@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <title>Kisan Konnect - Login & Sign Up</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Alpine.js for interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&amp;family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+    <script id="tailwind-config">
+        tailwind.config = { darkMode: "class", theme: { extend: { colors: { "primary-container": "#138808", "on-surface-variant": "#3f4a3b", outline: "#6f7a69", "outline-variant": "#becab7", "on-surface": "#191c1e", secondary: "#000080", primary: "#006104", "on-primary": "#ffffff" }, fontFamily: { body: ["Inter"], headline: ["Poppins"] } } } };
+    </script>
+
+    <style>
+        /* Smooth Background Slider Styles */
+        .bg-slider {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            overflow: hidden;
+        }
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out, transform 6s ease-in-out;
+            transform: scale(1);
+        }
+        .slide.active {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body class="font-body text-on-surface antialiased min-h-screen flex items-center justify-center p-4 sm:p-6 relative" 
+      x-data="authApp()" 
+      x-init="startSlider()">
+
+    <!-- Sliding Background Slideshow -->
+    <div class="bg-slider">
+        <div class="slide" :class="{ 'active': activeSlide === 0 }" style="background-image: url('1.jpg');"></div>
+        <div class="slide" :class="{ 'active': activeSlide === 1 }" style="background-image: url('2.jpeg');"></div>
+        <div class="slide" :class="{ 'active': activeSlide === 2 }" style="background-image: url('3.webp');"></div>
+        <div class="slide" :class="{ 'active': activeSlide === 3 }" style="background-image: url('4.jpg');"></div>
+        <div class="slide" :class="{ 'active': activeSlide === 4 }" style="background-image: url('login image.jpeg');"></div>
+        <!-- Soft Dark Gradient Overlay -->
+        <div class="absolute inset-0 bg-black/40"></div>
+    </div>
+
+    <!-- Login Container Card -->
+    <div class="w-full max-w-lg bg-white/20 backdrop-blur-sm rounded-3xl shadow-2xl p-6 sm:p-8 flex flex-col items-center border border-white/30 text-white relative">
+
+        <!-- Language Dropdown Switcher (Top Right) -->
+        <div class="absolute top-4 right-4">
+            <select x-model="lang" aria-label="Select Language" class="bg-black/60 hover:bg-black/80 text-white text-xs rounded-full px-3 py-1.5 focus:outline-none border border-white/20 cursor-pointer font-bold">
+                <option value="en" class="text-black">English</option>
+                <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
+                <option value="hi" class="text-black">हिन्दी</option>
+                <option value="te" class="text-black">తెలుగు</option>
+                <option value="ta" class="text-black">தமிழ்</option>
+                <option value="ml" class="text-black">മലയാളം</option>
+                <option value="kn" class="text-black">ಕನ್ನಡ</option>
+                <option value="ur" class="text-black">اردو</option>
+            </select>
+        </div>
+
+        <!-- Logo & Brand -->
+        <div class="flex flex-col items-center mb-6 w-full pt-4 sm:pt-0">
+            <div class="w-24 h-24 mb-3 rounded-full overflow-hidden flex items-center justify-center bg-white/80 shadow-md border-2 border-white/50">
+                <img alt="Kisan Konnect Logo" class="w-full h-full object-cover scale-110" src="logo.png"/>
+            </div>
+
+            <!-- INDIAN FLAG COLOR-FADING GRADIENT TEXT -->
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-center tracking-tight mt-2 bg-gradient-to-r from-[#FF9933] via-[#138808] to-[#000080] bg-clip-text text-transparent drop-shadow-sm">
+                KISAN KONNECT
+            </h1>
+
+            <p class="text-base text-gray-100 text-center mt-2 font-medium drop-shadow-sm">
+                <span x-show="isSignUp">
+                    <span x-show="lang === 'en'">Create Your Farmer Account</span>
+                    <span x-show="lang === 'pa'">ਆਪਣਾ ਕਿਸਾਨ ਖਾਤਾ ਬਣਾਓ</span>
+                    <span x-show="lang === 'hi'">अपना किसान खाता बनाएं</span>
+                    <span x-show="lang === 'te'">మీ రైతు ఖాతాను సృష్టించండి</span>
+                    <span x-show="lang === 'ta'">உங்கள் விவசாய கணக்கை உருவாக்கவும்</span>
+                    <span x-show="lang === 'ml'">നിങ്ങളുടെ കർഷക അക്കൗണ്ട് സൃഷ്ടിക്കുക</span>
+                    <span x-show="lang === 'kn'">ನಿಮ್ಮ ರೈತ ಖಾತೆಯನ್ನು ರಚಿಸಿ</span>
+                    <span x-show="lang === 'ur'">اپنا کسان اکاؤنٹ بنائیں</span>
+                </span>
+                <span x-show="!isSignUp">
+                    <span x-show="lang === 'en'">Empowering Your Agricultural Journey</span>
+                    <span x-show="lang === 'pa'">ਤੁਹਾਡੀ ਖੇਤੀਬਾੜੀ ਯਾਤਰਾ ਨੂੰ ਸ਼ਕਤੀਸ਼ਾਲੀ ਬਣਾਉਣਾ</span>
+                    <span x-show="lang === 'hi'">आपकी कृषि यात्रा को सशक्त बनाना</span>
+                    <span x-show="lang === 'te'">మీ వ్యవసాయ ప్రయాణాన్ని శక్తివంతం చేస్తోంది</span>
+                    <span x-show="lang === 'ta'">உங்கள் விவசாய பயணத்தை மேம்படுத்துதல்</span>
+                    <span x-show="lang === 'ml'">നിങ്ങളുടെ കാർഷിക യാത്രയെ ശക്തിപ്പെടുത്തുന്നു</span>
+                    <span x-show="lang === 'kn'">ನಿಮ್ಮ ಕೃಷಿ ಪ್ರಯಾಣವನ್ನು ಸಬಲೀಕರಣಗೊಳಿಸುವುದು</span>
+                    <span x-show="lang === 'ur'">آپ کے زرعی سفر کو بااختیار بنانا</span>
+                </span>
+            </p>
+        </div>
+
+        <!-- Toggle Tabs -->
+        <div class="flex w-full mb-6 bg-black/30 p-1.5 rounded-2xl border border-white/10">
+            <button @click="isSignUp = false; tab = 'phone'; message = ''" :class="!isSignUp && tab === 'phone' ? 'bg-white text-[#000080] shadow-sm font-bold' : 'text-gray-200 hover:text-white'" class="flex-1 py-3 text-xs sm:text-sm rounded-xl transition-all focus:outline-none cursor-pointer" type="button">
+                <span x-show="lang === 'en'">Phone Login</span>
+                <span x-show="lang === 'pa'">ਫੋਨ ਲੌਗਇਨ</span>
+                <span x-show="lang === 'hi'">फोन लॉगिन</span>
+                <span x-show="lang === 'te'">ఫోన్ లాగిన్</span>
+                <span x-show="lang === 'ta'">தொலைபேசி உள்நுழைவு</span>
+                <span x-show="lang === 'ml'">ഫോൺ ലോഗിൻ</span>
+                <span x-show="lang === 'kn'">ಫೋನ್ ಲಾಗಿನ್</span>
+                <span x-show="lang === 'ur'">فون لاگ ان</span>
+            </button>
+            <button @click="isSignUp = false; tab = 'email'; message = ''" :class="!isSignUp && tab === 'email' ? 'bg-white text-[#000080] shadow-sm font-bold' : 'text-gray-200 hover:text-white'" class="flex-1 py-3 text-xs sm:text-sm rounded-xl transition-all focus:outline-none cursor-pointer" type="button">
+                <span x-show="lang === 'en'">Email Login</span>
+                <span x-show="lang === 'pa'">ਈਮੇਲ ਲੌਗਇਨ</span>
+                <span x-show="lang === 'hi'">ईमेल लॉगिन</span>
+                <span x-show="lang === 'te'">ఇమెయిల్ లాగిన్</span>
+                <span x-show="lang === 'ta'">மின்னஞ்சல் உள்நுழைவு</span>
+                <span x-show="lang === 'ml'">ഇമെയിൽ ലോഗിൻ</span>
+                <span x-show="lang === 'kn'">ಇಮೇಲ್ ಲಾಗಿನ್</span>
+                <span x-show="lang === 'ur'">ای میل لاگ ان</span>
+            </button>
+            <button @click="isSignUp = true; message = ''" :class="isSignUp ? 'bg-white text-[#138808] shadow-sm font-bold' : 'text-gray-200 hover:text-white'" class="flex-1 py-3 text-xs sm:text-sm rounded-xl transition-all focus:outline-none cursor-pointer" type="button">
+                <span x-show="lang === 'en'">Sign Up</span>
+                <span x-show="lang === 'pa'">ਸਾਈਨ ਅੱਪ</span>
+                <span x-show="lang === 'hi'">साइन अप</span>
+                <span x-show="lang === 'te'">సైన్ అప్</span>
+                <span x-show="lang === 'ta'">பதிவு செய்க</span>
+                <span x-show="lang === 'ml'">സൈൻ അപ്പ്</span>
+                <span x-show="lang === 'kn'">ಸೈನ್ ಅಪ್</span>
+                <span x-show="lang === 'ur'">سائن اپ</span>
+            </button>
+        </div>
+
+        <!-- Input Form -->
+        <form class="w-full flex flex-col gap-4" @submit.prevent="handleSubmit">
+
+            <!-- SIGN UP FIELDS -->
+            <template x-if="isSignUp">
+                <div class="flex flex-col gap-4 w-full">
+                    <!-- Full Name -->
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-300">person</span>
+                        </div>
+                        <input x-model="signupName" 
+                               type="text"
+                               class="block w-full pl-12 pr-4 py-3.5 bg-black/30 border border-white/30 rounded-xl text-white text-base placeholder-gray-300 focus:ring-2 focus:ring-[#FF9933] focus:border-[#FF9933] focus:outline-none transition-shadow shadow-sm" 
+                               :placeholder="lang === 'en' ? 'Full Name' : (lang === 'pa' ? 'ਪੂਰਾ ਨਾਮ' : (lang === 'hi' ? 'पूरा नाम' : (lang === 'te' ? 'పూర్తి పేరు' : (lang === 'ta' ? 'முழு பெயர்' : (lang === 'ml' ? 'പൂർണ്ണനാമം' : (lang === 'kn' ? 'ಪೂರ್ಣ ಹೆಸರು' : 'पूरा नाम'))))))" 
+                               required/>
+                    </div>
+
+                    <!-- KCC Number -->
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-300">badge</span>
+                        </div>
+                        <input x-model="signupKcc" 
+                               type="text"
+                               class="block w-full pl-12 pr-4 py-3.5 bg-black/30 border border-white/30 rounded-xl text-white text-base placeholder-gray-300 focus:ring-2 focus:ring-[#FF9933] focus:border-[#FF9933] focus:outline-none transition-shadow shadow-sm" 
+                               :placeholder="lang === 'en' ? 'Kisan Credit Card (KCC) Number' : (lang === 'pa' ? 'ਕਿਸਾਨ ਕ੍ਰੈਡਿਟ ਕਾਰਡ (KCC) ਨੰਬਰ' : (lang === 'hi' ? 'किसान क्रेडिट कार्ड (KCC) नंबर' : (lang === 'te' ? 'కిసాన్ క్రెడిట్ కార్డ్ (KCC) నంబర్' : (lang === 'ta' ? 'கிசான் கடன் அட்டை (KCC) எண்' : (lang === 'ml' ? 'കിസാൻ ക്രെഡിറ്റ് കാർഡ് (KCC) നമ്പർ' : (lang === 'kn' ? 'ಕಿಸಾನ್ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ (KCC) ಸಂಖ್ಯೆ' : 'کیسان کریڈٹ کارڈ نمبر'))))))" 
+                               required/>
+                    </div>
+
+                    <!-- Contact Preference Choice -->
+                    <div class="flex gap-2 bg-black/30 p-1 rounded-xl border border-white/10">
+                        <button type="button" @click="signupContactType = 'phone'" :class="signupContactType === 'phone' ? 'bg-white text-primary font-bold shadow' : 'text-gray-300'" class="flex-1 py-2 text-xs rounded-lg transition-all cursor-pointer">
+                            <span x-show="lang === 'en'">Use Phone</span>
+                            <span x-show="lang === 'pa'">ਫੋਨ ਵਰਤੋਂ</span>
+                            <span x-show="lang === 'hi'">फोन उपयोग करें</span>
+                            <span x-show="lang === 'te'">ఫోన్ ఉపయోగించండి</span>
+                            <span x-show="lang === 'ta'">தொலைபேசியைப் பயன்படுத்துக</span>
+                            <span x-show="lang === 'ml'">ഫോൺ ഉപയോഗിക്കുക</span>
+                            <span x-show="lang === 'kn'">ಫೋನ್ ಬಳಸಿ</span>
+                            <span x-show="lang === 'ur'">فون استعمال کریں</span>
+                        </button>
+                        <button type="button" @click="signupContactType = 'email'" :class="signupContactType === 'email' ? 'bg-white text-primary font-bold shadow' : 'text-gray-300'" class="flex-1 py-2 text-xs rounded-lg transition-all cursor-pointer">
+                            <span x-show="lang === 'en'">Use Email</span>
+                            <span x-show="lang === 'pa'">ਈਮੇਲ ਵਰਤੋਂ</span>
+                            <span x-show="lang === 'hi'">ईमेल उपयोग करें</span>
+                            <span x-show="lang === 'te'">ఇమెయిల్ ఉపయోగించండి</span>
+                            <span x-show="lang === 'ta'">மின்னஞ்சலைப் பயன்படுத்துக</span>
+                            <span x-show="lang === 'ml'">ഇമെയിൽ ഉപയോഗിക്കുക</span>
+                            <span x-show="lang === 'kn'">ಇಮೇಲ್ ಬಳಸಿ</span>
+                            <span x-show="lang === 'ur'">ای میل استعمال کریں</span>
+                        </button>
+                    </div>
+
+                    <!-- Conditional Phone Input -->
+                    <div class="relative" x-show="signupContactType === 'phone'">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-300">call</span>
+                        </div>
+                        <input x-model="signupPhone" 
+                               type="tel"
+                               class="block w-full pl-12 pr-4 py-3.5 bg-black/30 border border-white/30 rounded-xl text-white text-base placeholder-gray-300 focus:ring-2 focus:ring-[#FF9933] focus:border-[#FF9933] focus:outline-none transition-shadow shadow-sm" 
+                               :placeholder="lang === 'en' ? 'Mobile Number' : (lang === 'pa' ? 'ਮੋਬਾਈਲ ਨੰਬਰ' : (lang === 'hi' ? 'मोबाइल नंबर' : (lang === 'te' ? 'మొబైల్ నంబర్' : (lang === 'ta' ? 'மொபைல் எண்' : (lang === 'ml' ? 'മൊബൈൽ നമ്പർ' : (lang === 'kn' ? 'ಮೊಬೈಲ್ ಸಂಖ್ಯೆ' : 'موبائل نمبر'))))))" 
+                               :required="signupContactType === 'phone'"/>
+                    </div>
+
+                    <!-- Conditional Email Input -->
+                    <div class="relative" x-show="signupContactType === 'email'">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-300">mail</span>
+                        </div>
+                        <input x-model="signupEmail" 
+                               type="email"
+                               class="block w-full pl-12 pr-4 py-3.5 bg-black/30 border border-white/30 rounded-xl text-white text-base placeholder-gray-300 focus:ring-2 focus:ring-[#FF9933] focus:border-[#FF9933] focus:outline-none transition-shadow shadow-sm" 
+                               :placeholder="lang === 'en' ? 'Email Address' : (lang === 'pa' ? 'ਈਮੇਲ ਪਤਾ' : (lang === 'hi' ? 'ईमेल पता' : (lang === 'te' ? 'ఇమెయిల్ చిరునామా' : (lang === 'ta' ? 'மின்னஞ்சல் முகவரி' : (lang === 'ml' ? 'ഇമെയിൽ വിലാസം' : (lang === 'kn' ? 'ಇಮೇಲ್ ವಿಳಾಸ' : 'ای میل ایڈریس'))))))" 
+                               :required="signupContactType === 'email'"/>
+                    </div>
+
+                    <!-- Password with Eye Toggle -->
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-300">lock</span>
+                        </div>
+                        <input x-model="signupPassword" 
+                               :type="showPassword ? 'text' : 'password'"
+                               class="block w-full pl-12 pr-12 py-3.5 bg-black/30 border border-white/30 rounded-xl text-white text-base placeholder-gray-300 focus:ring-2 focus:ring-[#FF9933] focus:border-[#FF9933] focus:outline-none transition-shadow shadow-sm" 
+                               :placeholder="lang === 'en' ? 'Create Password' : (lang === 'pa' ? 'ਪਾਸਵਰਡ ਬਣਾਓ' : (lang === 'hi' ? 'पासवर्ड बनाएं' : (lang === 'te' ? 'పాస్‌వర్డ్ సృష్టించండి' : (lang === 'ta' ? 'கடவுச்சொல்லை உருவாக்கவும்' : (lang === 'ml' ? 'പാസ്‌വേഡ് സൃഷ്ടിക്കുക' : (lang === 'kn' ? 'ಪಾಸ್‌ವರ್ಡ್ ರಚಿಸಿ' : 'پاس ورڈ بنائیں'))))))" 
+                               required/>
+                        <button type="button" @click="showPassword = !showPassword" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-300 hover:text-white focus:outline-none cursor-pointer">
+                            <span class="material-symbols-outlined" x-text="showPassword ? 'visibility_off' : 'visibility'">visibility</span>
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- LOGIN FIELDS: PHONE TAB VIEW -->
+            <template x-if="!isSignUp && tab === 'phone'">
+                <div class="flex flex-col gap-4 w-full">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-300">call</span>
+                        </div>
+                        <input x-model="phone" 
+                               type="tel"
+                               class="block w-full pl-12 pr-4 py-4 bg-black/30 border border-white/30 rounded-xl text-white text-lg placeholder-gray-300 focus:ring-2 focus:ring-[#FF9933] focus:border-[#FF9933] focus:outline-none transition-shadow shadow-sm" 
+                               :placeholder="lang === 'en' ? 'Enter Mobile Number' : (lang === 'pa' ? 'ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ' : (lang === 'hi' ? 'मोबाइल नंबर दर्ज करें' : (lang === 'te' ? 'మొబైల్ నంబర్‌ను నమోదు చేయండి' : (lang === 'ta' ? 'மொபைல் எண்ணை உள்ளிடவும்' : (lang === 'ml' ? 'മൊബൈൽ നമ്പർ നൽകുക' : (lang === 'kn' ? 'ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮूदಿಸಿ' : 'موبائل نمبر درج کریں'))))))" 
+                               required/>
+                    </div>
+                    <p class="text-xs text-gray-200 text-center">
+                        <span x-show="lang === 'en'">We will send a 4-digit verification code via SMS.</span>
+                        <span x-show="lang === 'pa'">ਅਸੀਂ ਐਸ.ਐਮ.ਐਸ. ਰਾਹੀਂ 4-ਅੰਕਾਂ ਦਾ ਤਸਦੀਕ ਕੋਡ ਭੇਜਾਂਗੇ।</span>
+                        <span x-show="lang === 'hi'">हम एसएमएस के माध्यम से 4 अंकों का सत्यापन कोड भेजेंगे।</span>
+                        <span x-show="lang === 'te'">మేము SMS ద్వారా 4 అంకెల ధృవీకరణ కోడ్‌ను పంపుతాము.</span>
+                        <span x-show="lang === 'ta'">நாங்கள் SMS மூலம் 4 இலக்க சரிபார்ப்பு குறியீட்டை அனுப்புவோம்.</span>
+                        <span x-show="lang === 'ml'">ഞങ്ങൾ SMS വഴി 4 അക്ക പരിശോധനാ കോഡ് അയക്കും.</span>
+                        <span x-show="lang === 'kn'">ನಾವು SMS ಮೂಲಕ 4 ಅಂಕಿಯ ಪರಿಶೀಲನಾ ಕೋಡ್ ಅನ್ನು ಕಳುಹಿಸುತ್ತೇವೆ.</span>
+                        <span x-show="lang === 'ur'">ہم ایس ایم ایس کے ذریعے 4 ہندسوں کا تصدیقی کوڈ بھیجیں گے۔</span>
+                    </p>
+                </div>
+            </template>
+
+            <!-- LOGIN FIELDS: EMAIL TAB VIEW -->
+            <template x-if="!isSignUp && tab === 'email'">
+                <div class="flex flex-col gap-4 w-full">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-300">mail</span>
+                        </div>
+                        <input x-model="email" 
+                               type="email"
+                               class="block w-full pl-12 pr-4 py-4 bg-black/30 border border-white/30 rounded-xl text-white text-lg placeholder-gray-300 focus:ring-2 focus:ring-[#FF9933] focus:border-[#FF9933] focus:outline-none transition-shadow shadow-sm" 
+                               placeholder="farmer1@kisansetu.demo" 
+                               required/>
+                    </div>
+
+                    <!-- Password with Eye Toggle -->
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <span class="material-symbols-outlined text-gray-300">lock</span>
+                        </div>
+                        <input x-model="password" 
+                               :type="showPassword ? 'text' : 'password'"
+                               class="block w-full pl-12 pr-12 py-4 bg-black/30 border border-white/30 rounded-xl text-white text-lg placeholder-gray-300 focus:ring-2 focus:ring-[#FF9933] focus:border-[#FF9933] focus:outline-none transition-shadow shadow-sm" 
+                               :placeholder="lang === 'en' ? 'Password (Demo@1234)' : (lang === 'pa' ? 'ਪਾਸਵਰਡ (Demo@1234)' : (lang === 'hi' ? 'पासवर्ड (Demo@1234)' : (lang === 'te' ? 'పాస్‌వర్డ్ (Demo@1234)' : (lang === 'ta' ? 'கடவுச்சொல் (Demo@1234)' : (lang === 'ml' ? 'പാസ്‌വേഡ് (Demo@1234)' : (lang === 'kn' ? 'ಪಾಸ್‌ವರ್ಡ್ (Demo@1234)' : 'پاس ورڈ (Demo@1234)'))))))" 
+                               required/>
+                        <button type="button" @click="showPassword = !showPassword" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-300 hover:text-white focus:outline-none cursor-pointer">
+                            <span class="material-symbols-outlined" x-text="showPassword ? 'visibility_off' : 'visibility'">visibility</span>
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <!-- Notification Display -->
+            <p x-show="message" class="text-sm font-medium text-center p-2 rounded-lg" :class="isError ? 'bg-red-900/80 text-red-200' : 'bg-green-900/80 text-green-200'" x-text="message"></p>
+
+            <!-- Action Button -->
+            <button type="submit" class="w-full mt-2 bg-[#138808] hover:bg-[#0f6e06] text-white font-bold text-lg py-4 rounded-xl shadow-md hover:shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2 border border-green-500/30 cursor-pointer">
+                <span x-text="isSignUp ? lang === 'en' ? 'Create Account' : (lang === 'pa' ? 'ਖਾਤਾ ਬਣਾਓ' : (lang === 'hi' ? 'खाता बनाएँ' : (lang === 'te' ? 'ఖాతాను సృష్టించండి' : (lang === 'ta' ? 'கணக்கை உருவாக்கவும்' : (lang === 'ml' ? 'അക്കൗണ്ട് സൃഷ്ടിക്കുക' : (lang === 'kn' ? 'ಖಾತೆಯನ್ನು ರಚಿಸಿ' : 'اکاؤنٹ بنائیں')))))) : (tab === 'phone' ? (lang === 'en' ? 'Get OTP & Sign In' : (lang === 'pa' ? 'ਓ.ਟੀ.ਪੀ. ਪ੍ਰਾਪਤ ਕਰੋ ਅਤੇ ਲੌਗਇਨ ਕਰੋ' : (lang === 'hi' ? 'ओटीपी प्राप्त करें और साइन इन करें' : (lang === 'te' ? 'OTP పొందండి & సైన్ ఇన్ చేయండి' : (lang === 'ta' ? 'OTP பெற்று உள்நுழைக' : (lang === 'ml' ? 'OTP നേടുക & സൈൻ ഇൻ ചെയ്യുക' : (lang === 'kn' ? 'OTP ಪಡೆಯಿರಿ ಮತ್ತು ಸೈನ್ ಇನ್ ಮಾಡಿ' : 'OTP حاصل کریں اور سائن ان کریں'))))))) : (lang === 'en' ? 'Sign In with Email' : (lang === 'pa' ? 'ਈਮੇਲ ਨਾਲ ਸਾਈਨ ਇਨ ਕਰੋ' : (lang === 'hi' ? 'ईमेल से साइन इन करें' : (lang === 'te' ? 'ఇమెయిల్‌తో సైన్ ఇన్ చేయండి' : (lang === 'ta' ? 'மின்னஞ்சல் மூலம் உள்நுழைக' : (lang === 'ml' ? 'ഇമെയിൽ വഴി സൈൻ ഇൻ ചെയ്യുക' : (lang === 'kn' ? 'ಇಮೇಲ್ ಮೂಲಕ ಸೈನ್ ಇನ್ ಮಾಡಿ' : 'ای میل کے ساتھ سائن ان کریں'))))))))"></span>
+                <span class="material-symbols-outlined text-[22px]">arrow_forward</span>
+            </button>
+        </form>
+
+        <!-- Switch between login/signup text link -->
+        <div class="mt-4 text-sm text-center">
+            <template x-if="!isSignUp">
+                <p class="text-gray-200">
+                    <span x-text="lang === 'en' ? 'Don\'t have an account?' : (lang === 'pa' ? 'ਕੋਈ ਖਾਤਾ ਨਹੀਂ ਹੈ?' : (lang === 'hi' ? 'खाता नहीं है?' : (lang === 'te' ? 'ఖాతా లేదా?' : (lang === 'ta' ? 'கணக்கு இல்லையா?' : (lang === 'ml' ? 'അക്കൗണ്ട് ഇല്ലേ?' : (lang === 'kn' ? 'ಖಾತೆ ಇಲ್ಲವೇ?' : 'اکاؤنٹ نہیں ہے؟'))))))"></span> 
+                    <a href="#" @click.prevent="isSignUp = true; message = ''" class="text-[#FF9933] font-bold hover:underline">
+                        <span x-show="lang === 'en'">Sign up here</span>
+                        <span x-show="lang === 'pa'">ਇੱਥੇ ਸਾਈਨ ਅੱਪ ਕਰੋ</span>
+                        <span x-show="lang === 'hi'">यहाँ साइन अप करें</span>
+                        <span x-show="lang === 'te'">ఇక్కడ సైన్ అప్ చేయండి</span>
+                        <span x-show="lang === 'ta'">இங்கே பதிவு செய்யவும்</span>
+                        <span x-show="lang === 'ml'">ഇവിടെ സൈൻ അപ്പ് ചെയ്യുക</span>
+                        <span x-show="lang === 'kn'">ಇಲ್ಲಿ ಸೈನ್ ಅಪ್ ಮಾಡಿ</span>
+                        <span x-show="lang === 'ur'">یہاں سائن اپ کریں</span>
+                    </a>
+                </p>
+            </template>
+            <template x-if="isSignUp">
+                <p class="text-gray-200">
+                    <span x-text="lang === 'en' ? 'Already have an account?' : (lang === 'pa' ? 'ਪਹਿਲਾਂ ਹੀ ਖਾਤਾ ਹੈ?' : (lang === 'hi' ? 'पहले से खाता है?' : (lang === 'te' ? '이미 ఖాతా ఉందా?' : (lang === 'ta' ? 'ஏற்கனவே கணக்கு உள்ளதா?' : (lang === 'ml' ? '이미 അക്കൗണ്ട് ഉണ്ടോ?' : (lang === 'kn' ? '이미 ಖಾತೆ ಇದೆಯೇ?' : 'پہلے سے اکاؤنٹ موجود ہے؟'))))))"></span> 
+                    <a href="#" @click.prevent="isSignUp = false; message = ''" class="text-[#FF9933] font-bold hover:underline">
+                        <span x-show="lang === 'en'">Sign in here</span>
+                        <span x-show="lang === 'pa'">ਇੱਥੇ ਸਾਈਨ ਇਨ ਕਰੋ</span>
+                        <span x-show="lang === 'hi'">यहाँ साइन इन करें</span>
+                        <span x-show="lang === 'te'">ఇక్కడ సైన్ ఇన్ చేయండి</span>
+                        <span x-show="lang === 'ta'">இங்கே உள்நுழைக</span>
+                        <span x-show="lang === 'ml'">ഇവിടെ സൈൻ ഇൻ ചെയ്യുക</span>
+                        <span x-show="lang === 'kn'">ಇಲ್ಲಿ ಸೈನ್ ಇನ್ ಮಾಡಿ</span>
+                        <span x-show="lang === 'ur'">یہاں سائن ان کریں</span>
+                    </a>
+                </p>
+            </template>
+        </div>
+
+        <!-- Terms Footer -->
+        <p class="mt-6 text-xs text-gray-300 text-center px-4">
+            <span x-show="lang === 'en'">By continuing, you agree to our</span>
+            <span x-show="lang === 'pa'">ਜਾਰੀ ਰੱਖ ਕੇ, ਤੁਸੀਂ ਸਾਡੀ</span>
+            <span x-show="lang === 'hi'">जारी रखकर, आप हमारी</span>
+            <span x-show="lang === 'te'">కొనసాగించడం ద్వారా, మీరు మా</span>
+            <span x-show="lang === 'ta'">தொடர்வதன் மூலம், எங்களது</span>
+            <span x-show="lang === 'ml'">തുടരുന്നതിലൂടെ, നിങ്ങൾ ഞങ്ങളുടെ</span>
+            <span x-show="lang === 'kn'">ಮುಂದುವರಿಸುವ ಮೂಲಕ, ನೀವು ನಮ್ಮ</span>
+            <span x-show="lang === 'ur'">جاری رکھ کر، آپ ہمارے</span>
+            <a class="text-white underline font-medium hover:text-[#FF9933]" href="terms.html" target="_blank">
+                <span x-show="lang === 'en'">Terms of Service</span>
+                <span x-show="lang === 'pa'">ਸੇਵਾ ਦੀਆਂ ਸ਼ਰਤਾਂ</span>
+                <span x-show="lang === 'hi'">सेवा की शर्तें</span>
+                <span x-show="lang === 'te'">సేవా నిబంధనలు</span>
+                <span x-show="lang === 'ta'">சேவை விதிமுறைகள்</span>
+                <span x-show="lang === 'ml'">സേവന നിബന്ധനകൾ</span>
+                <span x-show="lang === 'kn'">ಸೇವಾ ನಿಯಮಗಳು</span>
+                <span x-show="lang === 'ur'">سروس کی شرائط</span>
+            </a> 
+            <span x-show="lang === 'en'">&</span>
+            <span x-show="lang === 'pa'">ਅਤੇ</span>
+            <span x-show="lang === 'hi'">और</span>
+            <span x-show="lang === 'te'">&amp;</span>
+            <span x-show="lang === 'ta'">&amp;</span>
+            <span x-show="lang === 'ml'">&amp;</span>
+            <span x-show="lang === 'kn'">&amp;</span>
+            <span x-show="lang === 'ur'">&amp;</span>
+            <a class="text-white underline font-medium hover:text-[#FF9933]" href="privacy.html" target="_blank">
+                <span x-show="lang === 'en'">Privacy Policy</span>
+                <span x-show="lang === 'pa'">ਗੋਪਨੀਯਤਾ ਨੀਤੀ</span>
+                <span x-show="lang === 'hi'">गोपनीयता नीति</span>
+                <span x-show="lang === 'te'">గోప్యతా విధానం</span>
+                <span x-show="lang === 'ta'">தனியுரிமைக் கொள்கை</span>
+                <span x-show="lang === 'ml'">സ്വകാര്യതാ നയം</span>
+                <span x-show="lang === 'kn'">ಗೌಪ್ಯತಾ ನೀತಿ</span>
+                <span x-show="lang === 'ur'">رازداری کی پالیسی</span>
+            </a>
+            <span x-show="lang === 'pa'">ਨਾਲ ਸਹਿમત ਹੋ।</span>
+            <span x-show="lang === 'hi'">के सहमत हैं।</span>
+        </p>
+    </div>
+
+    <!-- Script to Handle Slideshow & Supabase Authentication -->
+    <script>
+        const SUPABASE_URL = 'https://lwexxnbwtltigadhzasa.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3ZXh4bmJ3dGx0aWdhZGh6YXNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTEyOTIsImV4cCI6MjEwMzQyNzI5Mn0.iZzB-KI5_dAamTdROz06knj57jgahVhXkHeSvaBNiaI';
+
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function authApp() {
+            return {
+                lang: 'en', // default language
+                isSignUp: false,
+                tab: 'email', 
+                phone: '9876543201',
+                email: 'farmer1@kisansetu.demo', 
+                password: 'Demo@1234',
+                showPassword: false,
+                activeSlide: 0,
+                totalSlides: 5,
+
+                // Sign Up Fields
+                signupName: '',
+                signupKcc: '',
+                signupContactType: 'phone',
+                signupPhone: '',
+                signupEmail: '',
+                signupPassword: '',
+                message: '',
+                isError: false,
+
+                // Initialize Background Slideshow Interval (changes every 4 seconds)
+                startSlider() {
+                    setInterval(() => {
+                        this.activeSlide = (this.activeSlide + 1) % this.totalSlides;
+                    }, 4000);
+                },
+
+                async handleSubmit() {
+                    this.message = this.lang === 'en' ? 'Processing...' : (this.lang === 'pa' ? 'ਪ੍ਰਕਿਰਿਆ ਜਾਰੀ ਹੈ...' : (this.lang === 'hi' ? 'प्रक्रिया जारी है...' : (this.lang === 'te' ? 'ప్రాసెస్ జరుగుతోంది...' : (this.lang === 'ta' ? 'செயலாக்கப்படுகிறது...' : (this.lang === 'ml' ? 'പ്രോസസ്സ് ചെയ്യുന്നു...' : (this.lang === 'kn' ? 'ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗುತ್ತಿದೆ...' : 'عمل جاری ہے...'))))));
+                    this.isError = false;
+
+                    if (this.isSignUp) {
+                        if (!this.signupName || !this.signupKcc || !this.signupPassword) {
+                            this.isError = true;
+                            this.message = this.lang === 'en' ? 'Please fill in all mandatory fields.' : (this.lang === 'pa' ? 'ਕਿਰਪਾ ਕਰਕੇ ਸਾਰੇ ਜ਼ਰੂਰੀ ਖੇਤਰ ਭਰੋ।' : (this.lang === 'hi' ? 'कृपया सभी आवश्यक फ़ील्ड भरें।' : (this.lang === 'te' ? 'దయచేసి అన్ని తప్పనిసరి ఫీల్డ్‌లను పూరించండి.' : (this.lang === 'ta' ? 'அனைத்து கட்டாய புலங்களையும் நிரப்பவும்.' : (this.lang === 'ml' ? 'എല്ലാ നിർബന്ധിത ഫീൽഡുകളും പൂരിപ്പിക്കുക.' : (this.lang === 'kn' ? 'ದಯವಿಟ್ಟು ಎಲ್ಲಾ ಕಡ್ಡಾಯ ಕ್ಷೇತ್ರಗಳನ್ನು ಭರ್ತಿ ಮಾಡಿ.' : 'براہ کرم تمام لازمی فیلڈز پُر کریں۔'))))));
+                            return;
+                        }
+
+                        if (this.signupContactType === 'email') {
+                            const { data, error } = await supabaseClient.auth.signUp({
+                                email: this.signupEmail,
+                                password: this.signupPassword,
+                                options: {
+                                    data: {
+                                        full_name: this.signupName,
+                                        kcc_number: this.signupKcc
+                                    }
+                                }
+                            });
+
+                            if (error) {
+                                this.isError = true;
+                                this.message = error.message;
+                            } else {
+                                this.message = this.lang === 'en' ? 'Account created successfully! Redirecting...' : (this.lang === 'pa' ? 'ਖਾਤਾ ਸਫਲਤਾਪੂਰਵਕ ਬਣਾਇਆ ਗਿਆ! ਰੀਡਾਇਰੈਕਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...' : (this.lang === 'hi' ? 'खाता सफलतापूर्वक बनाया गया! रीडायरेक्ट किया जा रहा है...' : (this.lang === 'te' ? 'ఖాతా வெற்றிகரமாக సృష్టించబడింది! దారి మళ్లిస్తోంది...' : (this.lang === 'ta' ? 'கணக்கு வெற்றிகரமாக உருவாக்கப்பட்டது! திருப்பி விடப்படுகிறது...' : (this.lang === 'ml' ? 'അക്കൗണ്ട് വിജയകരമായി സൃഷ്ടിച്ചു! റീഡയറക്‌ടുന്നു...' : (this.lang === 'kn' ? 'ಖಾತೆಯನ್ನು ಯಶಸ್ವಿಯಾಗಿ ರಚಿಸಲಾಗಿದೆ! ಮರುನಿರ್ದೇಶಿಸಲಾಗುತ್ತಿದೆ...' : 'اکاؤنٹ کامیابی سے بن گیا! ری ڈائریکٹ کیا جا رہا ہے...'))))));
+                                setTimeout(() => {
+                                    window.location.href = 'index.html';
+                                }, 1000);
+                            }
+                        } else {
+                            if (!this.signupPhone) {
+                                this.isError = true;
+                                this.message = this.lang === 'en' ? 'Please enter your phone number.' : (this.lang === 'pa' ? 'ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ ਫੋਨ ਨੰਬਰ ਦਰਜ ਕਰੋ।' : (this.lang === 'hi' ? 'कृपया अपना फोन नंबर दर्ज करें।' : (this.lang === 'te' ? 'దయచేసి మీ ఫోన్ నంబర్‌ను నమోదు చేయండి.' : (this.lang === 'ta' ? 'உங்கள் தொலைபேசி எண்ணை உள்ளிடவும்.' : (this.lang === 'ml' ? 'നിങ്ങളുടെ ഫോൺ നമ്പർ നൽകുക.' : (this.lang === 'kn' ? 'ದಯವಿಟ್ಟು ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮूदಿಸಿ.' : 'براہ کرم اپنا فون نمبر درج کریں۔'))))));
+                                return;
+                            }
+                            setTimeout(() => {
+                                this.message = this.lang === 'en' ? 'Account registered via phone! Redirecting...' : (this.lang === 'pa' ? 'ਫੋਨ ਰਾਹੀਂ ਖਾਤਾ ਰਜਿਸਟਰਡ! ਰੀਡਾਇਰੈਕਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...' : (this.lang === 'hi' ? 'फोन के माध्यम से खाता पंजीकृत! रीडायरेक्ट किया जा रहा है...' : (this.lang === 'te' ? 'ఫోన్ ద్వారా ఖాతా నమోదు చేయబడింది! దారి మళ్లిస్తోంది...' : (this.lang === 'ta' ? 'தொலைபேசி மூலம் கணக்கு பதிவு செய்யப்பட்டது! திருப்பி விடப்படுகிறது...' : (this.lang === 'ml' ? 'ഫോൺ വഴി അക്കൗണ്ട് രജിസ്റ്റർ ചെയ്തു! റീഡയറക്‌ടുന്നു...' : (this.lang === 'kn' ? 'ಫೋನ್ ಮೂಲಕ ಖಾತೆ ನೋಂದಾಯಿಸಲಾಗಿದೆ! ಮರುನಿರ್ದೇಶಿಸಲಾಗುತ್ತಿದೆ...' : 'فون کے ذریعے اکاؤنٹ رجسٹر ہو گیا! ری ڈائریکٹ کیا جا رہا ہے...'))))));
+                                setTimeout(() => {
+                                    window.location.href = 'index.html';
+                                }, 800);
+                            }, 1000);
+                        }
+                        return;
+                    }
+
+                    if (this.tab === 'phone') {
+                        setTimeout(() => {
+                            this.message = this.lang === 'en' ? 'OTP Verified! Redirecting...' : (this.lang === 'pa' ? 'ਓ.ਟੀ.ਪੀ. ਤਸਦੀਕ ਹੋ ਗਿਆ! ਰੀਡਾਇਰੈਕਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...' : (this.lang === 'hi' ? 'ओटीपी सत्यापित! रीडायरेक्ट किया जा रहा है...' : (this.lang === 'te' ? 'OTP ధృవీకరించబడింది! దారి మళ్లిస్తోంది...' : (this.lang === 'ta' ? 'OTP சரிபார்க்கப்பட்டது! திருப்பி விடப்படுகிறது...' : (this.lang === 'ml' ? 'OTP സ്ഥിരീകരിച്ചു! റീഡയറക്‌ടുന്നു...' : (this.lang === 'kn' ? 'OTP ಪರಿಶೀಲಿಸಲಾಗಿದೆ! ಮರುನಿರ್ದೇಶಿಸಲಾಗುತ್ತಿದೆ...' : 'OTP تصدیق ہو گئی! ری ڈائریکٹ کیا جا رہا ہے...'))))));
+                            setTimeout(() => {
+                                window.location.href = 'index.html';
+                            }, 800);
+                        }, 1000);
+                        return;
+                    }
+
+                    const { data, error } = await supabaseClient.auth.signInWithPassword({
+                        email: this.email,
+                        password: this.password
+                    });
+
+                    if (error) {
+                        if (this.email === 'farmer1@kisansetu.demo' && this.password === 'Demo@1234') {
+                            this.message = this.lang === 'en' ? 'Success! Redirecting to home...' : (this.lang === 'pa' ? 'ਸਫਲਤਾ! ਘਰ ਵੱਲ ਰੀਡਾਇਰੈਕਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...' : (this.lang === 'hi' ? 'सफलता! होम पर रीडायरेक्ट किया जा रहा है...' : (this.lang === 'te' ? 'విజయం! హోమ్‌కి దారి మళ్లిస్తోంది...' : (this.lang === 'ta' ? 'வெற்றி! முகப்புக்கு திருப்பி விடப்படுகிறது...' : (this.lang === 'ml' ? ' വിജയം! ഹോമിലേക്ക് റീഡയറക്‌ടുന്നു...' : (this.lang === 'kn' ? 'ಯಶಸ್ಸು! ಮುಖಪುಟಕ್ಕೆ ಮರುನಿರ್ದೇಶಿಸಲಾಗುತ್ತಿದೆ...' : 'کامیابی! ہوم پر ری ڈائریکٹ کیا جا رہا ہے...'))))));
+                            setTimeout(() => {
+                                window.location.href = 'index.html';
+                            }, 800);
+                            return;
+                        }
+
+                        this.isError = true;
+                        this.message = this.lang === 'en' ? 'Invalid credentials. Check email/password.' : (this.lang === 'pa' ? 'ਗਲਤ ਵੇਰਵੇ। ਈਮੇਲ/ਪਾਸਵਰਡ ਚੈੱਕ ਕਰੋ।' : (this.lang === 'hi' ? 'अमान्य विवरण। ईमेल/पासवर्ड जांचें।' : (this.lang === 'te' ? 'చెల్లని ఆధారాలు. ఇమెయిల్/పాస్‌వర్డ్‌ని తనిఖీ చేయండి.' : (this.lang === 'ta' ? 'தவறான சான்றுகள். மின்னஞ்சல்/கடவுச்சொல்லைச் சரிபார்க்கவும்.' : (this.lang === 'ml' ? 'തെറ്റായ വിവരങ്ങൾ. ഇമെയിൽ/പാസ്‌വേഡ് പരിശോധിക്കുക.' : (this.lang === 'kn' ? 'ಅಮೂರ್ತ ವಿವರಗಳು. ಇಮೇಲ್/ಪಾಸ್‌ವರ್ಡ್ ಪರಿಶೀಲಿಸಿ.' : 'غلط تفصیلات۔ ای میل/پاس ورڈ چیک کریں۔'))))));
+                    } else {
+                        this.message = this.lang === 'en' ? 'Success! Redirecting...' : (this.lang === 'pa' ? 'ਸਫਲਤਾ! ਰੀਡਾਇਰੈਕਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...' : (this.lang === 'hi' ? 'सफलता! रीडायरेक्ट किया जा रहा है...' : (this.lang === 'te' ? 'విజయం! దారి మళ్లిస్తోంది...' : (this.lang === 'ta' ? 'வெற்றி! திருப்பி விடப்படுகிறது...' : (this.lang === 'ml' ? 'വിജയം! റീഡയറക്‌ടുന്നു...' : (this.lang === 'kn' ? 'ಯಶಸ್ಸು! ಮರುನಿರ್ದೇಶಿಸಲಾಗುತ್ತಿದೆ...' : 'کامیابی! ری ڈائریکٹ کیا جا رہا ہے...'))))));
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 800);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

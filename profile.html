@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html class="light" lang="en" x-data="{ lang: 'en' }">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kisan Konnect - Profile</title>
+<!-- Supabase Client Library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // Initialize Supabase & Protect Route
+    const supabaseUrl = 'https://lwexxnbwtltigadhzasa.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3ZXh4bmJ3dGx0aWdhZGh6YXNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTEyOTIsImV4cCI6MjEwMzQyNzI5Mn0.iZzB-KI5_dAamTdROz06knj57jgahVhXkHeSvaBNiaI';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function checkAuth() {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+            window.location.href = 'login.html';
+        }
+    }
+    checkAuth();
+</script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Mukta:wght@400;500;600;700&amp;family=Poppins:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Alpine.js for interactivity -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#f8f9fb",
+                        "on-secondary-fixed-variant": "#005303",
+                        "tertiary-container": "#2e1500",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb77a",
+                        "on-secondary-container": "#007306",
+                        "tertiary": "#000000",
+                        "inverse-primary": "#bbc3fb",
+                        "inverse-surface": "#2d3133",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-surface-variant": "#46464f",
+                        "surface-tint": "#535b8c",
+                        "on-tertiary-fixed-variant": "#6d3a00",
+                        "surface-container-highest": "#e0e3e5",
+                        "secondary-fixed-dim": "#79dd68",
+                        "secondary-container": "#91f77e",
+                        "on-tertiary-fixed": "#2e1500",
+                        "surface": "#f8f9fb",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#0d1745",
+                        "on-background": "#191c1e",
+                        "secondary-fixed": "#94fa81",
+                        "primary-fixed-dim": "#bbc3fb",
+                        "surface-container": "#eceef0",
+                        "on-secondary-fixed": "#002200",
+                        "outline-variant": "#c6c5d0",
+                        "on-tertiary-container": "#c66d00",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f2f4f6",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "surface-bright": "#f8f9fb",
+                        "primary-fixed": "#dee1ff",
+                        "on-surface": "#191c1e",
+                        "primary": "#000000",
+                        "on-primary-container": "#7881b4",
+                        "on-primary-fixed-variant": "#3b4473",
+                        "tertiary-fixed": "#ffdcc2",
+                        "outline": "#767680",
+                        "inverse-on-surface": "#eff1f3",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#0d1745",
+                        "surface-dim": "#d8dadc",
+                        "secondary": "#006e06",
+                        "surface-container-high": "#e6e8ea"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Poppins"],
+                        "display": ["Poppins"],
+                        "body": ["Inter"],
+                        "label": ["Mukta"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased font-body selection:bg-secondary-container selection:text-on-secondary-container">
+
+<!-- Top Bar Updated -->
+<header class="fixed top-0 w-full z-50 shadow-md bg-[#0d1745] flex justify-between items-center px-4 h-16">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm overflow-hidden border border-white/20">
+<img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Konnect Logo"/>
+</div>
+<h1 class="font-headline text-[20px] font-bold tracking-tight text-white uppercase">KISAN KONNECT</h1>
+</div>
+
+<!-- Desktop Navigation Links -->
+<nav class="hidden xl:flex gap-6 items-center h-full pt-1">
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="index.html">
+    <span x-show="lang === 'en'">Home</span>
+    <span x-show="lang === 'pa'">ਘਰ</span>
+    <span x-show="lang === 'hi'">होम</span>
+    <span x-show="lang === 'te'">హోమ్</span>
+    <span x-show="lang === 'ta'">முகப்பு</span>
+    <span x-show="lang === 'ml'">ഹോം</span>
+    <span x-show="lang === 'kn'">ಮುಖಪುಟ</span>
+    <span x-show="lang === 'ur'">ہوم</span>
+</a>
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="mandi.html">
+    <span x-show="lang === 'en'">Mandi</span>
+    <span x-show="lang === 'pa'">ਮੰਡੀ</span>
+    <span x-show="lang === 'hi'">मंडी</span>
+    <span x-show="lang === 'te'">మండి</span>
+    <span x-show="lang === 'ta'">சந்தை</span>
+    <span x-show="lang === 'ml'">ചന്ത</span>
+    <span x-show="lang === 'kn'">ಮಂಡಿ</span>
+    <span x-show="lang === 'ur'">منڈی</span>
+</a>
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="queue.html">
+    <span x-show="lang === 'en'">Book Slot</span>
+    <span x-show="lang === 'pa'">ਸਲਾਟ ਬੁੱਕ ਕਰੋ</span>
+    <span x-show="lang === 'hi'">स्लॉट बुक करें</span>
+    <span x-show="lang === 'te'">స్లాట్ బుక్ చేయండి</span>
+    <span x-show="lang === 'ta'">ஸ்லாட் பதிவு</span>
+    <span x-show="lang === 'ml'">സ്ലോട്ട് ബുക്ക് ചെയ്യുക</span>
+    <span x-show="lang === 'kn'">ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ</span>
+    <span x-show="lang === 'ur'">سلاٹ بک کریں</span>
+</a>
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary border-on-primary font-semibold" href="profile.html">
+    <span x-show="lang === 'en'">Profile</span>
+    <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
+    <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
+    <span x-show="lang === 'te'">ప్రొఫైల్</span>
+    <span x-show="lang === 'ta'">சுயவிவரம்</span>
+    <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
+    <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
+    <span x-show="lang === 'ur'">پروفائل</span>
+</a>
+</nav>
+
+<div class="flex items-center gap-2">
+    <!-- Language Switcher Dropdown -->
+    <select x-model="lang" aria-label="Select Language" class="bg-white/10 hover:bg-white/20 text-white text-xs rounded-lg px-2 py-1 focus:outline-none cursor-pointer font-bold border border-white/20">
+        <option value="en" class="text-black">English</option>
+        <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
+        <option value="hi" class="text-black">हिन्दी</option>
+        <option value="te" class="text-black">తెలుగు</option>
+        <option value="ta" class="text-black">தமிழ்</option>
+        <option value="ml" class="text-black">മലയാളം</option>
+        <option value="kn" class="text-black">ಕನ್ನಡ</option>
+        <option value="ur" class="text-black">اردو</option>
+    </select>
+    <div class="h-8 w-8 rounded-full overflow-hidden border border-white/20 bg-surface-container-highest cursor-pointer hover:opacity-85 transition-opacity">
+    <img alt="User profile avatar" class="w-full h-full object-cover" src="kisan.jpg"/>
+    </div>
+</div>
+</header>
+
+<main class="pt-20 pb-28 px-4 max-w-2xl mx-auto flex flex-col gap-6">
+<section class="bg-surface-container-lowest rounded-xl shadow-sm p-6 flex flex-col items-center justify-center text-center relative overflow-hidden">
+<div class="absolute top-0 right-0 w-48 h-48 bg-primary-fixed rounded-full blur-3xl opacity-30 -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 w-32 h-32 bg-secondary-fixed rounded-full blur-3xl opacity-20 translate-y-1/2 -translate-x-1/4 pointer-events-none"></div>
+<div class="h-24 w-24 rounded-full overflow-hidden border-4 border-surface shadow-sm z-10 relative mb-4">
+<img alt="Harjinder Singh" class="w-full h-full object-cover" src="kisan.jpg"/>
+</div>
+<div class="z-10 flex flex-col items-center gap-2">
+<h2 class="font-headline text-[24px] font-semibold text-primary leading-tight">Harjinder Singh</h2>
+<div class="inline-flex items-center gap-1.5 bg-surface-container px-3 py-1 rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-[16px] text-primary-container" style="font-variation-settings: 'FILL' 1;">badge</span>
+<span class="font-label text-label-md text-on-surface-variant font-medium uppercase tracking-wider">ID: PB-9842</span>
+</div>
+</div>
+</section>
+
+<nav aria-label="Profile Menu" class="flex flex-col gap-3">
+<a class="bg-surface-container-lowest rounded-lg shadow-sm p-4 flex items-center justify-between hover:shadow-md transition-all duration-200 active:scale-[0.98] group" href="#">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-fixed-dim/15 flex items-center justify-center text-primary-container group-hover:bg-primary-fixed-dim/30 transition-colors">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">book_online</span>
+</div>
+<span class="font-body text-body-md text-on-surface font-medium">
+    <span x-show="lang === 'en'">My Bookings</span>
+    <span x-show="lang === 'pa'">ਮੇਰੀਆਂ ਬੁਕਿੰਗਾਂ</span>
+    <span x-show="lang === 'hi'">मेरी बुकिंग</span>
+    <span x-show="lang === 'te'">నా బుకింగ్‌లు</span>
+    <span x-show="lang === 'ta'">எனது முன்பதிவுகள்</span>
+    <span x-show="lang === 'ml'">എന്റെ ബുക്കിംഗുകൾ</span>
+    <span x-show="lang === 'kn'">ನನ್ನ ಬುಕಿಂಗ್‌ಗಳು</span>
+    <span x-show="lang === 'ur'">میری بکنگ</span>
+</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+
+<a class="bg-surface-container-lowest rounded-lg shadow-sm p-4 flex items-center justify-between hover:shadow-md transition-all duration-200 active:scale-[0.98] group" href="#">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed-dim/15 flex items-center justify-center text-secondary-container group-hover:bg-secondary-fixed-dim/30 transition-colors">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+</div>
+<span class="font-body text-body-md text-on-surface font-medium">
+    <span x-show="lang === 'en'">Transaction History</span>
+    <span x-show="lang === 'pa'">ਲੈਣ-ਦੇਣ ਦਾ ਇਤਿਹਾਸ</span>
+    <span x-show="lang === 'hi'">लेन-देन का इतिहास</span>
+    <span x-show="lang === 'te'">లావాదేవీల చరిత్ర</span>
+    <span x-show="lang === 'ta'">பரிவர்த்தனை வரலாறு</span>
+    <span x-show="lang === 'ml'">ഇടപാട് ചരിത്രം</span>
+    <span x-show="lang === 'kn'">ವಹಿವಾಟು ಇತಿಹಾಸ</span>
+    <span x-show="lang === 'ur'">لین دین کی تاریخ</span>
+</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+
+<a class="bg-surface-container-lowest rounded-lg shadow-sm p-4 flex items-center justify-between hover:shadow-md transition-all duration-200 active:scale-[0.98] group" href="#">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant group-hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">settings</span>
+</div>
+<span class="font-body text-body-md text-on-surface font-medium">
+    <span x-show="lang === 'en'">Settings</span>
+    <span x-show="lang === 'pa'">ਸੈਟਿੰਗਾਂ</span>
+    <span x-show="lang === 'hi'">सेटिंग्स</span>
+    <span x-show="lang === 'te'">అమరికలు</span>
+    <span x-show="lang === 'ta'">அமைப்புகள்</span>
+    <span x-show="lang === 'ml'">ക്രമീകരണങ്ങൾ</span>
+    <span x-show="lang === 'kn'">ಸಂಯೋಜನೆಗಳು</span>
+    <span x-show="lang === 'ur'">ترتیبات</span>
+</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+
+<a class="bg-surface-container-lowest rounded-lg shadow-sm p-4 flex items-center justify-between hover:shadow-md transition-all duration-200 active:scale-[0.98] group" href="#">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed-dim/15 flex items-center justify-center text-tertiary-container group-hover:bg-tertiary-fixed-dim/30 transition-colors">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+</div>
+<span class="font-body text-body-md text-on-surface font-medium">
+    <span x-show="lang === 'en'">Support</span>
+    <span x-show="lang === 'pa'">ਸਹਾਇਤਾ</span>
+    <span x-show="lang === 'hi'">सहायता</span>
+    <span x-show="lang === 'te'">మద్దతు</span>
+    <span x-show="lang === 'ta'">ஆதரவு</span>
+    <span x-show="lang === 'ml'">പിന്തുണ</span>
+    <span x-show="lang === 'kn'">ಬೆಂಬಲ</span>
+    <span x-show="lang === 'ur'">معاونت</span>
+</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+
+<div class="pt-4">
+<button @click="supabase.auth.signOut().then(() => window.location.href = 'login.html')" class="w-full bg-error-container/30 border border-error/10 rounded-lg p-4 flex items-center justify-between hover:bg-error-container/60 transition-all duration-200 active:scale-[0.98] group cursor-pointer text-left">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center text-error group-hover:bg-error/20 transition-colors">
+<span class="material-symbols-outlined text-[24px]">logout</span>
+</div>
+<span class="font-body text-body-md text-error font-medium">
+    <span x-show="lang === 'en'">Logout</span>
+    <span x-show="lang === 'pa'">ਲੌਗ ਆਉਟ</span>
+    <span x-show="lang === 'hi'">लॉग आउट</span>
+    <span x-show="lang === 'te'">లాగ్ అవుట్</span>
+    <span x-show="lang === 'ta'">வெளியேறு</span>
+    <span x-show="lang === 'ml'">പുറത്തുപോവുക</span>
+    <span x-show="lang === 'kn'">ಲಾಗ್ ಔಟ್</span>
+    <span x-show="lang === 'ur'">لاگ آؤٹ</span>
+</span>
+</div>
+</button>
+</div>
+</nav>
+</main>
+
+<!-- BottomNavBar (Mobile Only with Profile Active State) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-white/85 backdrop-blur-xl rounded-t-lg border-t border-white/40 shadow-2xl">
+<!-- Home Button -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="index.html">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="font-label text-[12px] font-medium mt-1">
+    <span x-show="lang === 'en'">Home</span>
+    <span x-show="lang === 'pa'">ਘਰ</span>
+    <span x-show="lang === 'hi'">होम</span>
+    <span x-show="lang === 'te'">హోమ్</span>
+    <span x-show="lang === 'ta'">முகப்பு</span>
+    <span x-show="lang === 'ml'">ഹോം</span>
+    <span x-show="lang === 'kn'">ಮುಖಪುಟ</span>
+    <span x-show="lang === 'ur'">ہوم</span>
+</span>
+</a>
+
+<!-- Mandi Button -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="mandi.html">
+<span class="material-symbols-outlined text-[24px]">storefront</span>
+<span class="font-label text-[12px] font-medium mt-1">
+    <span x-show="lang === 'en'">Mandi</span>
+    <span x-show="lang === 'pa'">ਮੰਡੀ</span>
+    <span x-show="lang === 'hi'">मंडी</span>
+    <span x-show="lang === 'te'">మార్కెట్</span>
+    <span x-show="lang === 'ta'">சந்தை</span>
+    <span x-show="lang === 'ml'">മാർക്കറ്റ്</span>
+    <span x-show="lang === 'kn'">ಮಾರುಕಟ್ಟೆ</span>
+    <span x-show="lang === 'ur'">مارکیٹ</span>
+</span>
+</a>
+
+<!-- Queue Button -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="queue.html">
+<span class="material-symbols-outlined text-[24px]">confirmation_number</span>
+<span class="font-label text-[12px] font-medium mt-1">
+    <span x-show="lang === 'en'">Queue</span>
+    <span x-show="lang === 'pa'">ਕਤਾਰ</span>
+    <span x-show="lang === 'hi'">कतार</span>
+    <span x-show="lang === 'te'">క్యూ</span>
+    <span x-show="lang === 'ta'">வரிசை</span>
+    <span x-show="lang === 'ml'">ക്യൂ</span>
+    <span x-show="lang === 'kn'">ക്ಯೂ</span>
+    <span x-show="lang === 'ur'">قطار</span>
+</span>
+</a>
+
+<!-- Profile Button (Active State Bubble) -->
+<a class="flex flex-col items-center justify-center bg-black text-white rounded-full px-7 py-2 -mt-4 shadow-md" href="profile.html">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label text-[10px] font-medium mt-0.5">
+    <span x-show="lang === 'en'">Profile</span>
+    <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
+    <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
+    <span x-show="lang === 'te'">ప్రొఫైల్</span>
+    <span x-show="lang === 'ta'">சுயவிவரம்</span>
+    <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
+    <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
+    <span x-show="lang === 'ur'">پروفائل</span>
+</span>
+</a>
+</nav>
+
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html class="light" lang="en" x-data="{ lang: 'en' }">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kisan Konnect - Market</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // Initialize Supabase & Protect Route
+    const supabaseUrl = 'https://lwexxnbwtltigadhzasa.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3ZXh4bmJ3dGx0aWdhZGh6YXNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTEyOTIsImV4cCI6MjEwMzQyNzI5Mn0.iZzB-KI5_dAamTdROz06knj57jgahVhXkHeSvaBNiaI';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function checkAuth() {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+            window.location.href = 'login.html';
+        }
+    }
+    checkAuth();
+</script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Mukta:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "background": "#f8f9fb", "on-secondary-fixed-variant": "#005303", "tertiary-container": "#2e1500", "surface-container-lowest": "#ffffff", "on-error-container": "#93000a", "tertiary-fixed-dim": "#ffb77a", "on-secondary-container": "#007306", "tertiary": "#000000", "inverse-primary": "#bbc3fb", "inverse-surface": "#2d3133", "on-error": "#ffffff", "on-primary": "#ffffff", "on-surface-variant": "#46464f", "surface-tint": "#535b8c", "on-tertiary-fixed-variant": "#6d3a00", "surface-container-highest": "#e0e3e5", "secondary-fixed-dim": "#79dd68", "secondary-container": "#91f77e", "on-tertiary-fixed": "#2e1500", "surface": "#f8f9fb", "on-tertiary": "#ffffff", "on-primary-fixed": "#0d1745", "on-background": "#191c1e", "secondary-fixed": "#94fa81", "primary-fixed-dim": "#bbc3fb", "surface-container": "#eceef0", "on-secondary-fixed": "#002200", "outline-variant": "#c6c5d0", "on-tertiary-container": "#c66d00", "error": "#ba1a1a", "surface-container-low": "#f2f4f6", "on-secondary": "#ffffff", "surface-variant": "#e0e3e5", "surface-bright": "#f8f9fb", "primary-fixed": "#dee1ff", "on-surface": "#191c1e", "primary": "#000000", "on-primary-container": "#7881b4", "on-primary-fixed-variant": "#3b4473", "tertiary-fixed": "#ffdcc2", "outline": "#767680", "inverse-on-surface": "#eff1f3", "error-container": "#ffdad6", "primary-container": "#0d1745", "surface-dim": "#d8dadc", "secondary": "#006e06", "surface-container-high": "#e6e8ea"
+                },
+                borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
+                fontFamily: { "headline": ["Poppins", "sans-serif"], "display": ["Poppins", "sans-serif"], "body": ["Inter", "sans-serif"], "label": ["Mukta", "sans-serif"] }
+            }
+        }
+    }
+</script>
+<style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+</style>
+</head>
+<body class="bg-background text-on-background font-body min-h-screen pb-28">
+
+<nav class="fixed top-0 w-full z-50 shadow-md bg-[#0d1745] flex justify-between items-center px-4 h-16">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm overflow-hidden border border-white/20">
+<img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Konnect Logo">
+</div>
+<h1 class="font-headline text-[20px] font-bold tracking-tight text-white uppercase">KISAN KONNECT</h1>
+</div>
+
+<nav class="hidden xl:flex gap-6 items-center h-full pt-1">
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="index.html">
+    <span x-show="lang === 'en'">Home</span>
+    <span x-show="lang === 'pa'">ਘਰ</span>
+    <span x-show="lang === 'hi'">होम</span>
+    <span x-show="lang === 'te'">హోమ్</span>
+    <span x-show="lang === 'ta'">முகப்பு</span>
+    <span x-show="lang === 'ml'">ഹോം</span>
+    <span x-show="lang === 'kn'">ಮುಖಪುಟ</span>
+    <span x-show="lang === 'ur'">ہوم</span>
+</a>
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary border-on-primary font-semibold" href="mandi.html">
+    <span x-show="lang === 'en'">Mandi</span>
+    <span x-show="lang === 'pa'">ਮੰਡੀ</span>
+    <span x-show="lang === 'hi'">मंडी</span>
+    <span x-show="lang === 'te'">మండి</span>
+    <span x-show="lang === 'ta'">சந்தை</span>
+    <span x-show="lang === 'ml'">ചന്ത</span>
+    <span x-show="lang === 'kn'">ಮಂಡಿ</span>
+    <span x-show="lang === 'ur'">منڈی</span>
+</a>
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="queue.html">
+    <span x-show="lang === 'en'">Book Slot</span>
+    <span x-show="lang === 'pa'">ਸਲਾਟ ਬੁੱਕ ਕਰੋ</span>
+    <span x-show="lang === 'hi'">स्लॉट बुक करें</span>
+    <span x-show="lang === 'te'">స్లాట్ బుక్ చేయండి</span>
+    <span x-show="lang === 'ta'">ஸ்லாட் பதிவு</span>
+    <span x-show="lang === 'ml'">സ്ലോട്ട് ബുക്ക് ചെയ്യുക</span>
+    <span x-show="lang === 'kn'">ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ</span>
+    <span x-show="lang === 'ur'">سلاٹ بک کریں</span>
+</a>
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="profile.html">
+    <span x-show="lang === 'en'">Profile</span>
+    <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
+    <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
+    <span x-show="lang === 'te'">ప్రొఫైల్</span>
+    <span x-show="lang === 'ta'">சுயவிவரம்</span>
+    <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
+    <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
+    <span x-show="lang === 'ur'">پروفائل</span>
+</a>
+</nav>
+
+<div class="flex items-center gap-3">
+    <select x-model="lang" aria-label="Select Language" class="bg-white/10 hover:bg-white/20 text-white text-xs rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer font-bold border border-white/25">
+        <option value="en" class="text-black">English</option>
+        <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
+        <option value="hi" class="text-black">हिन्दी</option>
+        <option value="te" class="text-black">తెలుగు</option>
+        <option value="ta" class="text-black">தமிழ்</option>
+        <option value="ml" class="text-black">മലയാളം</option>
+        <option value="kn" class="text-black">ಕನ್ನಡ</option>
+        <option value="ur" class="text-black">اردو</option>
+    </select>
+    <button class="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden border border-white/20">
+    <img alt="User profile avatar" class="w-full h-full object-cover" src="kisan.jpg"/>
+    </button>
+</div>
+</nav>
+
+<main class="pt-[80px] px-4 md:px-8 max-w-screen-xl mx-auto">
+<div class="mb-6">
+<h2 class="font-headline text-[24px] font-semibold text-primary mb-1">
+    <span x-show="lang === 'en'">Market Prices</span>
+    <span x-show="lang === 'pa'">ਮੰਡੀ ਭਾਅ</span>
+    <span x-show="lang === 'hi'">बाजार भाव</span>
+    <span x-show="lang === 'te'">మార్కెట్ ధరలు</span>
+    <span x-show="lang === 'ta'">சந்தை விலைகள்</span>
+    <span x-show="lang === 'ml'">വിപണി വിലകൾ</span>
+    <span x-show="lang === 'kn'">ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳು</span>
+    <span x-show="lang === 'ur'">مارکیٹ کی قیمتیں</span>
+</h2>
+<p class="font-body text-[16px] text-outline mb-4">
+    <span x-show="lang === 'en'">Live updates from regional mandis</span>
+    <span x-show="lang === 'pa'">ਖੇਤਰੀ ਮੰਡੀਆਂ ਤੋਂ ਲਾਈਵ ਅੱਪਡੇਟ</span>
+    <span x-show="lang === 'hi'">क्षेत्रीय मंडियों से लाइव अपडेट</span>
+    <span x-show="lang === 'te'">ప్రాంతీయ మండిల నుండి ప్రత్యక్ష నవీకరణలు</span>
+    <span x-show="lang === 'ta'">பிராந்திய சந்தைகளிலிருந்து நேரலை புதுப்பிப்புகள்</span>
+    <span x-show="lang === 'ml'">പ്രാദേശിക ചന്തകളിൽ നിന്നുള്ള തത്സമയ അപ്ഡേറ്റുകൾ</span>
+    <span x-show="lang === 'kn'">ಪ್ರಾದೇಶಿಕ ಮಂಡಿಗಳಿಂದ ಲೈವ್ ನವೀಕರಣಗಳು</span>
+    <span x-show="lang === 'ur'">علاقائی منڈیوں سے لائیو اپ ڈیٹس</span>
+</p>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-12 pr-4 py-3 rounded-lg bg-surface-container-lowest border-none shadow-[0_4px_12px_rgba(0,0,0,0.04)] text-on-surface font-body text-[16px] focus:ring-2 focus:ring-secondary focus:outline-none" :placeholder="lang === 'en' ? 'Search crops, mandis...' : (lang === 'pa' ? 'ਫਸਲਾਂ, ਮੰਡੀਆਂ ਖੋਜੋ...' : (lang === 'hi' ? 'फसलें, मंडियां खोजें...' : (lang === 'te' ? 'పంటలు, మండిలను వెతకండి...' : (lang === 'ta' ? 'பயிர்கள், சந்தைகளைத் தேடுங்கள்...' : (lang === 'ml' ? 'വിളകളും ചന്തകളും തിരയുക...' : (lang === 'kn' ? 'ಬೆಳೆಗಳು, ಮಂಡಿಗಳನ್ನು ಹುಡುಕಿ...' : 'فصلیں، منڈیاں تلاش کریں...'))))))" type="text"/>
+</div>
+</div>
+
+<div class="flex gap-3 overflow-x-auto no-scrollbar -mx-4 px-4 mb-6">
+<button class="px-5 py-2 rounded-full bg-secondary-container text-on-secondary-container font-label text-[14px] font-semibold whitespace-nowrap shadow-sm">
+    <span x-show="lang === 'en'">All Crops</span>
+    <span x-show="lang === 'pa'">ਸਾਰੀਆਂ ਫਸਲਾਂ</span>
+    <span x-show="lang === 'hi'">सभी फसलें</span>
+    <span x-show="lang === 'te'">అన్ని పంటలు</span>
+    <span x-show="lang === 'ta'">அனைத்து பயிர்கள்</span>
+    <span x-show="lang === 'ml'">എല്ലാ വിളകളും</span>
+    <span x-show="lang === 'kn'">ಎಲ್ಲಾ ಬೆಳೆಗಳು</span>
+    <span x-show="lang === 'ur'">تمام فصلیں</span>
+</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label text-[14px] font-medium whitespace-nowrap border border-outline-variant/30 shadow-sm">
+    <span x-show="lang === 'en'">Grains</span>
+    <span x-show="lang === 'pa'">ਅਨਾਜ</span>
+    <span x-show="lang === 'hi'">अनाज</span>
+    <span x-show="lang === 'te'">ధాన్యాలు</span>
+    <span x-show="lang === 'ta'">தானியங்கள்</span>
+    <span x-show="lang === 'ml'">ധാന്യങ്ങൾ</span>
+    <span x-show="lang === 'kn'">ಧಾನ್ಯಗಳು</span>
+    <span x-show="lang === 'ur'">اناج</span>
+</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label text-[14px] font-medium whitespace-nowrap border border-outline-variant/30 shadow-sm">
+    <span x-show="lang === 'en'">Pulses</span>
+    <span x-show="lang === 'pa'">ਦਾਲਾਂ</span>
+    <span x-show="lang === 'hi'">दालें</span>
+    <span x-show="lang === 'te'">పప్పుధాన్యాలు</span>
+    <span x-show="lang === 'ta'">பருப்பு வகைகள்</span>
+    <span x-show="lang === 'ml'">പരിപ്പുകൾ</span>
+    <span x-show="lang === 'kn'">ಕಾಳುಗಳು</span>
+    <span x-show="lang === 'ur'">دالیں</span>
+</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label text-[14px] font-medium whitespace-nowrap border border-outline-variant/30 shadow-sm">
+    <span x-show="lang === 'en'">Vegetables</span>
+    <span x-show="lang === 'pa'">ਸਬਜ਼ੀਆਂ</span>
+    <span x-show="lang === 'hi'">सब्जियां</span>
+    <span x-show="lang === 'te'">కూరగాయలు</span>
+    <span x-show="lang === 'ta'">காய்கறிகள்</span>
+    <span x-show="lang === 'ml'">പച്ചക്കറികൾ</span>
+    <span x-show="lang === 'kn'">ತರಕಾರಿಗಳು</span>
+    <span x-show="lang === 'ur'">سبزیاں</span>
+</button>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-4 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex gap-4 items-center">
+<div class="w-14 h-14 rounded-lg overflow-hidden bg-surface-variant shrink-0"><img class="w-full h-full object-cover" src="wheat.jpg"/></div>
+<div>
+<h3 class="font-headline text-[18px] font-semibold text-primary">Wheat (Lokwan)</h3>
+<div class="flex items-center gap-1 mt-0.5"><span class="material-symbols-outlined text-[14px] text-outline">location_on</span><span class="font-body text-[14px] text-outline">Nashik Mandi</span></div>
+</div>
+</div>
+<div class="text-right shrink-0"><p class="font-headline text-[20px] font-bold text-secondary">₹2,450</p><p class="font-label text-[12px] text-outline">
+    <span x-show="lang === 'en'">/ quintal</span>
+    <span x-show="lang === 'pa'">/ ਕੁਇੰਟਲ</span>
+    <span x-show="lang === 'hi'">/ क्विंटल</span>
+    <span x-show="lang === 'te'">/ క్వింటాల్</span>
+    <span x-show="lang === 'ta'">/ குவிண்டால்</span>
+    <span x-show="lang === 'ml'">/ ക്വിന്റൽ</span>
+    <span x-show="lang === 'kn'">/ ಕ್ವಿಂಟಾಲ್</span>
+    <span x-show="lang === 'ur'">/ کوئنٹل</span>
+</p></div>
+</div>
+<div class="flex justify-between items-center pt-3 border-t border-surface-variant/50">
+<div class="flex items-center gap-1 text-secondary bg-secondary-container/30 px-2 py-1 rounded"><span class="material-symbols-outlined text-[16px]">trending_up</span><span class="font-label text-[14px] font-semibold">
+    <span x-show="lang === 'en'">+2.4% today</span>
+    <span x-show="lang === 'pa'">+2.4% ਅੱਜ</span>
+    <span x-show="lang === 'hi'">+2.4% आज</span>
+    <span x-show="lang === 'te'">+2.4% ఈరోజు</span>
+    <span x-show="lang === 'ta'">+2.4% இன்று</span>
+    <span x-show="lang === 'ml'">+2.4% ഇന്ന്</span>
+    <span x-show="lang === 'kn'">+2.4% ಇಂದು</span>
+    <span x-show="lang === 'ur'">+2.4% آج</span>
+</span></div>
+<button class="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-label text-[14px] font-semibold">
+    <span x-show="lang === 'en'">View Analysis</span>
+    <span x-show="lang === 'pa'">ਵਿਸ਼ਲੇਸ਼ਣ ਵੇਖੋ</span>
+    <span x-show="lang === 'hi'">विश्लेषण देखें</span>
+    <span x-show="lang === 'te'">విశ్లేషణను వీక్షించండి</span>
+    <span x-show="lang === 'ta'">பகுப்பாய்வைக் காண்க</span>
+    <span x-show="lang === 'ml'">വിശകലനം കാണുക</span>
+    <span x-show="lang === 'kn'">ವಿಶ್ಲೇಷಣೆಯನ್ನು ವೀಕ್ಷಿಸಿ</span>
+    <span x-show="lang === 'ur'">تجزیہ دیکھیں</span>
+</button>
+</div>
+</div>
+
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-4 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex gap-4 items-center">
+<div class="w-14 h-14 rounded-lg overflow-hidden bg-surface-variant shrink-0"><img class="w-full h-full object-cover" src="Tomato(Hybrid).avif"/></div>
+<div>
+<h3 class="font-headline text-[18px] font-semibold text-primary">Tomato (Hybrid)</h3>
+<div class="flex items-center gap-1 mt-0.5"><span class="material-symbols-outlined text-[14px] text-outline">location_on</span><span class="font-body text-[14px] text-outline">Pune APMC</span></div>
+</div>
+</div>
+<div class="text-right shrink-0"><p class="font-headline text-[20px] font-bold text-error">₹1,200</p><p class="font-label text-[12px] text-outline">
+    <span x-show="lang === 'en'">/ quintal</span>
+    <span x-show="lang === 'pa'">/ ਕੁਇੰਟਲ</span>
+    <span x-show="lang === 'hi'">/ क्विंटल</span>
+    <span x-show="lang === 'te'">/ క్వింటాల్</span>
+    <span x-show="lang === 'ta'">/ குவிண்டால்</span>
+    <span x-show="lang === 'ml'">/ ക്വിന്റൽ</span>
+    <span x-show="lang === 'kn'">/ ಕ್ವಿಂಟಾಲ್</span>
+    <span x-show="lang === 'ur'">/ کوئنٹل</span>
+</p></div>
+</div>
+<div class="flex justify-between items-center pt-3 border-t border-surface-variant/50">
+<div class="flex items-center gap-1 text-error bg-error-container/30 px-2 py-1 rounded"><span class="material-symbols-outlined text-[16px]">trending_down</span><span class="font-label text-[14px] font-semibold">
+    <span x-show="lang === 'en'">-5.1% today</span>
+    <span x-show="lang === 'pa'">-5.1% ਅੱਜ</span>
+    <span x-show="lang === 'hi'">-5.1% आज</span>
+    <span x-show="lang === 'te'">-5.1% ఈరోజు</span>
+    <span x-show="lang === 'ta'">-5.1% இன்று</span>
+    <span x-show="lang === 'ml'">-5.1% ഇന്ന്</span>
+    <span x-show="lang === 'kn'">-5.1% ಇಂದು</span>
+    <span x-show="lang === 'ur'">-5.1% آج</span>
+</span></div>
+<button class="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-label text-[14px] font-semibold">
+    <span x-show="lang === 'en'">View Analysis</span>
+    <span x-show="lang === 'pa'">ਵਿਸ਼ਲੇਸ਼ਣ ਵੇਖੋ</span>
+    <span x-show="lang === 'hi'">विश्लेषण देखें</span>
+    <span x-show="lang === 'te'">విశ్లేషణను వీక్షించండి</span>
+    <span x-show="lang === 'ta'">பகுப்பாய்வைக் காண்க</span>
+    <span x-show="lang === 'ml'">വിശകലനം കാണുക</span>
+    <span x-show="lang === 'kn'">ವಿಶ್ಲೇಷಣೆಯನ್ನು ವೀಕ್ಷಿಸಿ</span>
+    <span x-show="lang === 'ur'">تجزیہ دیکھیں</span>
+</button>
+</div>
+</div>
+
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-4 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="flex gap-4 items-center">
+<div class="w-14 h-14 rounded-lg overflow-hidden bg-surface-variant shrink-0"><img class="w-full h-full object-cover" src="Toor Dal.webp"/></div>
+<div>
+<h3 class="font-headline text-[18px] font-semibold text-primary">Toor Dal</h3>
+<div class="flex items-center gap-1 mt-0.5"><span class="material-symbols-outlined text-[14px] text-outline">location_on</span><span class="font-body text-[14px] text-outline">Latur Market</span></div>
+</div>
+</div>
+<div class="text-right shrink-0"><p class="font-headline text-[20px] font-bold text-secondary">₹11,850</p><p class="font-label text-[12px] text-outline">
+    <span x-show="lang === 'en'">/ quintal</span>
+    <span x-show="lang === 'pa'">/ ਕੁਇੰਟਲ</span>
+    <span x-show="lang === 'hi'">/ क्विंटल</span>
+    <span x-show="lang === 'te'">/ క్వింటాల్</span>
+    <span x-show="lang === 'ta'">/ குவிண்டால்</span>
+    <span x-show="lang === 'ml'">/ ക്വിന്റൽ</span>
+    <span x-show="lang === 'kn'">/ ಕ್ವಿಂಟಾಲ್</span>
+    <span x-show="lang === 'ur'">/ کوئنٹل</span>
+</p></div>
+</div>
+<div class="flex justify-between items-center pt-3 border-t border-surface-variant/50">
+<div class="flex items-center gap-1 text-secondary bg-secondary-container/30 px-2 py-1 rounded"><span class="material-symbols-outlined text-[16px]">trending_up</span><span class="font-label text-[14px] font-semibold">
+    <span x-show="lang === 'en'">+1.2% today</span>
+    <span x-show="lang === 'pa'">+1.2% ਅੱਜ</span>
+    <span x-show="lang === 'hi'">+1.2% आज</span>
+    <span x-show="lang === 'te'">+1.2% ఈరోజు</span>
+    <span x-show="lang === 'ta'">+1.2% இன்று</span>
+    <span x-show="lang === 'ml'">+1.2% ഇന്ന്</span>
+    <span x-show="lang === 'kn'">+1.2% ಇಂದು</span>
+    <span x-show="lang === 'ur'">+1.2% آج</span>
+</span></div>
+<button class="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-label text-[14px] font-semibold">
+    <span x-show="lang === 'en'">View Analysis</span>
+    <span x-show="lang === 'pa'">ਵਿਸ਼ਲੇਸ਼ਣ ਵੇਖੋ</span>
+    <span x-show="lang === 'hi'">विश्लेषण देखें</span>
+    <span x-show="lang === 'te'">విశ్లేషణను వీక్షించండి</span>
+    <span x-show="lang === 'ta'">பகுப்பாய்வைக் காண்க</span>
+    <span x-show="lang === 'ml'">വിശകലനം കാണുക</span>
+    <span x-show="lang === 'kn'">ವಿಶ್ಲೇಷಣೆಯನ್ನು ವೀಕ್ಷಿಸಿ</span>
+    <span x-show="lang === 'ur'">تجزیہ دیکھیں</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden bg-white/85 backdrop-blur-xl rounded-t-lg border-t border-white/40 shadow-2xl">
+<a aria-label="Home" class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="index.html">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label text-[12px] font-medium mt-1">
+    <span x-show="lang === 'en'">Home</span>
+    <span x-show="lang === 'pa'">ਘਰ</span>
+    <span x-show="lang === 'hi'">होम</span>
+    <span x-show="lang === 'te'">హోమ్</span>
+    <span x-show="lang === 'ta'">முகப்பு</span>
+    <span x-show="lang === 'ml'">ഹോം</span>
+    <span x-show="lang === 'kn'">ಮುಖಪುಟ</span>
+    <span x-show="lang === 'ur'">ہوم</span>
+</span>
+</a>
+
+<a aria-label="Mandi" class="flex flex-col items-center justify-center bg-black text-white rounded-full px-7 py-2 -mt-4 shadow-md" href="mandi.html">
+    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">storefront</span>
+<span class="font-label text-[10px] font-medium mt-0.5">
+    <span x-show="lang === 'en'">Mandi</span>
+    <span x-show="lang === 'pa'">ਮੰਡੀ</span>
+    <span x-show="lang === 'hi'">मंडी</span>
+    <span x-show="lang === 'te'">మండి</span>
+    <span x-show="lang === 'ta'">சந்தை</span>
+    <span x-show="lang === 'ml'">ചന്ത</span>
+    <span x-show="lang === 'kn'">ಮಂಡಿ</span>
+    <span x-show="lang === 'ur'">منڈی</span>
+</span>
+</a>
+
+<a aria-label="Queue" class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="queue.html">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="font-label text-[12px] font-medium mt-1">
+    <span x-show="lang === 'en'">Queue</span>
+    <span x-show="lang === 'pa'">ਕਤਾਰ</span>
+    <span x-show="lang === 'hi'">कतार</span>
+    <span x-show="lang === 'te'">క్యూ</span>
+    <span x-show="lang === 'ta'">வரிசை</span>
+    <span x-show="lang === 'ml'">ക്യൂ</span>
+    <span x-show="lang === 'kn'">ಕ್ಯೂ</span>
+    <span x-show="lang === 'ur'">قطار</span>
+</span>
+</a>
+
+<a aria-label="Profile" class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="profile.html">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label text-[12px] font-medium mt-1">
+    <span x-show="lang === 'en'">Profile</span>
+    <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
+    <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
+    <span x-show="lang === 'te'">ప్రొఫైల్</span>
+    <span x-show="lang === 'ta'">சுயவிவரம்</span>
+    <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
+    <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
+    <span x-show="lang === 'ur'">پروفائل</span>
+</span>
+</a>
+</nav>
+
+</body>
+</html>

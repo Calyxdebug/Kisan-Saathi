@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html class="light" lang="en" x-data="{ lang: 'en', searchQuery: '', expertCategory: 'all' }">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kisan Konnect - Agri Support & Expert Advice</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Alpine.js for interactivity -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Mukta:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "background": "#f8f9fb", "on-secondary-fixed-variant": "#005303", "tertiary-container": "#2e1500", "surface-container-lowest": "#ffffff", "on-error-container": "#93000a", "tertiary-fixed-dim": "#ffb77a", "on-secondary-container": "#007306", "tertiary": "#000000", "inverse-primary": "#bbc3fb", "inverse-surface": "#2d3133", "on-error": "#ffffff", "on-primary": "#ffffff", "on-surface-variant": "#46464f", "surface-tint": "#535b8c", "on-tertiary-fixed-variant": "#6d3a00", "surface-container-highest": "#e0e3e5", "secondary-fixed-dim": "#79dd68", "secondary-container": "#91f77e", "on-tertiary-fixed": "#2e1500", "surface": "#f8f9fb", "on-tertiary": "#ffffff", "on-primary-fixed": "#0d1745", "on-background": "#191c1e", "secondary-fixed": "#94fa81", "primary-fixed-dim": "#bbc3fb", "surface-container": "#eceef0", "on-secondary-fixed": "#002200", "outline-variant": "#c6c5d0", "on-tertiary-container": "#c66d00", "error": "#ba1a1a", "surface-container-low": "#f2f4f6", "on-secondary": "#ffffff", "surface-variant": "#e0e3e5", "surface-bright": "#f8f9fb", "primary-fixed": "#dee1ff", "on-surface": "#191c1e", "primary": "#000000", "on-primary-container": "#7881b4", "on-primary-fixed-variant": "#3b4473", "tertiary-fixed": "#ffdcc2", "outline": "#767680", "inverse-on-surface": "#eff1f3", "error-container": "#ffdad6", "primary-container": "#0d1745", "surface-dim": "#d8dadc", "secondary": "#006e06", "surface-container-high": "#e6e8ea"
+                },
+                borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
+                fontFamily: { "headline": ["Poppins", "sans-serif"], "display": ["Poppins", "sans-serif"], "body": ["Inter", "sans-serif"], "label": ["Mukta", "sans-serif"] }
+            }
+        }
+    }
+</script>
+<style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    .frosted-pearl {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+</style>
+</head>
+<body class="bg-background text-on-background font-body min-h-screen pb-28">
+
+<!-- Top Bar Updated -->
+<header class="fixed top-0 w-full z-50 shadow-md bg-[#0d1745] flex justify-between items-center px-4 h-16">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm overflow-hidden border border-white/20">
+<img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Konnect Logo"/>
+</div>
+<h1 class="font-headline text-[20px] font-bold tracking-tight text-white uppercase">KISAN KONNECT</h1>
+</div>
+
+<!-- Desktop Navigation Links -->
+<nav class="hidden xl:flex gap-6 items-center h-full pt-1">
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="index.html">
+    <span x-show="lang === 'en'">Home</span>
+    <span x-show="lang === 'pa'">ਘਰ</span>
+    <span x-show="lang === 'hi'">होम</span>
+    <span x-show="lang === 'te'">హోమ్</span>
+    <span x-show="lang === 'ta'">முகப்பு</span>
+    <span x-show="lang === 'ml'">ഹോം</span>
+    <span x-show="lang === 'kn'">ಮುಖಪುಟ</span>
+    <span x-show="lang === 'ur'">ہوم</span>
+</a>
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="market.html">
+    <span x-show="lang === 'en'">Mandi</span>
+    <span x-show="lang === 'pa'">ਮੰਡੀ</span>
+    <span x-show="lang === 'hi'">मंडी</span>
+    <span x-show="lang === 'te'">మండి</span>
+    <span x-show="lang === 'ta'">சந்தை</span>
+    <span x-show="lang === 'ml'">ചന്ത</span>
+    <span x-show="lang === 'kn'">ಮಂಡಿ</span>
+    <span x-show="lang === 'ur'">منڈی</span>
+</a>
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="queue.html">
+    <span x-show="lang === 'en'">Book Slot</span>
+    <span x-show="lang === 'pa'">ਸਲਾਟ ਬੁੱਕ ਕਰੋ</span>
+    <span x-show="lang === 'hi'">स्लॉट बुक करें</span>
+    <span x-show="lang === 'te'">స్లాట్ బుక్ చేయండి</span>
+    <span x-show="lang === 'ta'">ஸ்லாட் பதிவு</span>
+    <span x-show="lang === 'ml'">സ്ലോട്ട് ബുക്ക് ചെയ്യുക</span>
+    <span x-show="lang === 'kn'">ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ</span>
+    <span x-show="lang === 'ur'">سلاٹ بک کریں</span>
+</a>
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="profile.html">
+    <span x-show="lang === 'en'">Profile</span>
+    <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
+    <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
+    <span x-show="lang === 'te'">ప్రొఫైల్</span>
+    <span x-show="lang === 'ta'">சுயவிவரம்</span>
+    <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
+    <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
+    <span x-show="lang === 'ur'">پروفائل</span>
+</a>
+</nav>
+
+<div class="flex items-center gap-3">
+    <!-- Language Switcher Dropdown -->
+    <select x-model="lang" aria-label="Select Language" class="bg-white/10 hover:bg-white/20 text-white text-xs rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer font-bold border border-white/25">
+        <option value="en" class="text-black">English</option>
+        <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
+        <option value="hi" class="text-black">हिन्दी</option>
+        <option value="te" class="text-black">తెలుగు</option>
+        <option value="ta" class="text-black">தமிழ்</option>
+        <option value="ml" class="text-black">മലയാളം</option>
+        <option value="kn" class="text-black">ಕನ್ನಡ</option>
+        <option value="ur" class="text-black">اردو</option>
+    </select>
+    <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white/20 shadow-sm cursor-pointer">
+    <img alt="Harjinder Singh Profile" class="w-full h-full object-cover" src="kisan.jpg"/>
+    </div>
+</div>
+</header>
+
+<main class="pt-[80px] px-4 md:px-8 max-w-screen-xl mx-auto flex flex-col gap-8">
+<!-- Hero Support Header -->
+<div class="bg-primary-container text-white rounded-2xl p-6 md:p-8 relative overflow-hidden shadow-lg">
+<div class="absolute right-0 bottom-0 opacity-10 translate-x-4 translate-y-4">
+<span class="material-symbols-outlined text-[160px]">support_agent</span>
+</div>
+<div class="relative z-10 max-w-xl">
+<span class="bg-secondary text-on-secondary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 inline-block">
+    <span x-show="lang === 'en'">24/7 Expert Help</span>
+    <span x-show="lang === 'pa'">24/7 ਮਾਹਰ ਸਹਾਇਤਾ</span>
+    <span x-show="lang === 'hi'">24/7 विशेषज्ञ सहायता</span>
+    <span x-show="lang === 'te'">24/7 నిపుణుల సహాయం</span>
+    <span x-show="lang === 'ta'">24/7 நிபுணர் உதவி</span>
+    <span x-show="lang === 'ml'">24/7 വിദഗ്ദ്ധ സഹായം</span>
+    <span x-show="lang === 'kn'">24/7 ತಜ್ಞರ ಸಹಾಯ</span>
+    <span x-show="lang === 'ur'">24/7 ماہر کی مدد</span>
+</span>
+<h2 class="font-headline text-[28px] md:text-[32px] font-bold mb-2">
+    <span x-show="lang === 'en'">Agricultural Support Center</span>
+    <span x-show="lang === 'pa'">ਖੇਤੀਬਾੜੀ ਸਹਾਇਤਾ ਕੇਂਦਰ</span>
+    <span x-show="lang === 'hi'">कृषि सहायता केंद्र</span>
+    <span x-show="lang === 'te'">వ్యవసాయ మద్దతు కేంద్రం</span>
+    <span x-show="lang === 'ta'">விவசாய ஆதரவு மையம்</span>
+    <span x-show="lang === 'ml'">കാർഷിക പിന്തുണ കേന്ദ്രം</span>
+    <span x-show="lang === 'kn'">ಕೃಷಿ ಬೆಂಬಲ ಕೇಂದ್ರ</span>
+    <span x-show="lang === 'ur'">زرعی معاونت مرکز</span>
+</h2>
+<p class="font-body text-inverse-primary text-[15px] mb-6">
+    <span x-show="lang === 'en'">Connect directly with government agronomists, pest control specialists, and mandi support desk.</span>
+    <span x-show="lang === 'pa'">ਸਰਕਾਰੀ ਖੇਤੀ ਮਾਹਰਾਂ, ਕੀਟ ਕੰਟਰੋਲ ਮਾਹਰਾਂ ਅਤੇ ਮੰਡੀ ਸਹਾਇਤਾ ਡੈਸਕ ਨਾਲ ਸਿੱਧਾ ਸੰਪਰਕ ਕਰੋ।</span>
+    <span x-show="lang === 'hi'">सरकारी कृषि विशेषज्ञों, कीट नियंत्रण विशेषज्ञों और मंडी सहायता डेस्क से सीधे जुड़ें।</span>
+    <span x-show="lang === 'te'">ప్రభుత్వ వ్యవసాయ నిపుణులు, కీటక నియంత్రణ నిపుణులు మరియు మండి హెల్ప్‌డెస్క్‌తో నేరుగా కనెక్ట్ అవ్వండి।</span>
+    <span x-show="lang === 'ta'">அரசு வேளாண் நிபுணர்கள் மற்றும் சந்தை உதவி மையத்துடன் நேரடியாகத் தொடர்பு கொள்ளுங்கள்।</span>
+    <span x-show="lang === 'ml'">സർക്കാർ കാർഷിക വിദഗ്ദ്ധരുമായി നേരിട്ട് ബന്ധപ്പെടുക.</span>
+    <span x-show="lang === 'kn'">सरकारी ಕೃಷಿ ತಜ್ಞರೊಂದಿಗೆ ನೇರವಾಗಿ ಸಂಪರ್ಕಿಸಿ.</span>
+    <span x-show="lang === 'ur'">सरकारी زراعت کے ماہرین سے براہ راست رابطہ کریں۔</span>
+</p>
+<div class="flex flex-wrap gap-3">
+<a href="tel:18001801551" class="bg-secondary text-on-secondary font-label text-[15px] font-bold px-5 py-2.5 rounded-xl shadow-md flex items-center gap-2 hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">call</span>
+<span>
+    <span x-show="lang === 'en'">Call Kisan Helpline</span>
+    <span x-show="lang === 'pa'">ਕਿਸਾਨ ਹੈਲਪਲਾਈਨ ਨੂੰ ਕਾਲ ਕਰੋ</span>
+    <span x-show="lang === 'hi'">किसान हेल्पलाइन पर कॉल करें</span>
+    <span x-show="lang === 'te'">కిసాన్ హెల్ప్‌లైన్‌కు కాల్ చేయండి</span>
+    <span x-show="lang === 'ta'">கிசான் உதவி எண்ணை அழைக்கவும்</span>
+    <span x-show="lang === 'ml'">ഹെൽപ്‌ലൈനിൽ വിളിക്കുക</span>
+    <span x-show="lang === 'kn'">ಸಹಾಯವಾಣಿಗೆ ಕರೆ ಮಾಡಿ</span>
+    <span x-show="lang === 'ur'">ہیلپ لائن پر کال کریں</span>
+</span>
+</a>
+<a href="#experts-list" class="bg-white/10 hover:bg-white/20 border border-white/25 text-white font-label text-[15px] font-semibold px-5 py-2.5 rounded-xl transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>
+    <span x-show="lang === 'en'">Chat with Expert</span>
+    <span x-show="lang === 'pa'">ਮਾਹਰ ਨਾਲ ਗੱਲਬਾਤ ਕਰੋ</span>
+    <span x-show="lang === 'hi'">विशेषज्ञ से चैट करें</span>
+    <span x-show="lang === 'te'">నిపుణులతో చాట్ చేయండి</span>
+    <span x-show="lang === 'ta'">நிபுணரிடம் அரட்டை அடிக்கவும்</span>
+    <span x-show="lang === 'ml'">വിദഗ്ദ്ധനുമായി ചാറ്റ് ചെയ്യുക</span>
+    <span x-show="lang === 'kn'">ತಜ್ಞರೊಂದಿಗೆ ಚಾಟ್ ಮಾಡಿ</span>
+    <span x-show="lang === 'ur'">ماہر سے بات کریں</span>
+</span>
+</a>
+</div>
+</div>
+</div>
+
+<!-- Quick Ticket Status & Instant FAQs -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container/40 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">confirmation_number</span>
+</div>
+<span class="bg-secondary-container text-on-secondary-container text-xs font-bold px-2.5 py-1 rounded-full">
+    <span x-show="lang === 'en'">Active Ticket</span>
+    <span x-show="lang === 'pa'">ਸਰਗਰਮ ਟਿਕਟ</span>
+    <span x-show="lang === 'hi'">सक्रिय टिकट</span>
+    <span x-show="lang === 'te'">సక్రియ టికెట్</span>
+    <span x-show="lang === 'ta'">செயலில் உள்ள சீட்டு</span>
+    <span x-show="lang === 'ml'">സജീവ ടിക്കറ്റ്</span>
+    <span x-show="lang === 'kn'">ಸಕ್ರಿಯ ಟಿಕೆಟ್</span>
+    <span x-show="lang === 'ur'">فعال ٹکٹ</span>
+</span>
+</div>
+<h3 class="font-headline text-lg font-semibold text-primary mb-1">#TK-8902: Soil Health Card Query</h3>
+<p class="font-body text-sm text-outline mb-4">Assigned to Dr. R. K. Sharma • Ludhiana Lab</p>
+</div>
+<div class="border-t border-surface-variant pt-3 flex justify-between items-center text-xs font-semibold text-secondary">
+<span>Status: In Progress</span>
+<span>Updated 2h ago</span>
+</div>
+</div>
+
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-full bg-primary-fixed/40 text-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">pest_control</span>
+</div>
+<span class="bg-primary-fixed text-on-primary-fixed text-xs font-bold px-2.5 py-1 rounded-full">
+    <span x-show="lang === 'en'">Advisory</span>
+    <span x-show="lang === 'pa'">ਸਲਾਹ</span>
+    <span x-show="lang === 'hi'">सलाह</span>
+    <span x-show="lang === 'te'">సలహా</span>
+    <span x-show="lang === 'ta'">ஆலோசனை</span>
+    <span x-show="lang === 'ml'">ഉപദേശം</span>
+    <span x-show="lang === 'kn ಸಲಹೆ</span>
+    <span x-show="lang === 'ur'">مشورہ</span>
+</span>
+</div>
+<h3 class="font-headline text-lg font-semibold text-primary mb-1">Wheat Yellow Rust Alert</h3>
+<p class="font-body text-sm text-outline mb-4">Preventative spray recommended in northern Punjab sectors.</p>
+</div>
+<a href="#advisories" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">Read full advisory <span class="material-symbols-outlined text-[14px]">arrow_forward</span></a>
+</div>
+
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-6 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed-dim/30 text-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">school</span>
+</div>
+<span class="bg-tertiary-container text-white text-xs font-bold px-2.5 py-1 rounded-full">
+    <span x-show="lang === 'en'">Training</span>
+    <span x-show="lang === 'pa'">ਸਿਖਲਾਈ</span>
+    <span x-show="lang === 'hi'">प्रशिक्षण</span>
+    <span x-show="lang === 'te'">శిక్షణ</span>
+    <span x-show="lang === 'ta'">பயிற்சி</span>
+    <span x-show="lang === 'ml'">പരിശീലനം</span>
+    <span x-show="lang === 'kn'">ತರಬೇತಿ</span>
+    <span x-show="lang === 'ur'">تربیتی</span>
+</span>
+</div>
+<h3 class="font-headline text-lg font-semibold text-primary mb-1">Organic Farming Webinar</h3>
+<p class="font-body text-sm text-outline mb-4">Scheduled for Friday, 11:00 AM via Kisan Konnect TV.</p>
+</div>
+<button class="w-full py-2 bg-primary-container text-white rounded-lg text-xs font-semibold hover:bg-black transition-colors">Register Free</button>
+</div>
+</div>
+
+<!-- Expert Directory Section -->
+<section id="experts-list" class="flex flex-col gap-4">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h3 class="font-headline text-[22px] font-semibold text-primary">
+    <span x-show="lang === 'en'">Consult Regional Experts</span>
+    <span x-show="lang === 'pa'">ਖੇਤਰੀ ਮਾਹਰਾਂ ਨਾਲ ਸਲਾਹ ਕਰੋ</span>
+    <span x-show="lang === 'hi'">क्षेत्रीय विशेषज्ञों से परामर्श लें</span>
+    <span x-show="lang === 'te'">ప్రాంతీయ నిపుణులను సంప్రదించండి</span>
+    <span x-show="lang === 'ta'">பிராந்திய நிபுணர்களை அணுகவும்</span>
+    <span x-show="lang === 'ml'">പ്രാദേശിക വിദഗ്ദ്ധരുമായി ബന്ധപ്പെടുക</span>
+    <span x-show="lang === 'kn'">ಪ್ರಾದೇಶಿಕ ತಜ್ಞರನ್ನು ಸಂಪರ್ಕಿಸಿ</span>
+    <span x-show="lang === 'ur'">علاقائی ماہرین سے مشورہ کریں</span>
+</h3>
+<p class="font-body text-sm text-outline">Verified agricultural scientists and district extension officers</p>
+</div>
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+<button @click="expertCategory = 'all'" :class="expertCategory === 'all' ? 'bg-black text-white' : 'bg-surface-container-lowest text-on-surface-variant border border-outline-variant/30'" class="px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm transition-all">All Experts</button>
+<button @click="expertCategory = 'soil'" :class="expertCategory === 'soil' ? 'bg-black text-white' : 'bg-surface-container-lowest text-on-surface-variant border border-outline-variant/30'" class="px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm transition-all">Soil & Fertilizers</button>
+<button @click="expertCategory = 'pest'" :class="expertCategory === 'pest' ? 'bg-black text-white' : 'bg-surface-container-lowest text-on-surface-variant border border-outline-variant/30'" class="px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm transition-all">Pest Control</button>
+<button @click="expertCategory = 'market'" :class="expertCategory === 'market' ? 'bg-black text-white' : 'bg-surface-container-lowest text-on-surface-variant border border-outline-variant/30'" class="px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap shadow-sm transition-all">Mandi & MSP</button>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Expert Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-6 flex flex-col gap-4 border border-outline-variant/20">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-secondary shrink-0">
+<img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80"/>
+</div>
+<div>
+<h4 class="font-headline text-lg font-bold text-primary">Dr. Amritpal Kaur</h4>
+<p class="font-body text-xs text-secondary font-semibold">Senior Soil Scientist</p>
+<p class="font-body text-xs text-outline">PAU Ludhiana • 14 yrs exp</p>
+</div>
+</div>
+<p class="font-body text-sm text-on-surface-variant">Specialized in soil testing, micro-nutrient deficiencies, and organic compost enrichment.</p>
+<div class="flex items-center gap-2 pt-2 border-t border-surface-variant">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="text-xs font-semibold text-secondary">Available Now for Chat</span>
+</div>
+<button class="w-full py-2.5 bg-primary-container text-white font-label text-sm font-semibold rounded-lg hover:bg-black transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">chat_bubble</span>
+<span>Start Consultation</span>
+</button>
+</div>
+
+<!-- Expert Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-6 flex flex-col gap-4 border border-outline-variant/20">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-secondary shrink-0">
+<img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80"/>
+</div>
+<div>
+<h4 class="font-headline text-lg font-bold text-primary">Dr. Rajesh Verma</h4>
+<p class="font-body text-xs text-secondary font-semibold">Chief Entomologist</p>
+<p class="font-body text-xs text-outline">Crop Protection Board • 10 yrs exp</p>
+</div>
+</div>
+<p class="font-body text-sm text-on-surface-variant">Expert in wheat and paddy pest management, bio-pesticides, and disease outbreak forecasting.</p>
+<div class="flex items-center gap-2 pt-2 border-t border-surface-variant">
+<span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+<span class="text-xs font-semibold text-amber-700">In Consultation (Next slot 3:00 PM)</span>
+</div>
+<button class="w-full py-2.5 bg-surface-container-high text-primary font-label text-sm font-semibold rounded-lg hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_add_on</span>
+<span>Book Slot</span>
+</button>
+</div>
+
+<!-- Expert Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-6 flex flex-col gap-4 border border-outline-variant/20">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-secondary shrink-0">
+<img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80"/>
+</div>
+<div>
+<h4 class="font-headline text-lg font-bold text-primary">Simranjit Brar</h4>
+<p class="font-body text-xs text-secondary font-semibold">Mandi Procurement Officer</p>
+<p class="font-body text-xs text-outline">Punjab Mandi Board • 8 yrs exp</p>
+</div>
+</div>
+<p class="font-body text-sm text-on-surface-variant">Assists with digital gate passes, MSP pricing structures, direct bank payments, and queue verification.</p>
+<div class="flex items-center gap-2 pt-2 border-t border-surface-variant">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="text-xs font-semibold text-secondary">Available Now for Chat</span>
+</div>
+<button class="w-full py-2.5 bg-primary-container text-white font-label text-sm font-semibold rounded-lg hover:bg-black transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">chat_bubble</span>
+<span>Start Consultation</span>
+</button>
+</div>
+</div>
+</section>
+
+<!-- Submit Ticket Form Section -->
+<section class="bg-surface-container-lowest rounded-2xl shadow-sm p-6 md:p-8 border border-outline-variant/30">
+<div class="max-w-2xl">
+<h3 class="font-headline text-[22px] font-semibold text-primary mb-1">
+    <span x-show="lang === 'en'">Raise a Support Ticket</span>
+    <span x-show="lang === 'pa'">ਸਹਾਇਤਾ ਟਿਕਟ ਦਰਜ ਕਰੋ</span>
+    <span x-show="lang === 'hi'">सहायता टिकट दर्ज करें</span>
+    <span x-show="lang === 'te'">సహాయ టికెట్‌ను పెంచండి</span>
+    <span x-show="lang === 'ta'">ஆதரவு சீட்டை உயர்த்தவும்</span>
+    <span x-show="lang === 'ml'">പിന്തുണ ടിക്കറ്റ് സമർപ്പിക്കുക</span>
+    <span x-show="lang === 'kn'">ಬೆಂಬಲ ಟಿಕೆಟ್ ಸಲ್ಲಿಸಿ</span>
+    <span x-show="lang === 'ur'">سپورٹ ٹکٹ جمع کروائیں</span>
+</h3>
+<p class="font-body text-sm text-outline mb-6">Describe your issue or upload a photo of affected crop leaves for quick analysis.</p>
+
+<form class="flex flex-col gap-4" @submit.prevent="alert('Support ticket submitted successfully! Ticket ID #TK-9421 assigned.')">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block font-label text-xs font-bold text-on-surface-variant uppercase mb-1">Full Name</label>
+<input type="text" value="Harjinder Singh" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/40 text-sm focus:ring-2 focus:ring-secondary focus:outline-none"/>
+</div>
+<div>
+<label class="block font-label text-xs font-bold text-on-surface-variant uppercase mb-1">Mobile Number</label>
+<input type="text" value="+91 98765 43210" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/40 text-sm focus:ring-2 focus:ring-secondary focus:outline-none"/>
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block font-label text-xs font-bold text-on-surface-variant uppercase mb-1">Category</label>
+<select class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/40 text-sm focus:ring-2 focus:ring-secondary focus:outline-none">
+<option>Mandi Slot / Gate Pass Issue</option>
+<option>Crop Disease / Pest Problem</option>
+<option>Soil Testing & Fertilizer</option>
+<option>Bank Payment / KCC Credit</option>
+</select>
+</div>
+<div>
+<label class="block font-label text-xs font-bold text-on-surface-variant uppercase mb-1">District / Mandi</label>
+<input type="text" value="Ludhiana Mandi" class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/40 text-sm focus:ring-2 focus:ring-secondary focus:outline-none"/>
+</div>
+</div>
+
+<div>
+<label class="block font-label text-xs font-bold text-on-surface-variant uppercase mb-1">Message / Description</label>
+<textarea rows="4" placeholder="Describe your issue in detail..." class="w-full px-4 py-2.5 rounded-lg bg-surface border border-outline-variant/40 text-sm focus:ring-2 focus:ring-secondary focus:outline-none"></textarea>
+</div>
+
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2 text-outline text-xs">
+<span class="material-symbols-outlined">attach_file</span>
+<span>Attach crop photo (optional)</span>
+</div>
+<button type="submit" class="px-6 py-3 bg-secondary text-on-secondary font-label text-base font-bold rounded-xl shadow-md hover:opacity-90 transition-opacity">Submit Ticket</button>
+</div>
+</form>
+</div>
+</section>
+</main>
+
+<!-- BottomNavBar (Mobile Only with Profile/Support Active Bubble) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-white/85 backdrop-blur-xl rounded-t-lg border-t border-white/40 shadow-2xl">
+<!-- Home Button -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="index.html">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="font-label text-[12px] font-medium mt-1">
+    <span x-show="lang === 'en'">Home</span>
+    <span x-show="lang === 'pa'">ਘਰ</span>
+    <span x-show="lang === 'hi'">होम</span>
+    <span x-show="lang === 'te'">హోమ్</span>
+    <span x-show="lang === 'ta'">முகப்பு</span>
+    <span x-show="lang === 'ml'">ഹോം</span>
+    <span x-show="lang === 'kn'">ಮುಖಪುಟ</span>
+    <span x-show="lang === 'ur'">ہوم</span>
+</span>
+</a>
+
+<!-- Mandi Button -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="market.html">
+<span class="material-symbols-outlined text-[24px]">storefront</span>
+<span class="font-label text-[12px] font-medium mt-1">
+    <span x-show="lang === 'en'">Mandi</span>
+    <span x-show="lang === 'pa'">ਮੰਡੀ</span>
+    <span x-show="lang === 'hi'">मंडी</span>
+    <span x-show="lang === 'te'">మార్కెట్</span>
+    <span x-show="lang === 'ta'">சந்தை</span>
+    <span x-show="lang === 'ml'">മാർക്കറ്റ്</span>
+    <span x-show="lang === 'kn'">ಮಾರುಕಟ್ಟೆ</span>
+    <span x-show="lang === 'ur'">مارکیٹ</span>
+</span>
+</a>
+
+<!-- Queue Button -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="queue.html">
+<span class="material-symbols-outlined text-[24px]">confirmation_number</span>
+<span class="font-label text-[12px] font-medium mt-1">
+    <span x-show="lang === 'en'">Queue</span>
+    <span x-show="lang === 'pa'">ਕਤਾਰ</span>
+    <span x-show="lang === 'hi'">कतार</span>
+    <span x-show="lang === 'te'">క్యూ</span>
+    <span x-show="lang === 'ta'">வரிசை</span>
+    <span x-show="lang === 'ml'">ക്യൂ</span>
+    <span x-show="lang === 'kn'">ಕ್ಯೂ</span>
+    <span x-show="lang === 'ur'">قطار</span>
+</span>
+</a>
+
+<!-- Profile Button (Active Oval State) -->
+<a class="flex flex-col items-center justify-center bg-black text-white rounded-full px-8 py-2 -mt-4 shadow-md" href="profile.html">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label text-[10px] font-medium mt-0.5">
+    <span x-show="lang === 'en'">Profile</span>
+    <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
+    <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
+    <span x-show="lang === 'te'">ప్రొఫైల్</span>
+    <span x-show="lang === 'ta'">சுயவிவரம்</span>
+    <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
+    <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
+    <span x-show="lang === 'ur'">پروفائل</span>
+</span>
+</a>
+</nav>
+
+</body>
+</html>

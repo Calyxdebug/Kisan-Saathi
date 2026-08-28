@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html class="light" lang="en" x-data="{ lang: 'en', showAllNews: false }">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>All Agricultural Services - Kisan Konnect</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Mukta:wght@400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Alpine.js for interactivity -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#dee1ff",
+                        "border-subtle": "rgba(255, 255, 255, 0.4)",
+                        "surface-container-highest": "rgba(255, 255, 255, 0.9)",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#7881b4",
+                        "background": "#FBF8F5",
+                        "on-secondary-container": "#684000",
+                        "surface-variant": "#d3e4fe",
+                        "outline": "#767680",
+                        "on-tertiary-fixed": "#351000",
+                        "secondary": "#855300",
+                        "surface-bright": "#FBF8F5",
+                        "error-container": "#ffdad6",
+                        "transaction-blue": "#3b82f6",
+                        "on-secondary-fixed-variant": "#653e00",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#feb695",
+                        "on-background": "#0b1c30",
+                        "secondary-container": "#fea619",
+                        "secondary-fixed-dim": "#ffb95f",
+                        "on-error": "#ffffff",
+                        "primary": "#000000",
+                        "tertiary-container": "#351000",
+                        "on-tertiary-fixed-variant": "#6b3a21",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#ffdbcc",
+                        "on-surface-variant": "#334155",
+                        "weather-warm": "#fbbf24",
+                        "surface-dim": "#cbdbf5",
+                        "inverse-primary": "#bbc3fb",
+                        "surface-container-low": "rgba(255, 255, 255, 0.75)",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#525b8c",
+                        "on-primary-fixed-variant": "#3b4473",
+                        "kcc-amber": "#f59e0b",
+                        "primary-fixed-dim": "#bbc3fb",
+                        "tertiary": "#000000",
+                        "inverse-on-surface": "#eaf1ff",
+                        "ledger-green": "#10b981",
+                        "outline-variant": "#c6c5d0",
+                        "secondary-fixed": "#ffddb8",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#0d1745",
+                        "on-secondary-fixed": "#2a1700",
+                        "inverse-surface": "#213145",
+                        "on-tertiary-container": "#b27558",
+                        "surface-container-high": "rgba(255, 255, 255, 0.95)",
+                        "on-surface": "#0f172a",
+                        "mandi-purple": "#8b5cf6",
+                        "surface-container-lowest": "rgba(255, 255, 255, 0.85)",
+                        "surface": "#FBF8F5",
+                        "surface-container": "rgba(255, 255, 255, 0.8)",
+                        "primary-container": "#0d1745"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "margin-desktop": "32px",
+                        "unit": "4px",
+                        "bento-gap": "20px"
+                    },
+                    "fontFamily": {
+                        "data-display": ["Inter"],
+                        "headline-lg": ["Poppins"],
+                        "headline-xl": ["Poppins"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["notoSans"],
+                        "headline-lg-mobile": ["Poppins"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-constant {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            background-color: #0d1745;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface antialiased min-h-screen flex flex-col relative pb-28">
+
+<div class="bg-constant" style="background-image: url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=2000&auto=format&fit=crop');">
+    <div class="absolute inset-0 bg-black/50"></div>
+</div>
+
+<!-- TopNav Shell -->
+<nav class="fixed top-0 left-0 w-full z-50 bg-[#0d1745] shadow-md border-b border-white/10">
+<div class="flex items-center justify-between px-4 h-16 w-full">
+<div class="flex items-center gap-3">
+<a class="flex items-center justify-center p-2 rounded-full hover:bg-white/10 transition-colors active:scale-95 duration-200 text-white cursor-pointer" href="index.html">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<div class="w-8 h-8 bg-white rounded-full flex items-center justify-center overflow-hidden border border-white/25">
+<img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Konnect Logo"/>
+</div>
+<h1 class="font-headline text-[18px] sm:text-[20px] font-bold tracking-tight text-white">
+    <span x-show="lang === 'en'">All Agricultural Services</span>
+    <span x-show="lang === 'pa'">ਸਾਰੀਆਂ ਖੇਤੀਬਾੜੀ ਸੇਵਾਵਾਂ</span>
+    <span x-show="lang === 'hi'">सभी कृषि सेवाएं</span>
+    <span x-show="lang === 'te'">అన్ని వ్యవసాయ సేవలు</span>
+    <span x-show="lang === 'ta'">அனைத்து விவசாய சேவைகள்</span>
+    <span x-show="lang === 'ml'">എല്ലാ കാർഷിക സേവനങ്ങളും</span>
+    <span x-show="lang === 'kn'">ಎಲ್ಲಾ ಕೃಷಿ ಸೇವೆಗಳು</span>
+    <span x-show="lang === 'ur'">تمام زرعی خدمات</span>
+</h1>
+</div>
+<!-- Language Switcher -->
+<div>
+<select x-model="lang" aria-label="Select Language" class="bg-white/10 hover:bg-white/20 text-white text-xs rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer font-bold border border-white/20">
+    <option value="en" class="text-black">English</option>
+    <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
+    <option value="hi" class="text-black">हिन्दी</option>
+    <option value="te" class="text-black">తెలుగు</option>
+    <option value="ta" class="text-black">தமிழ்</option>
+    <option value="ml" class="text-black">മലയാളം</option>
+    <option value="kn" class="text-black">ಕನ್ನಡ</option>
+    <option value="ur" class="text-black">اردو</option>
+</select>
+</div>
+</div>
+</nav>
+
+<!-- Main Content Canvas -->
+<main class="max-w-4xl mx-auto pt-24 pb-24 px-4 flex-1 w-full flex flex-col gap-6">
+<section class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-2xl">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#fea619]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<h2 class="font-headline text-xl font-bold text-primary-container">
+    <span x-show="lang === 'en'">Complete Services & Records</span>
+    <span x-show="lang === 'pa'">ਪੂਰੀਆਂ ਸੇਵਾਵਾਂ ਅਤੇ ਰਿਕਾਰਡ</span>
+    <span x-show="lang === 'hi'">पूर्ण सेवाएं और रिकॉर्ड</span>
+    <span x-show="lang === 'te'">పూర్తి సేవలు మరియు రికార్డులు</span>
+    <span x-show="lang === 'ta'">முழுமையான சேவைகள் மற்றும் பதிவுகள்</span>
+    <span x-show="lang === 'ml'">സേവനങ്ങളും രേഖകളും</span>
+    <span x-show="lang === 'kn'">ಸಂಪೂರ್ಣ ಸೇವೆಗಳು ಮತ್ತು ದಾಖಲೆಗಳು</span>
+    <span x-show="lang === 'ur'">مکمل خدمات اور ریکارڈ</span>
+</h2>
+</div>
+<button @click="showAllNews = true" class="text-xs font-semibold text-secondary hover:underline cursor-pointer">View News & Updates</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<a href="queue.html" class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/90 border border-black/5 hover:bg-white transition-all duration-200 hover:scale-[1.02] active:scale-95 group shadow-sm">
+<div class="w-12 h-12 rounded-full bg-ledger-green/15 flex items-center justify-center group-hover:bg-ledger-green/25 transition-colors">
+<span class="material-symbols-outlined text-ledger-green">sell</span>
+</div>
+<span class="font-label text-xs text-primary-container font-semibold">
+    <span x-show="lang === 'en'">Sell Crop</span>
+    <span x-show="lang === 'pa'">ਫਸਲ ਵੇਚੋ</span>
+    <span x-show="lang === 'hi'">फसल बेचें</span>
+    <span x-show="lang === 'te'">పంట అమ్మండి</span>
+    <span x-show="lang === 'ta'">பயிர் விற்பனை</span>
+    <span x-show="lang === 'ml'">വിള വിൽക്കുക</span>
+    <span x-show="lang === 'kn'">ಬೆಳೆ ಮಾರಾಟ</span>
+    <span x-show="lang === 'ur'">فصل فروخت کریں</span>
+</span>
+</a>
+<a href="market.html" class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/90 border border-black/5 hover:bg-white transition-all duration-200 hover:scale-[1.02] active:scale-95 group shadow-sm">
+<div class="w-12 h-12 rounded-full bg-mandi-purple/15 flex items-center justify-center group-hover:bg-mandi-purple/25 transition-colors">
+<span class="material-symbols-outlined text-mandi-purple">storefront</span>
+</div>
+<span class="font-label text-xs text-primary-container font-semibold">
+    <span x-show="lang === 'en'">Market Prices</span>
+    <span x-show="lang === 'pa'">ਮੰਡੀ ਭਾਅ</span>
+    <span x-show="lang === 'hi'">बाजार भाव</span>
+    <span x-show="lang === 'te'">మార్కెట్ ధరలు</span>
+    <span x-show="lang === 'ta'">சந்தை விலைகள்</span>
+    <span x-show="lang === 'ml'">വിപണി വിലകൾ</span>
+    <span x-show="lang === 'kn'">ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳು</span>
+    <span x-show="lang === 'ur'">مارکیٹ کی قیمتیں</span>
+</span>
+</a>
+<a href="queue.html" class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/90 border border-black/5 hover:bg-white transition-all duration-200 hover:scale-[1.02] active:scale-95 group shadow-sm">
+<div class="w-12 h-12 rounded-full bg-transaction-blue/15 flex items-center justify-center group-hover:bg-transaction-blue/25 transition-colors">
+<span class="material-symbols-outlined text-transaction-blue">line_weight</span>
+</div>
+<span class="font-label text-xs text-primary-container font-semibold">
+    <span x-show="lang === 'en'">Live Queue</span>
+    <span x-show="lang === 'pa'">ਲਾਈਵ ਕਤਾਰ</span>
+    <span x-show="lang === 'hi'">लाइव कतार</span>
+    <span x-show="lang === 'te'">లైవ్ క్యూ</span>
+    <span x-show="lang === 'ta'">நேரலை வரிசை</span>
+    <span x-show="lang === 'ml'">ലൈവ് ക്യൂ</span>
+    <span x-show="lang === 'kn'">ಲೈವ್ ಕ್ಯೂ</span>
+    <span x-show="lang === 'ur'">لائیو قطار</span>
+</span>
+</a>
+<a href="profile.html" class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/90 border border-black/5 hover:bg-white transition-all duration-200 hover:scale-[1.02] active:scale-95 group shadow-sm">
+<div class="w-12 h-12 rounded-full bg-secondary-container/25 flex items-center justify-center group-hover:bg-secondary-container/40 transition-colors">
+<span class="material-symbols-outlined text-secondary">support_agent</span>
+</div>
+<span class="font-label text-xs text-primary-container font-semibold">
+    <span x-show="lang === 'en'">Agri Support</span>
+    <span x-show="lang === 'pa'">ਖੇਤੀ ਸਹਾਇਤਾ</span>
+    <span x-show="lang === 'hi'">कृषि सहायता</span>
+    <span x-show="lang === 'te'">వ్యవసాయ మద్దతు</span>
+    <span x-show="lang === 'ta'">விவசாய ஆதரவு</span>
+    <span x-show="lang === 'ml'">കാർഷിക പിന്തുണ</span>
+    <span x-show="lang === 'kn'">ಕೃಷಿ ಬೆಂಬಲ</span>
+    <span x-show="lang === 'ur'">زرعی معاونت</span>
+</span>
+</a>
+</div>
+</section>
+
+<!-- Detailed Records Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<a class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group" href="#">
+<div class="p-3 bg-kcc-amber/15 rounded-2xl shrink-0">
+<span class="material-symbols-outlined text-kcc-amber" style="font-variation-settings: 'FILL' 1;">credit_card</span>
+</div>
+<div>
+<h3 class="font-body text-base font-bold text-primary-container mb-1">
+    <span x-show="lang === 'en'">Kisan Credit Card Status</span>
+    <span x-show="lang === 'pa'">ਕਿਸਾਨ ਕ੍ਰੈਡਿਟ ਕਾਰਡ ਸਥਿਤੀ</span>
+    <span x-show="lang === 'hi'">किसान क्रेडिट कार्ड स्थिति</span>
+    <span x-show="lang === 'te'">కిసాన్ క్రెడిట్ కార్డ్ స్థితి</span>
+    <span x-show="lang === 'ta'">கிசான் கடன் அட்டை நிலை</span>
+    <span x-show="lang === 'ml'">കിസാൻ ക്രെഡിറ്റ് കാർഡ് സ്ഥിതി</span>
+    <span x-show="lang === 'kn'">ಕಿಸಾನ್ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಸ್ಥಿತಿ</span>
+    <span x-show="lang === 'ur'">کسان کریڈٹ کارڈ کی حیثیت</span>
+</h3>
+<p class="font-label text-xs text-on-surface-variant">
+    <span x-show="lang === 'en'">View your current KCC limit and renewal details.</span>
+    <span x-show="lang === 'pa'">ਆਪਣੀ ਮੌਜੂਦਾ KCC ਸੀਮਾ ਅਤੇ ਨਵੀਨੀਕਰਨ ਵੇਖੋ।</span>
+    <span x-show="lang === 'hi'">अपनी वर्तमान KCC सीमा और नवीनीकरण विवरण देखें।</span>
+    <span x-show="lang === 'te'">మీ ప్రస్తుత KCC పరిమితిని మరియు వివరాలను వీక్షించండి.</span>
+    <span x-show="lang === 'ta'">உங்கள் தற்போதைய KCC வரம்பு மற்றும் புதுப்பித்தல் விவரங்களைக் காண்க.</span>
+    <span x-show="lang === 'ml'">നിങ്ങളുടെ നിലവിലുള്ള KCC പരിധിയും പുതുക്കൽ വിശദാംശങ്ങളും കാണുക.</span>
+    <span x-show="lang === 'kn'">ನಿಮ್ಮ ಪ್ರಸ್ತುತ KCC ಮಿತಿ ಮತ್ತು ನವೀಕರಣ ವಿವರಗಳನ್ನು ವೀಕ್ಷಿಸಿ.</span>
+    <span x-show="lang === 'ur'">اپنی موجودہ KCC حد اور تجدید کی تفصیلات دیکھیں۔</span>
+</p>
+</div>
+</a>
+
+<a class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group" href="#">
+<div class="p-3 bg-ledger-green/15 rounded-2xl shrink-0">
+<span class="material-symbols-outlined text-ledger-green" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+</div>
+<div>
+<h3 class="font-body text-base font-bold text-primary-container mb-1">
+    <span x-show="lang === 'en'">Payments / Ledger</span>
+    <span x-show="lang === 'pa'">ਭੁਗਤਾਨ / ਲੇਜ਼ਰ</span>
+    <span x-show="lang === 'hi'">भुगतान / लेजर</span>
+    <span x-show="lang === 'te'">చెల్లింపులు / లెడ్జర్</span>
+    <span x-show="lang === 'ta'">கொடுப்பனவுகள் / லெட்ஜர்</span>
+    <span x-show="lang === 'ml'">പേയ്‌മെന്റുകൾ / ലെഡ്ജർ</span>
+    <span x-show="lang === 'kn'">ಪಾವತಿಗಳು / ಲೆಡ್ಜರ್</span>
+    <span x-show="lang === 'ur'">ادائیگییں / لیجر</span>
+</h3>
+<p class="font-label text-xs text-on-surface-variant">
+    <span x-show="lang === 'en'">Track your settled and pending payments.</span>
+    <span x-show="lang === 'pa'">ਆਪਣੇ ਪੂਰੇ ਅਤੇ ਬਕਾਇਆ ਭੁਗਤਾਨਾਂ ਨੂੰ ਟ੍ਰੈਕ ਕਰੋ।</span>
+    <span x-show="lang === 'hi'">अपने पूर्ण और लंबित भुगतानों को ट्रैक करें।</span>
+    <span x-show="lang === 'te'">మీ చెల్లించిన మరియు పెండింగ్‌లో ఉన్న చెల్లింపులను ట్రాక్ చేయండి.</span>
+    <span x-show="lang === 'ta'">செலுத்தப்பட்ட மற்றும் நிலுவையில் உள்ள கட்டணங்களைக் கண்காணிக்கவும்.</span>
+    <span x-show="lang === 'ml'">നിങ്ങളുടെ തീർപ്പാക്കിയതും ബാക്കിയുള്ളതുമായ പേയ്‌മെന്റുകൾ ട്രാക്ക് ചെയ്യുക.</span>
+    <span x-show="lang === 'kn'">ನಿಮ್ಮ ಪಾವತಿಸಿದ ಮತ್ತು ಬಾಕಿ ಇರುವ ಪಾವತಿಗಳನ್ನು ಟ್ರ್ಯಾಕ್ ಮಾಡಿ.</span>
+    <span x-show="lang === 'ur'">اپنی طے شدہ اور زیر التواء ادائیگیوں کو ٹریک کریں۔</span>
+</p>
+</div>
+</a>
+
+<a class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group" href="#">
+<div class="p-3 bg-transaction-blue/15 rounded-2xl shrink-0">
+<span class="material-symbols-outlined text-transaction-blue" style="font-variation-settings: 'FILL' 1;">history</span>
+</div>
+<div>
+<h3 class="font-body text-base font-bold text-primary-container mb-1">
+    <span x-show="lang === 'en'">Past Transactions</span>
+    <span x-show="lang === 'pa'">ਪਿਛਲੇ ਲੈਣ-ਦੇਣ</span>
+    <span x-show="lang === 'hi'">पिछले लेन-देन</span>
+    <span x-show="lang === 'te'">గత లావాదేవీలు</span>
+    <span x-show="lang === 'ta'">கடந்த பரிவர்த்தனைகள்</span>
+    <span x-show="lang === 'ml'">കഴിഞ്ഞ ഇടപാടുകൾ</span>
+    <span x-show="lang === 'kn'">ಹಿಂದಿನ ವಹಿವಾಟುಗಳು</span>
+    <span x-show="lang === 'ur'">پچھلے لین دین</span>
+</h3>
+<p class="font-label text-xs text-on-surface-variant">
+    <span x-show="lang === 'en'">History of all crop sales and purchases.</span>
+    <span x-show="lang === 'pa'">ਸਾਰੀਆਂ ਫਸਲਾਂ ਦੀ ਵਿਕਰੀ ਅਤੇ ਖਰੀਦ ਦਾ ਇਤਿਹਾਸ।</span>
+    <span x-show="lang === 'hi'">सभी फसलों की बिक्री और खरीद का इतिहास।</span>
+    <span x-show="lang === 'te'">అన్ని పంటల అమ్మకాలు మరియు కొనుగోళ్ల చరిత్ర.</span>
+    <span x-show="lang === 'ta'">அனைத்து பயிர் விற்பனை மற்றும் வாங்குதல்களின் வரலாறு.</span>
+    <span x-show="lang === 'ml'">എല്ലാ വിള വിൽപനകളുടെയും വാങ്ങലുകളുടെയും ചരിത്രം.</span>
+    <span x-show="lang === 'kn'">ಎಲ್ಲಾ ಬೆಳೆ ಮಾರಾಟ ಮತ್ತು ಖರೀದಿಗಳ ಇತಿಹಾಸ.</span>
+    <span x-show="lang === 'ur'">تمام فصلوں کی فروخت اور خریداری کی تاریخ۔</span>
+</p>
+</div>
+</a>
+
+<a class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group" href="#">
+<div class="p-3 bg-mandi-purple/15 rounded-2xl shrink-0">
+<span class="material-symbols-outlined text-mandi-purple" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+</div>
+<div>
+<h3 class="font-body text-base font-bold text-primary-container mb-1">
+    <span x-show="lang === 'en'">Mandi Gate Pass History</span>
+    <span x-show="lang === 'pa'">ਮੰਡੀ ਗੇਟ ਪਾਸ ਇਤਿਹਾਸ</span>
+    <span x-show="lang === 'hi'">मंडी गेट पास इतिहास</span>
+    <span x-show="lang === 'te'">మండి గేట్ పాస్ చరిత్ర</span>
+    <span x-show="lang === 'ta'">சந்தை நுழைவுச் சீட்டு வரலாறு</span>
+    <span x-show="lang === 'ml'">ചന്ത ഗേറ്റ് പാസ് ചരിത്രം</span>
+    <span x-show="lang === 'kn'">ಮಂಡಿ ಗೇಟ್ ಪಾಸ್ ಇತಿಹಾಸ</span>
+    <span x-show="lang === 'ur'">منڈی گیٹ پاس کی تاریخ</span>
+</h3>
+<p class="font-label text-xs text-on-surface-variant">
+    <span x-show="lang === 'en'">Access previously generated entry passes.</span>
+    <span x-show="lang === 'pa'">ਪਹਿਲਾਂ ਤਿਆਰ ਕੀਤੇ ਗਏ ਐਂਟਰੀ ਪਾਸਾਂ ਤੱਕ ਪਹੁੰਚ ਕਰੋ।</span>
+    <span x-show="lang === 'hi'">पहले जनरेट किए गए एंट्री पास तक पहुंचें।</span>
+    <span x-show="lang === 'te'">ముందుగా సృష్టించబడిన ఎంట్రీ పాస్‌లను యాక్సెస్ చేయండి.</span>
+    <span x-show="lang === 'ta'">முன்னர் உருவாக்கப்பட்ட நுழைவுச் சீட்டுகளை அணுகவும்.</span>
+    <span x-show="lang === 'ml'">മുമ്പ് സൃഷ്ടിച്ച പ്രവേശന പാസുകൾ ആക്സസ് ചെയ്യുക.</span>
+    <span x-show="lang === 'kn'">ಪೂರ್ವದಲ್ಲಿ ರಚಿಸಲಾದ ಪ್ರವೇಶ ಪಾಸ್‌ಗಳನ್ನು ಪ್ರವೇಶಿಸಿ.</span>
+    <span x-show="lang === 'ur'">پہلے سے تیار کردہ انٹری پاس تک رسائی حاصل کریں۔</span>
+</p>
+</div>
+</a>
+
+<a class="md:col-span-2 bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group" href="#">
+<div class="p-3 bg-weather-warm/20 rounded-2xl shrink-0">
+<span class="material-symbols-outlined text-kcc-amber" style="font-variation-settings: 'FILL' 1;">sunny</span>
+</div>
+<div>
+<h3 class="font-body text-base font-bold text-primary-container mb-1">
+    <span x-show="lang === 'en'">Weather & Advisory</span>
+    <span x-show="lang === 'pa'">ਮੌਸਮ ਅਤੇ ਸਲਾਹ</span>
+    <span x-show="lang === 'hi'">मौसम और सलाह</span>
+    <span x-show="lang === 'te'">వాతావరణం & సలహా</span>
+    <span x-show="lang === 'ta'">வானிலை & ஆலோசனை</span>
+    <span x-show="lang === 'ml'">കാലാവസ്ഥയും ഉപദേശവും</span>
+    <span x-show="lang === 'kn'">ಹವಾಮಾನ ಮತ್ತು ಸಲಹೆ</span>
+    <span x-show="lang === 'ur'">موسم اور مشورہ</span>
+</h3>
+<p class="font-label text-xs text-on-surface-variant">
+    <span x-show="lang === 'en'">Get hyper-local forecasts and expert crop advice.</span>
+    <span x-show="lang === 'pa'">ਸਥਾਨਕ ਮੌਸਮ ਦੀ ਭਵਿੱਖਬਾਣੀ ਅਤੇ ਮਾਹਰ ਫਸਲ ਸਲਾਹ ਪ੍ਰਾਪਤ ਕਰੋ।</span>
+    <span x-show="lang === 'hi'">स्थानीय मौसम पूर्वानुमान और विशेषज्ञ फसल सलाह प्राप्त करें।</span>
+    <span x-show="lang === 'te'">స్థానిక వాతావరణ అంచనాలు మరియు నిపుణుల సలహాలను పొందండి.</span>
+    <span x-show="lang === 'ta'">உள்ளூர் வானிலை முன்னறிவிப்பு மற்றும் நிபுணர் பயிர் ஆலோசனையைப் பெறுங்கள்.</span>
+    <span x-show="lang === 'ml'">പ്രാദേശിക കാലാവസ്ഥാ പ്രവചനങ്ങളും വിദഗ്ദ്ധ ഉപദേശങ്ങളും നേടുക.</span>
+    <span x-show="lang === 'kn'">ಸ್ಥಳೀಯ ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ ಮತ್ತು ತಜ್ಞರ ಬೆಳೆ ಸಲಹೆಯನ್ನು ಪಡೆಯಿರಿ.</span>
+    <span x-show="lang === 'ur'">مقامی موسم کی پیشگوئی اور ماہرین کا فصل کا مشورہ حاصل کریں۔</span>
+</p>
+</div>
+</a>
+</div>
+</main>
+
+<!-- Full News & Updates Modal Overlay -->
+<div x-show="showAllNews" x-transition.opacity class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 md:p-8" style="display: none;">
+<div @click.outside="showAllNews = false" class="frosted-pearl w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2.5rem] p-6 md:p-10 flex flex-col gap-6 shadow-2xl relative bg-white/95 text-on-surface">
+<div class="flex justify-between items-center border-b border-black/10 pb-4">
+<h3 class="font-headline-lg text-2xl font-bold text-on-surface">
+    <span x-show="lang === 'en'">All Agricultural News & Weather Advisories</span>
+    <span x-show="lang === 'pa'">ਸਾਰੀਆਂ ਖੇਤੀਬਾੜੀ ਖ਼ਬਰਾਂ ਅਤੇ ਮੌਸਮ ਚੇਤਾਵਨੀਆਂ</span>
+    <span x-show="lang === 'hi'">सभी कृषि समाचार और मौसम सलाह</span>
+    <span x-show="lang === 'te'">అన్ని వ్యవసాయ వార్తలు మరియు వాతావరణ హెచ్చరికలు</span>
+    <span x-show="lang === 'ta'">அனைத்து வேளாண் செய்திகள் மற்றும் வானிலை எச்சரிக்கைகள்</span>
+    <span x-show="lang === 'ml'">എല്ലാ കാർഷിക വാർത്തകളും കാലാവസ്ഥാ മുന്നറിയിപ്പുകളും</span>
+    <span x-show="lang === 'kn'">ಎಲ್ಲಾ ಕೃಷಿ ಸುದ್ದಿ ಮತ್ತು ಹವಾಮಾನ ಎಚ್ಚರಿಕೆಗಳು</span>
+    <span x-show="lang === 'ur'">تمام زرعی خبریں اور موسمی انتباہات</span>
+</h3>
+<button @click="showAllNews = false" class="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center hover:bg-black/20 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="rounded-2xl bg-white/60 border border-black/5 overflow-hidden flex flex-col shadow-sm">
+<div class="h-40 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?q=80&w=800&auto=format&fit=crop')"></div>
+<div class="p-5 flex flex-col gap-2">
+<span class="text-xs font-bold uppercase text-secondary">Weather Advisory</span>
+<h4 class="font-title-md font-bold text-on-surface text-lg">Light Rain Expected Next Week</h4>
+<p class="text-sm text-on-surface-variant">Optimal time for sowing wheat is approaching. Ensure fields are well prepared and drainage channels are clear.</p>
+</div>
+</div>
+<div class="rounded-2xl bg-white/60 border border-black/5 overflow-hidden flex flex-col shadow-sm">
+<div class="h-40 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=800&auto=format&fit=crop')"></div>
+<div class="p-5 flex flex-col gap-2">
+<span class="text-xs font-bold uppercase text-secondary">Government Subsidy</span>
+<h4 class="font-title-md font-bold text-on-surface text-lg">New Subsidy for Drip Irrigation</h4>
+<p class="text-sm text-on-surface-variant">Govt announces 50% direct subsidy on solar-powered drip irrigation systems for registered farmers.</p>
+</div>
+</div>
+<!-- Updated Mandi Update card with working reliable image -->
+<div class="rounded-2xl bg-white/60 border border-black/5 overflow-hidden flex flex-col shadow-sm">
+<div class="h-40 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1586771107445-d3ca888129ff?q=80&w=800&auto=format&fit=crop')"></div>
+<div class="p-5 flex flex-col gap-2">
+<span class="text-xs font-bold uppercase text-secondary">Mandi Update</span>
+<h4 class="font-title-md font-bold text-on-surface text-lg">Expanded Slot Timings at Ludhiana Mandi</h4>
+<p class="text-sm text-on-surface-variant">Gate entry hours extended from 6:00 AM to 9:00 PM during peak harvest season to reduce congestion.</p>
+</div>
+</div>
+<div class="rounded-2xl bg-white/60 border border-black/5 overflow-hidden flex flex-col shadow-sm">
+<div class="h-40 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1574943320219-553eb213f72d?q=80&w=800&auto=format&fit=crop')"></div>
+<div class="p-5 flex flex-col gap-2">
+<span class="text-xs font-bold uppercase text-secondary">Crop Protection</span>
+<h4 class="font-title-md font-bold text-on-surface text-lg">Pest Control Advisory for Paddy</h4>
+<p class="text-sm text-on-surface-variant">Agricultural department issues guidelines for managing stem borer infestation using organic biopesticides.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- BottomNav Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 rounded-t-xl bg-[#0d1745] shadow-lg md:hidden border-t border-white/10">
+<div class="flex justify-around items-center h-16 px-2 w-full text-white">
+<a class="flex flex-col items-center justify-center text-gray-300 hover:text-white transition-all group w-16 py-1 rounded-xl" href="index.html">
+<span class="material-symbols-outlined text-xl mb-0.5">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-300 hover:text-white transition-all group w-16 py-1 rounded-xl" href="market.html">
+<span class="material-symbols-outlined text-xl mb-0.5">storefront</span>
+<span class="text-[10px] font-medium">Market</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-300 hover:text-white transition-all group w-16 py-1 rounded-xl" href="queue.html">
+<span class="material-symbols-outlined text-xl mb-0.5">line_weight</span>
+<span class="text-[10px] font-medium">Queue</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-300 hover:text-white transition-all group w-16 py-1 rounded-xl" href="profile.html">
+<span class="material-symbols-outlined text-xl mb-0.5" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</div>
+</nav>
+
+</body>
+</html>

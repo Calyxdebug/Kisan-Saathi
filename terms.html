@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="light" lang="en" x-data="{ lang: 'en' }">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Kisan Konnect - Terms of Service</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js for interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f4f6f8; }
+        .font-headline { font-family: 'Poppins', sans-serif; }
+    </style>
+</head>
+<body class="text-gray-900 min-h-screen flex flex-col">
+
+    <!-- Top Header -->
+    <header class="bg-[#0d1745] text-white flex items-center justify-between px-6 h-16 shadow-md fixed top-0 w-full z-50">
+        <a href="login.html" class="flex items-center gap-1 text-sm bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20 transition-all cursor-pointer">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+            <span x-show="lang === 'en'">Back to Login</span>
+            <span x-show="lang === 'pa'">ਲੌਗਇਨ ਤੇ ਵਾਪਸ ਜਾਓ</span>
+            <span x-show="lang === 'hi'">लॉगिन पर वापस जाएं</span>
+            <span x-show="lang === 'te'">లాగిన్‌కి తిరిగి వెళ్లండి</span>
+            <span x-show="lang === 'ta'">உள்நுழைவுக்குத் திரும்பு</span>
+            <span x-show="lang === 'ml'">ലോഗിൻ ചെയ്യുക</span>
+            <span x-show="lang === 'kn'">ಲಾಗಿನ್‌ಗೆ ಹಿಂತಿರುಗಿ</span>
+            <span x-show="lang === 'ur'">لاگ ان پر واپس جائیں</span>
+        </a>
+        <h1 class="font-headline text-lg font-bold tracking-tight">KISAN KONNECT</h1>
+        
+        <!-- Language Switcher Dropdown -->
+        <div>
+            <select x-model="lang" aria-label="Select Language" class="bg-white/10 hover:bg-white/20 text-white text-xs rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer font-bold border border-white/20">
+                <option value="en" class="text-black">English</option>
+                <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
+                <option value="hi" class="text-black">हिन्दी</option>
+                <option value="te" class="text-black">తెలుగు</option>
+                <option value="ta" class="text-black">தமிழ்</option>
+                <option value="ml" class="text-black">മലയാളം</option>
+                <option value="kn" class="text-black">ಕನ್ನಡ</option>
+                <option value="ur" class="text-black">اردو</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- Content Container -->
+    <main class="flex-1 max-w-3xl w-full mx-auto pt-24 pb-16 px-6">
+        <div class="bg-white rounded-2xl shadow-sm p-6 sm:p-10 border border-gray-100 flex flex-col gap-6">
+            <div class="border-b pb-4">
+                <h2 class="font-headline text-2xl font-bold text-[#0d1745]">
+                    <span x-show="lang === 'en'">Terms of Service</span>
+                    <span x-show="lang === 'pa'">ਸੇਵਾ ਦੀਆਂ ਸ਼ਰਤਾਂ</span>
+                    <span x-show="lang === 'hi'">सेवा की शर्तें</span>
+                    <span x-show="lang === 'te'">సేవా నిబంధనలు</span>
+                    <span x-show="lang === 'ta'">சேவை விதிமுறைகள்</span>
+                    <span x-show="lang === 'ml'">സേവന നിബന്ധനകൾ</span>
+                    <span x-show="lang === 'kn'">ಸೇವಾ ನಿಯಮಗಳು</span>
+                    <span x-show="lang === 'ur'">سروس کی شرائط</span>
+                </h2>
+                <p class="text-xs text-gray-500 mt-1">
+                    <span x-show="lang === 'en'">Last updated: August 2026</span>
+                    <span x-show="lang === 'pa'">ਆਖਰੀ ਵਾਰ ਅੱਪਡੇਟ ਕੀਤਾ ਗਿਆ: ਅਗਸਤ 2026</span>
+                    <span x-show="lang === 'hi'">अ अंतिम बार अपडेट किया गया: अगस्त 2026</span>
+                    <span x-show="lang === 'te'">చివరిగా నవీకరించబడింది: ఆగస్టు 2026</span>
+                    <span x-show="lang === 'ta'">கடைசியாக புதுப்பிக்கப்பட்டது: ஆகஸ்ட் 2026</span>
+                    <span x-show="lang === 'ml'">അവസാനം അപ്ഡേറ്റ് ചെയ്തത്: ആഗസ്റ്റ് 2026</span>
+                    <span x-show="lang === 'kn'">ಕೊನೆಯದಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ: ಆಗಸ್ಟ್ 2026</span>
+                    <span x-show="lang === 'ur'">آخری بار اپ ڈیٹ کیا گیا: اگست 2026</span>
+                </p>
+            </div>
+
+            <div class="space-y-4 text-sm text-gray-700 leading-relaxed">
+                <!-- Section 1 -->
+                <h3 class="font-semibold text-base text-gray-900">
+                    <span x-show="lang === 'en'">1. Acceptance of Terms</span>
+                    <span x-show="lang === 'pa'">1. ਸ਼ਰਤਾਂ ਦੀ ਸਵੀਕ੍ਰਿਤੀ</span>
+                    <span x-show="lang === 'hi'">1. शर्तों की स्वीकृति</span>
+                    <span x-show="lang === 'te'">1. నిబంధనల ఆమోదం</span>
+                    <span x-show="lang === 'ta'">1. விதிமுறைகளை ஏற்றுக்கொள்ளுதல்</span>
+                    <span x-show="lang === 'ml'">1. നിബന്ധനകളുടെ അംഗീകാരം</span>
+                    <span x-show="lang === 'kn'">1. ನಿಯಮಗಳ ಸ್ವೀಕಾರ</span>
+                    <span x-show="lang === 'ur'">1. شرائط کی قبولیت</span>
+                </h3>
+                <p>
+                    <span x-show="lang === 'en'">Welcome to Kisan Konnect. By accessing or using our platform, mobile application, or services, you agree to comply with and be bound by these Terms of Service. If you do not agree, please refrain from using our services.</span>
+                    <span x-show="lang === 'pa'">ਕਿਸਾਨ ਕਨੈਕਟ ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ। ਸਾਡੇ ਪਲੇਟਫਾਰਮ ਜਾਂ ਸੇਵਾਵਾਂ ਦੀ ਵਰਤੋਂ ਕਰਕੇ, ਤੁਸੀਂ ਇਨ੍ਹਾਂ ਸ਼ਰਤਾਂ ਦੀ ਪਾਲਣਾ ਕਰਨ ਲਈ ਸਹਿਮਤ ਹੁੰਦੇ ਹੋ।</span>
+                    <span x-show="lang === 'hi'">किसान कनेक्ट में आपका स्वागत है। हमारे प्लेटफॉर्म या सेवाओं का उपयोग करके, आप इन शर्तों का पालन करने के लिए सहमत होते हैं।</span>
+                    <span x-show="lang === 'te'">కిసాన్ కనెక్ట్‌కి స్వాగతం. మా ప్లాట్‌ఫారమ్ లేదా సేవలను ఉపయోగించడం ద్వారా, మీరు ఈ నిబంధనలకు కట్టుబడి ఉండటానికి అంగీకరిస్తున్నారు.</span>
+                    <span x-show="lang === 'ta'">கிசான் கனெக்ட்க்கு உங்களை வரவேற்கிறோம். எங்கள் தளத்தைப் பயன்படுத்துவதன் மூலம், இந்த சேவை விதிமுறைகளுக்கு இணங்க ஒப்புக்கொள்கிறீர்கள்.</span>
+                    <span x-show="lang === 'ml'">കിസാൻ കനെക്റ്റിലേക്ക് സ്വാഗതം. ഞങ്ങളുടെ പ്ലാറ്റ്‌ഫോം ഉപയോഗിക്കുന്നതിലൂടെ, ഈ നിബന്ധനകൾ പാലിക്കാൻ നിങ്ങൾ സമ്മതിക്കുന്നു.</span>
+                    <span x-show="lang === 'kn'">ಕಿಸಾನ್ ಕನೆಕ್ಟ್‌ಗೆ ಸ್ವಾಗತ. ನಮ್ಮ ವೇದಿಕೆ ಅಥವಾ ಸೇವೆಗಳನ್ನು ಬಳಸುವ ಮೂಲಕ, ಈ ಸೇವಾ ನಿಯಮಗಳನ್ನು ಅನುಸರಿಸಲು ನೀವು ಒಪ್ಪುತ್ತೀರಿ.</span>
+                    <span x-show="lang === 'ur'">کسان کنیکٹ میں خوش آمدید۔ ہمارے پلیٹ فارم یا خدمات تک رسائی حاصل کرکے، آپ ان سروس کی شرائط کی تعمیل کرنے سے اتفاق کرتے ہیں۔</span>
+                </p>
+
+                <!-- Section 2 -->
+                <h3 class="font-semibold text-base text-gray-900">
+                    <span x-show="lang === 'en'">2. Use of Services</span>
+                    <span x-show="lang === 'pa'">2. ਸੇਵਾਵਾਂ ਦੀ ਵਰਤੋਂ</span>
+                    <span x-show="lang === 'hi'">2. सेवाओं का उपयोग</span>
+                    <span x-show="lang === 'te'">2. సేవల వినియోగం</span>
+                    <span x-show="lang === 'ta'">2. சேவைகளின் பயன்பாடு</span>
+                    <span x-show="lang === 'ml'">2. സേവനങ്ങളുടെ ഉപയോഗം</span>
+                    <span x-show="lang === 'kn'">2. ಸೇವೆಗಳ ಬಳಕೆ</span>
+                    <span x-show="lang === 'ur'">2. خدمات کا استعمال</span>
+                </h3>
+                <p>
+                    <span x-show="lang === 'en'">Kisan Konnect provides agricultural market insights, queue management for regional mandis, and digital farming resources. You agree to use these services only for lawful agricultural and trading purposes.</span>
+                    <span x-show="lang === 'pa'">ਕਿਸਾਨ ਕਨੈਕਟ ਖੇਤੀਬਾੜੀ ਮਾਰਕੀਟ ਸੂਝ ਅਤੇ ਮੰਡੀਆਂ ਲਈ ਕਤਾਰ ਪ੍ਰਬੰਧਨ ਪ੍ਰਦਾਨ ਕਰਦਾ ਹੈ। ਤੁਸੀਂ ਇਨ੍ਹਾਂ ਨੂੰ ਸਿਰਫ਼ ਕਾਨੂੰਨੀ ਖੇਤੀਬਾੜੀ ਉਦੇਸ਼ਾਂ ਲਈ ਵਰਤਣ ਲਈ ਸਹਿਮਤ ਹੋ।</span>
+                    <span x-show="lang === 'hi'">किसान कनेक्ट कृषि बाजार अंतर्दृष्टि और मंडियों के लिए कतार प्रबंधन प्रदान करता है। आप इनका उपयोग केवल वैध कृषि उद्देश्यों के लिए करने के लिए सहमत हैं।</span>
+                    <span x-show="lang === 'te'">కిసాన్ కనెక్ట్ వ్యవసాయ మార్కెట్ అంతర్దృష్టులను మరియు మండిల కోసం క్యూ నిర్వహణను అందిస్తుంది. మీరు వీటిని చట్టపరమైన వ్యవసాయ ప్రయోజనాల కోసం మాత్రమే ఉపయోగించాలి.</span>
+                    <span x-show="lang === 'ta'">கிசான் கனெக்ட் விவசாய சந்தை நுண்ணறிவுகள் மற்றும் வரிசை மேலாண்மை ஆகியவற்றை வழங்குகிறது. இவற்றைச் சட்டப்பூர்வ விவசாய நோக்கங்களுக்காக மட்டுமே பயன்படுத்த ஒப்புக்கொள்கிறீர்கள்.</span>
+                    <span x-show="lang === 'ml'">കിസാൻ കനെക്റ്റ് കാർഷിക വിപണി സ്ഥിതിവിവരക്കണക്കുകളും ക്യൂ മാനേജ്മെന്റും നൽകുന്നു. നിയമപരമായ ആവശ്യങ്ങൾക്കായി മാത്രം ഇവ ഉപയോഗിക്കാൻ നിങ്ങൾ സമ്മതിക്കുന്നു.</span>
+                    <span x-show="lang === 'kn'">ಕಿಸಾನ್ ಕನೆಕ್ಟ್ ಕೃಷಿ ಮಾರುಕಟ್ಟೆ ಒಳಹೋಟುಗಳು ಮತ್ತು ಕ್ಯೂ ನಿರ್ವಹಣೆಯನ್ನು ಒದಗಿಸುತ್ತದೆ. ಕಾನೂನುಬದ್ಧ ಕೃಷಿ ಉದ್ದೇಶಗಳಿಗಾಗಿ ಮಾತ್ರ ಇವುಗಳನ್ನು ಬಳಸಲು ನೀವು ಒಪ್ಪುತ್ತೀರಿ.</span>
+                    <span x-show="lang === 'ur'">کسان کنیکٹ زرعی مارکیٹ کی بصیرت اور قطار کے انتظام کی سہولت فراہم کرتا ہے۔ آپ ان خدمات کو صرف قانونی زرعی مقاصد کے لیے استعمال کرنے کے پابند ہیں۔</span>
+                </p>
+
+                <!-- Section 3 -->
+                <h3 class="font-semibold text-base text-gray-900">
+                    <span x-show="lang === 'en'">3. User Accounts & Security</span>
+                    <span x-show="lang === 'pa'">3. ਉਪਭੋਗਤਾ ਖਾਤੇ ਅਤੇ ਸੁਰੱਖਿਆ</span>
+                    <span x-show="lang === 'hi'">3. उपयोगकर्ता खाते और सुरक्षा</span>
+                    <span x-show="lang === 'te'">3. వినియోగదారు ఖాతాలు & భద్రత</span>
+                    <span x-show="lang === 'ta'">3. பயனர் கணக்குகள் & பாதுகாப்பு</span>
+                    <span x-show="lang === 'ml'">3. ഉപയോക്തൃ അക്കൗണ്ടുകളും സുരക്ഷയും</span>
+                    <span x-show="lang === 'kn'">3. ಬಳಕೆದಾರರ ಖಾತೆಗಳು ಮತ್ತು ಭದ್ರತೆ</span>
+                    <span x-show="lang === 'ur'">3. صارف اکاؤنٹس اور سیکیورٹی</span>
+                </h3>
+                <p>
+                    <span x-show="lang === 'en'">You are responsible for maintaining the confidentiality of your account credentials, including your Kisan Credit Card (KCC) details, phone number, and password. You agree to notify us immediately of any unauthorized use.</span>
+                    <span x-show="lang === 'pa'">ਤੁਸੀਂ ਆਪਣੇ ਖਾਤੇ ਦੇ ਵੇਰਵਿਆਂ, ਜਿਵੇਂ ਕਿ KCC ਨੰਬਰ, ਫੋਨ ਨੰਬਰ ਅਤੇ ਪਾਸਵਰਡ ਦੀ ਗੁਪਤਤਾ ਬਣਾਈ ਰੱਖਣ ਲਈ ਜ਼ਿੰਮੇਵਾਰ ਹੋ।</span>
+                    <span x-show="lang === 'hi'">आप अपने खाते के विवरण, जैसे केसीसी नंबर, फोन नंबर और पासवर्ड की गोपनीयता बनाए रखने के लिए जिम्मेदार हैं।</span>
+                    <span x-show="lang === 'te'">మీ KCC వివరాలు, ఫోన్ నంబర్ మరియు పాస్‌వర్డ్ వంటి మీ ఖాతా ఆధారాల గోప్యతను కాపాడుకోవడానికి మీరే బాధ్యత వహిస్తారు.</span>
+                    <span x-show="lang === 'ta'">உங்கள் KCC விவரங்கள், தொலைபேசி எண் மற்றும் கடவுச்சொல் உள்ளிட்ட உங்கள் கணக்கு சான்றுகளின் ரகசியத்தன்மையைப் பேணுவதற்கு நீங்களே பொறுப்பாவீர்கள்.</span>
+                    <span x-show="lang === 'ml'">നിങ്ങളുടെ KCC വിവരങ്ങൾ, ഫോൺ നമ്പർ, പാസ്‌വേഡ് എന്നിവയുടെ രഹസ്യസ്വഭാവം സൂക്ഷിക്കേണ്ടത് നിങ്ങളുടെ ഉത്തരവാദിത്തമാണ്.</span>
+                    <span x-show="lang === 'kn'">ನಿಮ್ಮ KCC ವಿವರಗಳು, ಫೋನ್ ಸಂಖ್ಯೆ ಮತ್ತು ಪಾಸ್‌ವರ್ಡ್‌ನ ಗೌಪ್ಯತೆಯನ್ನು ಕಾಪಾಡಿಕೊಳ್ಳಲು ನೀವೇ ಜವಾಬ್ದಾರರು.</span>
+                    <span x-show="lang === 'ur'">آپ اپنے اکاؤنٹ کی اسناد بشمول KCC تفصیلات، فون نمبر، اور پاس ورڈ کی رازداری برقرار رکھنے کے ذمہ دار ہیں۔</span>
+                </p>
+
+                <!-- Section 4 -->
+                <h3 class="font-semibold text-base text-gray-900">
+                    <span x-show="lang === 'en'">4. Limitation of Liability</span>
+                    <span x-show="lang === 'pa'">4. ਦੇਣਦਾਰੀ ਦੀ ਸੀਮਾ</span>
+                    <span x-show="lang === 'hi'">4. देयता की सीमा</span>
+                    <span x-show="lang === 'te'">4. బాధ్యత పరిమితి</span>
+                    <span x-show="lang === 'ta'">4. பொறுப்பு வரம்பு</span>
+                    <span x-show="lang === 'ml'">4. ബാധ്യതയുടെ പരിമിതി</span>
+                    <span x-show="lang === 'kn'">4. ಹೊಣೆಗಾರಿಕೆಯ ಮಿತಿ</span>
+                    <span x-show="lang === 'ur'">4. ذمہ داری کی حد</span>
+                </h3>
+                <p>
+                    <span x-show="lang === 'en'">Market prices and queue timelines provided on the platform are for informational and operational streamlining purposes. Kisan Konnect is not liable for fluctuations in mandi pricing or external logistical delays.</span>
+                    <span x-show="lang === 'pa'">ਮਾਰਕੀਟ ਕੀਮਤਾਂ ਅਤੇ ਕਤਾਰ ਦੇ ਸਮੇਂ ਜਾਣਕਾਰੀ ਦੇ ਉਦੇਸ਼ਾਂ ਲਈ ਹਨ। ਕਿਸਾਨ ਕਨੈਕਟ ਮੰਡੀ ਦੀਆਂ ਕੀਮਤਾਂ ਵਿੱਚ ਉਤਰਾਅ-ਚੜ੍ਹਾਅ ਲਈ ਜ਼ਿੰਮੇਵਾਰ ਨਹੀਂ ਹੈ।</span>
+                    <span x-show="lang === 'hi'">बाजार मूल्य और कतार का समय सूचना के उद्देश्यों के लिए हैं। किसान कनेक्ट मंडी की कीमतों में उतार-चढ़ाव के लिए ज़िम्मेदार नहीं है।</span>
+                    <span x-show="lang === 'te'">ప్లాట్‌ఫారమ్‌లో అందించబడిన మార్కెట్ ధరలు కేవలం సమాచార ప్రయోజనాల కోసమే. మండి ధరలలో హెచ్చుతగ్గులకు కిసాన్ కనెక్ట్ బాధ్యత వహించదు.</span>
+                    <span x-show="lang === 'ta'">प्ளாட்ஃபார்மில் வழங்கப்படும் சந்தை விலைகள் தகவல் நோக்கத்திற்காக மட்டுமே. சந்தை விலை மாற்றங்களுக்கு கிசான் கனெக்ட் பொறுப்பல்ல.</span>
+                    <span x-show="lang === 'ml'">പ്ലാറ്റ്‌ഫോമിൽ നൽകിയിരിക്കുന്ന വിപണി വിലകൾ വിവര ആവശ്യങ്ങൾക്ക് മാത്രമുള്ളതാണ്.</span>
+                    <span x-show="lang === 'kn'">ವೇದಿಕೆಯಲ್ಲಿ ಒದಗಿಸಲಾದ ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳು ಮಾಹಿತಿ ಉದ್ದೇಶಗಳಿಗಾಗಿ ಮಾತ್ರ. ಮಂಡಿ ಬೆಲೆಗಳ ಏರಿಳಿತಕ್ಕೆ ಕಿಸಾನ್ ಕನೆಕ್ಟ್ ಜವಾಬ್ದಾರನಲ್ಲ.</span>
+                    <span x-show="lang === 'ur'">پلیٹ فارم پر فراہم کردہ مارکیٹ کی قیمتیں معلوماتی مقاصد کے لیے ہیں۔ کسان کنیکٹ منڈی کی قیمتوں میں उतार چڑھاؤ کا ذمہ دار نہیں ہے۔</span>
+                </p>
+
+                <!-- Section 5 -->
+                <h3 class="font-semibold text-base text-gray-900">
+                    <span x-show="lang === 'en'">5. Modifications</span>
+                    <span x-show="lang === 'pa'">5. ਸੋਧਾਂ</span>
+                    <span x-show="lang === 'hi'">5. संशोधन</span>
+                    <span x-show="lang === 'te'">5. సవరణలు</span>
+                    <span x-show="lang === 'ta'">5. மாற்றங்கள்</span>
+                    <span x-show="lang === 'ml'">5. മാറ്റങ്ങൾ</span>
+                    <span x-show="lang === 'kn'">5. ಮಾರ್ಪಾಡುಗಳು</span>
+                    <span x-show="lang === 'ur'">5. ترامیم</span>
+                </h3>
+                <p>
+                    <span x-show="lang === 'en'">We reserve the right to modify these terms at any time. Continued use of Kisan Konnect following any changes constitutes acceptance of those modifications.</span>
+                    <span x-show="lang === 'pa'">ਅਸੀਂ ਕਿਸੇ ਵੀ ਸਮੇਂ ਇਨ੍ਹਾਂ ਸ਼ਰਤਾਂ ਨੂੰ ਸੋਧਣ ਦਾ ਅਧਿਕਾਰ ਰੱਖਦੇ ਹਾਂ। ਕਿਸਾਨ ਕਨੈਕਟ ਦੀ ਨਿਰੰਤਰ ਵਰਤੋਂ ਇਨ੍ਹਾਂ ਤਬਦੀਲੀਆਂ ਦੀ ਸਵੀਕ੍ਰਿਤੀ ਨੂੰ ਦਰਸਾਉਂਦੀ ਹੈ।</span>
+                    <span x-show="lang === 'hi'">हम किसी भी समय इन शर्तों को संशोधित करने का अधिकार सुरक्षित रखते हैं। किसी भी बदलाव के बाद किसान कनेक्ट का निरंतर उपयोग उन संशोधनों की स्वीकृति का गठन करता है।</span>
+                    <span x-show="lang === 'te'">మేము ఎప్పుడైనా ఈ నిబంధనలను సవరించే హక్కును కలిగి ఉన్నాము. మార్పుల తర్వాత కిసాన్ కనెక్ట్‌ని నిరంతరం ఉపయోగించడం ద్వారా మీరు ఆ నిబంధనలను అంగీకరిస్తున్నట్లు భావించబడుతుంది.</span>
+                    <span x-show="lang === 'ta'">எந்த நேரத்திலும் இந்த விதிமுறைகளை மாற்ற எங்களுக்கு உரிமை உண்டு. மாற்றங்களுக்குப் பிறகு கிசான் கனெக்டைத் தொடர்ந்து பயன்படுத்துவது ஒப்புதலைக் குறிக்கிறது.</span>
+                    <span x-show="lang === 'ml'">ഏത് സമയത്തും ഈ നിബന്ധനകൾ ഭേദഗതി ചെയ്യാനുള്ള അവകാശം ഞങ്ങൾക്കുണ്ട്.</span>
+                    <span x-show="lang === 'kn'">ಯಾವುದೇ ಸಮಯದಲ್ಲಿ ಈ ನಿಯಮಗಳನ್ನು ಮಾರ್ಪಡಿಸುವ ಹಕ್ಕನ್ನು ನಾವು ಕಾಯ್ದುಕೊಂಡಿದ್ದೇವೆ. ಬದಲಾವಣೆಗಳ ನಂತರ ಕಿಸಾನ್ ಕನೆಕ್ಟ್ ನಿರಂತರ ಬಳಕೆಯು ಆ ಮಾರ್ಪಾಡುಗಳ ಸ್ವೀಕಾರವನ್ನು ಸೂಚಿಸುತ್ತದೆ.</span>
+                    <span x-show="lang === 'ur'">ہم کسی بھی وقت ان شرائط میں ترمیم کرنے کا حق محفوظ رکھتے ہیں۔ کسی بھی تبدیلی کے بعد کسان کنیکٹ کا مسلسل استعمال ان ترامیم کی قبولیت تصور ہوگا۔</span>
+                </p>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

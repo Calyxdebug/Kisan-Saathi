@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="light" lang="en" x-data="{ lang: 'en' }">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Kisan Konnect - Privacy Policy</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js for interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f4f6f8; }
+        .font-headline { font-family: 'Poppins', sans-serif; }
+    </style>
+</head>
+<body class="text-gray-900 min-h-screen flex flex-col">
+
+    <!-- Top Header -->
+    <header class="bg-[#0d1745] text-white flex items-center justify-between px-6 h-16 shadow-md fixed top-0 w-full z-50">
+        <a href="login.html" class="flex items-center gap-1 text-sm bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20 transition-all cursor-pointer">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span> 
+            <span x-show="lang === 'en'">Back to Login</span>
+            <span x-show="lang === 'pa'">ਲੌਗਇਨ ਤੇ ਵਾਪਸ ਜਾਓ</span>
+            <span x-show="lang === 'hi'">लॉगिन पर वापस जाएं</span>
+            <span x-show="lang === 'te'">లాగిన్‌కి తిరిగి వెళ్లండి</span>
+            <span x-show="lang === 'ta'">உள்நுழைவுக்குத் திரும்பு</span>
+            <span x-show="lang === 'ml'">ലോഗിൻ ചെയ്യുക</span>
+            <span x-show="lang === 'kn'">ಲಾಗಿನ್‌ಗೆ ಹಿಂತಿರುಗಿ</span>
+            <span x-show="lang === 'ur'">لاگ ان پر واپس جائیں</span>
+        </a>
+        <h1 class="font-headline text-lg font-bold tracking-tight">KISAN KONNECT</h1>
+        
+        <!-- Language Switcher Dropdown -->
+        <div>
+            <select x-model="lang" aria-label="Select Language" class="bg-white/10 hover:bg-white/20 text-white text-xs rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer font-bold border border-white/20">
+                <option value="en" class="text-black">English</option>
+                <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
+                <option value="hi" class="text-black">हिन्दी</option>
+                <option value="te" class="text-black">తెలుగు</option>
+                <option value="ta" class="text-black">தமிழ்</option>
+                <option value="ml" class="text-black">മലയാളം</option>
+                <option value="kn" class="text-black">ಕನ್ನಡ</option>
+                <option value="ur" class="text-black">اردو</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- Content Container -->
+    <main class="flex-1 max-w-3xl w-full mx-auto pt-24 pb-16 px-6">
+        <div class="bg-white rounded-2xl shadow-sm p-6 sm:p-10 border border-gray-100 flex flex-col gap-6">
+            <div class="border-b pb-4">
+                <h2 class="font-headline text-2xl font-bold text-[#0d1745]">
+                    <span x-show="lang === 'en'">Privacy Policy</span>
+                    <span x-show="lang === 'pa'">ਗੋਪਨੀਯਤਾ ਨੀਤੀ</span>
+                    <span x-show="lang === 'hi'">गोपनीयता नीति</span>
+                    <span x-show="lang === 'te'">గోప్యతా విధానం</span>
+                    <span x-show="lang === 'ta'">தனியுரிமைக் கொள்கை</span>
+                    <span x-show="lang === 'ml'">സ്വകാര്യതാ നയം</span>
+                    <span x-show="lang === 'kn'">ಗೌಪ್ಯತಾ ನೀತಿ</span>
+                    <span x-show="lang === 'ur'">رازداری کی پالیسی</span>
+                </h2>
+                <p class="text-xs text-gray-500 mt-1">
+                    <span x-show="lang === 'en'">Last updated: August 2026</span>
+                    <span x-show="lang === 'pa'">ਆਖਰੀ ਵਾਰ ਅੱਪਡੇਟ ਕੀਤਾ ਗਿਆ: ਅਗਸਤ 2026</span>
+                    <span x-show="lang === 'hi'">अंतिम बार अपडेट किया गया: अगस्त 2026</span>
+                    <span x-show="lang === 'te'">చివరిగా నవీకరించబడింది: ఆగస్టు 2026</span>
+                    <span x-show="lang === 'ta'">கடைசியாக புதுப்பிக்கப்பட்டது: ஆகஸ்ட் 2026</span>
+                    <span x-show="lang === 'ml'">അവസാനം അപ്ഡേറ്റ് ചെയ്തത്: ആഗസ്റ്റ് 2026</span>
+                    <span x-show="lang === 'kn'">ಕೊನೆಯದಾಗಿ ನವೀಕರಿಸಲಾಗಿದೆ: ಆಗಸ್ಟ್ 2026</span>
+                    <span x-show="lang === 'ur'">آخری بار اپ ڈیٹ کیا گیا: اگست 2026</span>
+                </p>
+            </div>
+
+            <div class="space-y-4 text-sm text-gray-700 leading-relaxed">
+                <!-- Section 1 -->
+                <h3 class="font-semibold text-base text-gray-900">
+                    <span x-show="lang === 'en'">1. Information We Collect</span>
+                    <span x-show="lang === 'pa'">1. ਜਾਣਕਾਰੀ ਜੋ ਅਸੀਂ ਇਕੱਠੀ ਕਰਦੇ ਹਾਂ</span>
+                    <span x-show="lang === 'hi'">1. जानकारी जो हम एकत्र करते हैं</span>
+                    <span x-show="lang === 'te'">1. మేము సేకరించే సమాచారం</span>
+                    <span x-show="lang === 'ta'">1. நாங்கள் சேகரிக்கும் தகவல்</span>
+                    <span x-show="lang === 'ml'">1. ഞങ്ങൾ ശേഖരിക്കുന്ന വിവരങ്ങൾ</span>
+                    <span x-show="lang === 'kn'">1. ನಾವು ಸಂಗ್ರಹಿಸುವ ಮಾಹಿತಿ</span>
+                    <span x-show="lang === 'ur'">1. جو معلومات ہم اکٹھی کرتے ہیں</span>
+                </h3>
+                <p>
+                    <span x-show="lang === 'en'">When you register or log into Kisan Konnect, we collect personal information such as your full name, phone number, email address, and Kisan Credit Card (KCC) identification details to verify your profile as an active farmer or agricultural trader.</span>
+                    <span x-show="lang === 'pa'">ਜਦੋਂ ਤੁਸੀਂ ਕਿਸਾਨ ਕਨੈਕਟ ਵਿੱਚ ਰਜਿਸਟਰ ਜਾਂ ਲੌਗ ਇਨ ਕਰਦੇ ਹੋ, ਤਾਂ ਅਸੀਂ ਤੁਹਾਡਾ ਪੂਰਾ ਨਾਮ, ਫੋਨ ਨੰਬਰ, ਈਮੇਲ ਪਤਾ, ਅਤੇ KCC ਵੇਰਵੇ ਇਕੱਠੇ ਕਰਦੇ ਹਾਂ।</span>
+                    <span x-show="lang === 'hi'">जब आप किसान कनेक्ट में रजिस्टर या लॉग इन करते हैं, तो हम आपका पूरा नाम, फोन नंबर, ईमेल पता, और KCC पहचान विवरण एकत्र करते हैं।</span>
+                    <span x-show="lang === 'te'">మీరు కిసాన్ కనెక్ట్‌లో నమోదు చేసుకున్నప్పుడు లేదా లాగిన్ అయినప్పుడు, మేము మీ పూర్తి పేరు, ఫోన్ నంబర్, ఇమెయిల్ చిరునామా మరియు KCC వివరాలను సేకరిస్తాము.</span>
+                    <span x-show="lang === 'ta'">கிசான் கனெக்ட்டில் பதிவு செய்யும் போது அல்லது உள்நுழையும் போது, உங்கள் முழு பெயர், தொலைபேசி எண், மின்னஞ்சல் முகவரி மற்றும் KCC விவரங்களைச் சேகரிக்கிறோம்.</span>
+                    <span x-show="lang === 'ml'">നിങ്ങൾ കിസാൻ കനെക്റ്റിൽ രജിസ്റ്റർ ചെയ്യുമ്പോഴോ ലോഗിൻ ചെയ്യുമ്പോഴോ നിങ്ങളുടെ മുഴുവൻ പേര്, ഫോൺ നമ്പർ, ഇമെയിൽ വിലാസം, KCC വിവരങ്ങൾ എന്നിവ ശേഖരിക്കുന്നു.</span>
+                    <span x-show="lang === 'kn'">ನೀವು ಕಿಸಾನ್ ಕನೆಕ್ಟ್‌ನಲ್ಲಿ ನೋಂದಾಯಿಸಿದಾಗ ಅಥವಾ ಲಾಗಿನ್ ಆದಾಗ, ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರು, ಫೋನ್ ಸಂಖ್ಯೆ, ಇಮೇಲ್ ವಿಳಾಸ ಮತ್ತು KCC ವಿವರಗಳನ್ನು ನಾವು ಸಂಗ್ರಹಿಸುತ್ತೇವೆ.</span>
+                    <span x-show="lang === 'ur'">جب آپ کسان کنیکٹ پر رجسٹر یا لاگ ان کرتے ہیں، تو ہم آپ کا پورا نام، فون نمبر، ای میل ایڈریس، اور KCC تفصیلات اکٹھی کرتے ہیں۔</span>
+                </p>
+
+                <!-- Section 2 -->
+                <h3 class="font-semibold text-base text-gray-900">
+                    <span x-show="lang === 'en'">2. How We Use Your Information</span>
+                    <span x-show="lang === 'pa'">2. ਅਸੀਂ ਤੁਹਾਡੀ ਜਾਣਕਾਰੀ ਦੀ ਵਰਤੋਂ ਕਿਵੇਂ ਕਰਦੇ ਹਾਂ</span>
+                    <span x-show="lang === 'hi'">2. हम आपकी जानकारी का उपयोग कैसे करते हैं</span>
+                    <span x-show="lang === 'te'">2. మేము మీ సమాచారాన్ని ఎలా ఉపయోగిస్తాము</span>
+                    <span x-show="lang === 'ta'">2. உங்கள் தகவலை நாங்கள் எவ்வாறு பயன்படுத்துகிறோம்</span>
+                    <span x-show="lang === 'ml'">2. നിങ്ങളുടെ വിവരങ്ങൾ ഞങ്ങൾ എങ്ങനെ ഉപയോഗിക്കുന്നു</span>
+                    <span x-show="lang === 'kn'">2. ನಿಮ್ಮ ಮಾಹಿತಿಯನ್ನು ನಾವು ಹೇಗೆ ಬಳಸುತ್ತೇವೆ</span>
+                    <span x-show="lang === 'ur'">2. ہم آپ کی معلومات کا استعمال کیسے کرتے ہیں</span>
+                </h3>
+                <p>
+                    <span x-show="lang === 'en'">Your data is utilized strictly to manage mandi queue tokens, provide localized market pricing updates, authenticate secure logins, and improve overall platform reliability.</span>
+                    <span x-show="lang === 'pa'">ਤੁਹਾਡੇ ਡੇਟਾ ਦੀ ਵਰਤੋਂ ਮੰਡੀ ਕਤਾਰ ਟੋਕਨਾਂ ਦਾ ਪ੍ਰਬੰਧਨ ਕਰਨ, ਮਾਰਕੀਟ ਕੀਮਤਾਂ ਦੇ ਅੱਪਡੇਟ ਪ੍ਰਦਾਨ ਕਰਨ ਅਤੇ ਸੁਰੱਖਿਅਤ ਲੌਗਇਨ ਲਈ ਕੀਤੀ ਜਾਂਦੀ ਹੈ।</span>
+                    <span x-show="lang === 'hi'">आपके डेटा का उपयोग मंडी कतार टोकन प्रबंधित करने, बाजार मूल्य अपडेट प्रदान करने और सुरक्षित लॉगिन को प्रमाणित करने के लिए किया जाता है।</span>
+                    <span x-show="lang === 'te'">మండి క్యూ టోకెన్‌లను నిర్వహించడానికి, మార్కెట్ ధరల నవీకరణలను అందించడానికి మరియు సురక్షితమైన లాగిన్‌లను ధృవీకరించడానికి మీ డేటా ఉపయోగించబడుతుంది.</span>
+                    <span x-show="lang === 'ta'">சந்தை வரிசை டோக்கன்களை நிர்வகிக்கவும், சந்தை விலை புதுப்பிப்புகளை வழங்கவும், பாதுகாப்பான உள்நுழைவுகளை உறுதிப்படுத்தவும் உங்கள் தரவு பயன்படுத்தப்படுகிறது.</span>
+                    <span x-show="lang === 'ml'">ചന്ത ക്യൂ ടോക്കണുകൾ നിയന്ത്രിക്കുന്നതിനും വിപണി വില അപ്ഡേറ്റുകൾ നൽകുന്നതിനും നിങ്ങളുടെ ഡാറ്റ ഉപയോഗിക്കുന്നു.</span>
+                    <span x-show="lang === 'kn'">ಮಂಡಿ ಕ್ಯೂ ಟೋಕನ್‌ಗಳನ್ನು ನಿರ್ವಹಿಸಲು, ಮಾರುಕಟ್ಟೆ ಬೆಲೆ ನವೀಕರಣಗಳನ್ನು ಒದಗಿಸಲು ಮತ್ತು ಸುರಕ್ಷಿತ ಲಾಗಿನ್‌ಗಳನ್ನು ದೃಢೀಕರಿಸಲು ನಿಮ್ಮ ಡೇಟಾವನ್ನು ಬಳಸಲಾಗುತ್ತದೆ.</span>
+                    <span x-show="lang === 'ur'">آپ کا ڈیٹا منڈی کی قطار کے ٹوکنز کا انتظام کرنے، مارکیٹ کی قیمتوں کی تازہ کاری فراہم کرنے، اور محفوظ لاگ ان کی توثیق کے لیے استعمال کیا جاتا ہے۔</span>
+                </p>
+
+                <!-- Section 3 -->
+                <h3 class="font-semibold text-base text-gray-900">
+                    <span x-show="lang === 'en'">3. Data Security</span>
+                    <span x-show="lang === 'pa'">3. ਡੇਟਾ ਸੁਰੱਖਿਆ</span>
+                    <span x-show="lang === 'hi'">3. डेटा सुरक्षा</span>
+                    <span x-show="lang === 'te'">3. డేటా భద్రత</span>
+                    <span x-show="lang === 'ta'">3. தரவு பாதுகாப்பு</span>
+                    <span x-show="lang === 'ml'">3. ഡാറ്റ സുരക്ഷ</span>
+                    <span x-show="lang === 'kn'">3. ಡೇಟಾ ಭದ್ರತೆ</span>
+                    <span x-show="lang === 'ur'">3. ڈیٹا سیکیورٹی</span>
+                </h3>
+                <p>
+                    <span x-show="lang === 'en'">We implement robust encryption and security measures (powered by secure authentication protocols like Supabase) to protect your personal and financial information against unauthorized access or disclosure.</span>
+                    <span x-show="lang === 'pa'">ਅਸੀਂ ਅਣਅਧਿਕਾਰਤ ਪਹੁੰਚ ਤੋਂ ਤੁਹਾਡੀ ਜਾਣਕਾਰੀ ਦੀ ਰੱਖਿਆ ਕਰਨ ਲਈ ਮਜ਼ਬੂਤ ਸੁਰੱਖਿਆ ਉਪਾਵਾਂ (ਜਿਵੇਂ ਕਿ Supabase) ਦੀ ਵਰਤੋਂ ਕਰਦੇ ਹਾਂ।</span>
+                    <span x-show="lang === 'hi'">हम अनधिकृत पहुंच से आपकी जानकारी की रक्षा के लिए मजबूत सुरक्षा उपायों (जैसे Supabase) का उपयोग करते हैं।</span>
+                    <span x-show="lang === 'te'">अनधिकृत యాక్సెస్ నుండి మీ సమాచారాన్ని రక్షించడానికి మేము బలమైన భద్రతా చర్యలను అమలు చేస్తాము.</span>
+                    <span x-show="lang === 'ta'">அங்கீகரிக்கப்படாத அணுகலில் இருந்து உங்களைப் பாதுகாக்க வலுவான பாதுகாப்பு நடவடிக்கைகளை நாங்கள் செயல்படுத்துகிறோம்.</span>
+                    <span x-show="lang === 'ml'">അനധികൃത പ്രവേശനത്തിൽ നിന്ന് നിങ്ങളുടെ വിവരങ്ങൾ സംരക്ഷിക്കാൻ ശക്തമായ സുരക്ഷാ നടപടികൾ ഞങ്ങൾ നടപ്പിലാക്കുന്നു.</span>
+                    <span x-show="lang === 'kn'">ಅನಧಿಕೃತ ಪ್ರವೇಶದಿಂದ ನಿಮ್ಮ ಮಾಹಿತಿಯನ್ನು ರಕ್ಷಿಸಲು ನಾವು ಬಲವಾದ ಭದ್ರತಾ ಕ್ರಮಗಳನ್ನು ಜಾರಿಗೆ ತರುತ್ತೇವೆ.</span>
+                    <span x-show="lang === 'ur'">ہم غیر مجاز رسائی سے آپ کی معلومات کی حفاظت کے لیے مضبوط حفاظتی اقدامات نافذ کرتے ہیں۔</span>
+                </p>
+
+                <!-- Section 4 -->
+                <h3 class="font-semibold text-base text-gray-900">
+                    <span x-show="lang === 'en'">4. Data Sharing</span>
+                    <span x-show="lang === 'pa'">4. ਡੇਟਾ ਸਾਂਝਾ ਕਰਨਾ</span>
+                    <span x-show="lang === 'hi'">4. डेटा साझा करना</span>
+                    <span x-show="lang === 'te'">4. డేటా భాగస్వామ్యం</span>
+                    <span x-show="lang === 'ta'">4. தரவு பகிர்வு</span>
+                    <span x-show="lang === 'ml'">4. ഡാറ്റ പങ്കിടൽ</span>
+                    <span x-show="lang === 'kn'">4. ಡೇಟಾ ಹಂಚಿಕೆ</span>
+                    <span x-show="lang === 'ur'">4. ڈیٹا کا اشتراک</span>
+                </h3>
+                <p>
+                    <span x-show="lang === 'en'">We do not sell, trade, or rent your personal identification information to third parties. Information is only shared with authorized regional mandi authorities when booking operational queue slots.</span>
+                    <span x-show="lang === 'pa'">ਅਸੀਂ ਤੁਹਾਡੀ ਨਿੱਜੀ ਜਾਣਕਾਰੀ ਤੀਜੀ ਧਿਰ ਨੂੰ ਨਹੀਂ ਵੇਚਦੇ। ਇਹ ਜਾਣਕਾਰੀ ਸਿਰਫ਼ ਮੰਡੀ ਅਧਿਕਾਰੀਆਂ ਨਾਲ ਸਾਂਝੀ ਕੀਤੀ ਜਾਂਦੀ ਹੈ।</span>
+                    <span x-show="lang === 'hi'">हम आपकी व्यक्तिगत पहचान की जानकारी तीसरे पक्ष को नहीं बेचते हैं। यह जानकारी केवल मंडी अधिकारियों के साथ साझा की जाती है।</span>
+                    <span x-show="lang === 'te'">మేము మీ వ్యక్తిగత సమాచారాన్ని మూడవ पक्षాలకు విక్రయించము. స్లాట్‌లను బుక్ చేసేటప్పుడు మాత్రమే ఇది మండి అధికారులతో పంచుకోబడుతుంది.</span>
+                    <span x-show="lang === 'ta'">உங்கள் தனிப்பட்ட தகவல்களை நாங்கள் மூன்றாம் தரப்பினருக்கு விற்பனை செய்வதில்லை. வரிசை ஸ்லாட்டுகளைப் பதிவு செய்யும் போது மட்டுமே சந்தை அதிகாரிகளுடன் பகிரப்படுகிறது.</span>
+                    <span x-show="lang === 'ml'">ഞങ്ങൾ നിങ്ങളുടെ വ്യക്തിഗത വിവരങ്ങൾ മൂന്നാം കക്ഷികൾക്ക് വിൽക്കുന്നില്ല. സ്ലോട്ടുകൾ ബുക്ക് ചെയ്യുമ്പോൾ മാത്രമേ ചന്ത അധികാരികളുമായി പങ്കിടൂ.</span>
+                    <span x-show="lang === 'kn'">ನಿಮ್ಮ ವೈಯಕ್ತಿಕ ಮಾಹಿತಿಯನ್ನು ನಾವು ಮೂರನೇ ವ್ಯಕ್ತಿಗಳಿಗೆ ಮಾರಾಟ ಮಾಡುವುದಿಲ್ಲ. ಸ್ಲಾಟ್‌ಗಳನ್ನು ಬುಕ್ ಮಾಡುವಾಗ ಮಾತ್ರ ಮಂಡಿ ಅಧಿಕಾರಿಗಳೊಂದಿಗೆ ಹಂಚಿಕೊಳ್ಳಲಾಗುತ್ತದೆ.</span>
+                    <span x-show="lang === 'ur'">ہم آپ کی ذاتی معلومات تیسرے فریق کو فروخت نہیں کرتے ہیں۔ سلاٹ بک کرتے وقت یہ صرف متعلقہ منڈی حکام کے ساتھ شیئر کی جاتی ہے۔</span>
+                </p>
+
+                <!-- Section 5 -->
+                <h3 class="font-semibold text-base text-gray-900">
+                    <span x-show="lang === 'en'">5. Contact Us</span>
+                    <span x-show="lang === 'pa'">5. ਸਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰੋ</span>
+                    <span x-show="lang === 'hi'">5. संपर्क करें</span>
+                    <span x-show="lang === 'te'">5. మమ్మల్ని సంప్రదించండి</span>
+                    <span x-show="lang === 'ta'">5. எங்களைத் தொடர்பு கொள்ளவும்</span>
+                    <span x-show="lang === 'ml'">5. ബന്ധപ്പെടുക</span>
+                    <span x-show="lang === 'kn'">5. ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ</span>
+                    <span x-show="lang === 'ur'">5. رابطہ کریں</span>
+                </h3>
+                <p>
+                    <span x-show="lang === 'en'">If you have any questions or concerns regarding this Privacy Policy, please reach out through the support portal inside your profile dashboard.</span>
+                    <span x-show="lang === 'pa'">ਜੇਕਰ ਇਸ ਗੋਪਨੀਯਤਾ ਨੀਤੀ ਬਾਰੇ ਤੁਹਾਡੇ ਕੋਈ ਸਵਾਲ ਹਨ, ਤਾਂ ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਪ੍ਰੋਫਾਈਲ ਡੈਸ਼ਬੋਰਡ ਰਾਹੀਂ ਸੰਪਰਕ ਕਰੋ।</span>
+                    <span x-show="lang === 'hi'">यदि इस गोपनीयता नीति के संबंध में आपके कोई प्रश्न हैं, तो कृपया अपने प्रोफ़ाइल डैशबोर्ड के माध्यम से संपर्क करें।</span>
+                    <span x-show="lang === 'te'">ఈ గోప్యతా విధానానికి సంబంధించి మీకు ఏດైనా ప్రశ్నలు ఉంటే, దయచేసి మీ ప్రొఫైల్ డ్యాష్‌బోర్డ్ ద్వారా మమ్మల్ని సంప్రదించండి.</span>
+                    <span x-show="lang === 'ta'">இந்த தனியுரிமைக் கொள்கை குறித்து ஏதேனும் கேள்விகள் இருந்தால், உங்கள் சுயவிவர டாஷ்போர்டு வழியாகத் தொடர்பு கொள்ளவும்.</span>
+                    <span x-show="lang === 'ml'">ഈ സ്വകാര്യതാ നയത്തെക്കുറിച്ച് എന്തെങ്കിലും സംശയങ്ങളുണ്ടെങ്കിൽ, നിങ്ങളുടെ പ്രൊഫൈൽ ഡാഷ്‌ബോർഡ് വഴി ബന്ധപ്പെടുക.</span>
+                    <span x-show="lang === 'kn'">ಈ ಗೌಪ್ಯತಾ ನೀತಿಯ ಕುರಿತು ನೀವು ಯಾವುದೇ ಪ್ರಶ್ನೆಗಳನ್ನು ಹೊಂದಿದ್ದರೆ, ದಯವಿಟ್ಟು ನಿಮ್ಮ ಪ್ರೊಫೈಲ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಮೂಲಕ ಸಂಪರ್ಕಿಸಿ.</span>
+                    <span x-show="lang === 'ur'">اگر آپ کو اس رازداری کی پالیسی کے بارے میں کوئی سوالات ہیں، تو براہ کرم اپنے پروفائل ڈیش بورڈ کے ذریعے رابطہ کریں۔</span>
+                </p>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

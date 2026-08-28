@@ -1,0 +1,49 @@
+<!-- TopAppBar (Redesigned Modern Glassmorphism Header) -->
+<header class="bg-[#0d1745]/90 backdrop-blur-md shadow-lg sticky top-0 z-50 transition-all duration-300 border-b border-white/15">
+<div class="flex justify-between items-center w-full px-4 md:px-margin-desktop py-3.5 max-w-container-max mx-auto">
+    <!-- Logo & Brand -->
+    <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-white to-surface-container flex items-center justify-center shadow-md overflow-hidden border border-white/30">
+            <img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Konnect Logo">
+        </div>
+        <div class="flex flex-col">
+            <h1 class="font-headline-lg-mobile md:font-headline-lg text-[18px] md:text-[20px] font-extrabold tracking-wider text-white uppercase leading-none">KISAN <span class="text-secondary-fixed">KONNECT</span></h1>
+            <span class="text-[10px] text-inverse-primary/80 font-medium tracking-wide">Smart Agriculture & Mandi</span>
+        </div>
+    </div>
+
+    <!-- Desktop Navigation Links -->
+    <nav class="hidden xl:flex gap-6 items-center h-full pt-1">
+        <a class="font-label-caps text-label-caps pb-1 transition-all border-b-2" :class="activeSection === 'home' ? 'text-on-primary border-on-primary font-bold' : 'text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent'" href="#home-top" @click="activeSection = 'home'">Home</a>
+        <a class="font-label-caps text-label-caps pb-1 transition-all border-b-2" :class="activeSection === 'queue' ? 'text-on-primary border-on-primary font-bold' : 'text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent'" href="queue.html">Book Slot</a>
+        <a class="font-label-caps text-label-caps pb-1 transition-all border-b-2" :class="activeSection === 'prices' ? 'text-on-primary border-on-primary font-bold' : 'text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent'" href="mandi.html">Mandi</a>
+        <a class="font-label-caps text-label-caps pb-1 transition-all border-b-2" :class="activeSection === 'support' ? 'text-on-primary border-on-primary font-bold' : 'text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent'" href="support.html">Support</a>
+    </nav>
+
+    <!-- Right Actions (Language, Notifications, Avatar) -->
+    <div class="flex items-center gap-2.5 relative">
+        <!-- Language Switcher -->
+        <select x-model="lang" aria-label="Select Language" class="bg-white/15 hover:bg-white/20 border border-white/30 text-white text-xs rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-white cursor-pointer font-semibold shadow-sm transition-colors">
+            <option value="en" class="text-black">English</option>
+            <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
+            <option value="hi" class="text-black">हिन्दी</option>
+            <option value="te" class="text-black">తెలుగు</option>
+            <option value="ta" class="text-black">தமிழ்</option>
+            <option value="ml" class="text-black">മലയാളം</option>
+            <option value="kn" class="text-black">ಕನ್ನಡ</option>
+            <option value="ur" class="text-black">اردو</option>
+        </select>
+
+        <!-- Notification Button -->
+        <button @click="showNotifications = !showNotifications; hasUnread = false" aria-label="notifications" class="text-white hover:bg-white/15 transition-all relative rounded-full p-2 flex items-center justify-center cursor-pointer border border-white/10">
+            <span class="material-symbols-outlined text-[20px]">notifications</span>
+            <span x-show="hasUnread" class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full animate-pulse"></span>
+        </button>
+
+        <!-- User Profile Avatar -->
+        <div class="w-9 h-9 rounded-full overflow-hidden border-2 border-secondary shadow-md cursor-pointer hover:scale-105 transition-transform">
+            <img alt="Harjinder Singh Profile" class="w-full h-full object-cover" src="kisan.jpg">
+        </div>
+    </div>
+</div>
+</header>
