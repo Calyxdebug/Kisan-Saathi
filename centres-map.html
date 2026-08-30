@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kisan Konnect - Nearby Centres</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Mukta:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "background": "#FBF8F5",
+          "surface-container-lowest": "#ffffff",
+          "surface-container-low": "#f2f4f6",
+          "surface-container": "#eceef0",
+          "on-surface": "#191c1e",
+          "on-surface-variant": "#46464f",
+          "primary-container": "#0d1745",
+          "on-primary": "#ffffff",
+          "outline": "#767680"
+        },
+        borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px", "2xl": "1rem" },
+        fontFamily: { headline: ["Poppins", "sans-serif"], body: ["Inter", "sans-serif"], label: ["Mukta", "sans-serif"] },
+        boxShadow: { "ambient-1": "0 4px 12px rgba(0,0,0,0.04)", "ambient-2": "0 12px 24px rgba(0,0,0,0.08)" }
+      }
+    }
+  }
+</script>
+<!-- Leaflet map library — free, no API key required -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  body { background-color: #FBF8F5 !important; -webkit-tap-highlight-color: transparent; }
+  .card-surface { background-color: theme('colors.surface-container-lowest'); box-shadow: theme('boxShadow.ambient-1'); border-radius: theme('borderRadius.2xl'); }
+  #map { height: 340px; width: 100%; border-radius: 1rem; z-index: 0; }
+  .queue-dot { width: 12px; height: 12px; border-radius: 9999px; flex-shrink: 0; }
+</style>
+</head>
+<body class="font-body antialiased min-h-screen flex flex-col relative pb-28">
+
+<!-- Top Bar (same style as your other pages) -->
+<header class="fixed top-0 w-full z-50 shadow-md bg-[#0d1745] flex items-center gap-2.5 px-4 h-16">
+  <div class="w-9 h-9 rounded-full bg-white overflow-hidden border border-white/25 shadow-sm flex items-center justify-center">
+    <img alt="Kisan Konnect Logo" class="w-full h-full object-cover" src="Logo.png"/>
+  </div>
+  <h1 class="font-headline text-[18px] sm:text-[20px] font-bold tracking-tight text-white">Nearby Procurement Centres</h1>
+</header>
+
+<main class="flex-1 pt-24 px-4 max-w-4xl mx-auto w-full flex flex-col gap-5">
+
+  <!-- Location status banner -->
+  <div id="locationBanner" class="text-xs font-body px-3 py-2 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 hidden"></div>
+
+  <!-- Legend + distance filter -->
+  <section class="card-surface p-4 flex flex-col gap-3">
+    <div class="flex items-center gap-4 flex-wrap text-xs font-label font-medium text-on-surface-variant">
+      <span class="flex items-center gap-1.5"><span class="queue-dot bg-green-500"></span> Low queue</span>
+      <span class="flex items-center gap-1.5"><span class="queue-dot bg-yellow-500"></span> Moderate</span>
+      <span class="flex items-center gap-1.5"><span class="queue-dot bg-red-500"></span> Busy</span>
+      <span class="flex items-center gap-1.5"><span class="queue-dot bg-blue-600"></span> You</span>
+    </div>
+    <div>
+      <label class="flex justify-between text-xs font-label font-medium text-on-surface-variant mb-1">
+        <span>Show centres within</span>
+        <span id="radiusValue">50 km</span>
+      </label>
+      <input id="radiusSlider" type="range" min="5" max="100" step="5" value="50" class="w-full accent-[#0d1745]"/>
+    </div>
+  </section>
+
+  <!-- Map -->
+  <section class="card-surface p-2">
+    <div id="map"></div>
+  </section>
+
+  <!-- List of centres, sorted by distance -->
+  <section class="flex flex-col gap-3" id="centreList"></section>
+
+</main>
+
+<script>
+  // ------------------------------------------------------------
+  // 1. MOCK CENTRE DATA — replace this later with a real Supabase
+  //    query: supabase.from('procurement_centres').select('*')
+  //    joined with a live queue-count calculation per centre.
+  // ------------------------------------------------------------
+  const centres = [
+    { name: "Test Centre — Karnal",  lat: 29.6857, lng: 76.9905, queue: "low",  waitingFarmers: 8,  capacity: 30 },
+    { name: "Test Centre — Panipat", lat: 29.3909, lng: 76.9635, queue: "mid",  waitingFarmers: 19, capacity: 30 },
+    { name: "Test Centre — Sonipat", lat: 28.9931, lng: 77.0151, queue: "high", waitingFarmers: 28, capacity: 30 }
+  ];
+
+  const queueMeta = {
+    low:  { color: "#22c55e", label: "Low queue",  wait: "~10-15 min" },
+    mid:  { color: "#eab308", label: "Moderate",   wait: "~30-40 min" },
+    high: { color: "#ef4444", label: "Busy",        wait: "~60+ min" }
+  };
+
+  // Fallback location if geolocation is denied/unavailable (New Delhi area)
+  const FALLBACK_LOCATION = { lat: 28.6139, lng: 77.2090 };
+
+  // ------------------------------------------------------------
+  // 2. Haversine distance in km between two lat/lng points
+  // ------------------------------------------------------------
+  function distanceKm(lat1, lng1, lat2, lng2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) ** 2 +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLng / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  // ------------------------------------------------------------
+  // 3. Init map + markers once we know the user's location
+  // ------------------------------------------------------------
+  let map, userMarker;
+  const centreMarkers = {};
+
+  function initMap(userLoc) {
+    map = L.map('map').setView([userLoc.lat, userLoc.lng], 9);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    userMarker = L.circleMarker([userLoc.lat, userLoc.lng], {
+      radius: 9, color: "#fff", weight: 2, fillColor: "#2563eb", fillOpacity: 1
+    }).addTo(map).bindPopup("You are here");
+
+    centres.forEach(c => {
+      c.distance = distanceKm(userLoc.lat, userLoc.lng, c.lat, c.lng);
+      const meta = queueMeta[c.queue];
+      const marker = L.circleMarker([c.lat, c.lng], {
+        radius: 10, color: "#fff", weight: 2, fillColor: meta.color, fillOpacity: 0.9
+      }).addTo(map).bindPopup(
+        `<strong>${c.name}</strong><br>${meta.label} · ${meta.wait}<br>${c.distance.toFixed(1)} km away`
+      );
+      centreMarkers[c.name] = marker;
+    });
+
+    renderList();
+    applyRadiusFilter();
+  }
+
+  // ------------------------------------------------------------
+  // 4. Render the card list, sorted by distance
+  // ------------------------------------------------------------
+  function renderList() {
+    const listEl = document.getElementById('centreList');
+    listEl.innerHTML = '';
+    const sorted = [...centres].sort((a, b) => a.distance - b.distance);
+
+    sorted.forEach(c => {
+      const meta = queueMeta[c.queue];
+      const row = document.createElement('div');
+      row.className = "card-surface p-4 flex items-center gap-3 cursor-pointer active:scale-[0.99] transition-all";
+      row.dataset.name = c.name;
+      row.innerHTML = `
+        <span class="queue-dot" style="background:${meta.color}"></span>
+        <div class="flex-1">
+          <p class="font-headline text-sm font-bold text-primary-container">${c.name}</p>
+          <p class="font-body text-xs text-on-surface-variant mt-0.5">${meta.label} · Est. wait ${meta.wait} · ${c.waitingFarmers}/${c.capacity} in queue</p>
+        </div>
+        <div class="text-right">
+          <p class="font-headline text-sm font-bold text-primary-container">${c.distance.toFixed(1)} km</p>
+        </div>
+      `;
+      row.addEventListener('click', () => {
+        map.flyTo([c.lat, c.lng], 12);
+        centreMarkers[c.name].openPopup();
+      });
+      listEl.appendChild(row);
+    });
+  }
+
+  // ------------------------------------------------------------
+  // 5. Distance filter slider
+  // ------------------------------------------------------------
+  function applyRadiusFilter() {
+    const radius = Number(document.getElementById('radiusSlider').value);
+    document.getElementById('radiusValue').textContent = radius + " km";
+
+    centres.forEach(c => {
+      const within = c.distance <= radius;
+      const marker = centreMarkers[c.name];
+      if (within && !map.hasLayer(marker)) marker.addTo(map);
+      if (!within && map.hasLayer(marker)) map.removeLayer(marker);
+    });
+
+    // re-render list filtered
+    const listEl = document.getElementById('centreList');
+    [...listEl.children].forEach(row => {
+      const c = centres.find(x => x.name === row.dataset.name);
+      row.style.display = c.distance <= radius ? '' : 'none';
+    });
+  }
+
+  document.getElementById('radiusSlider').addEventListener('input', applyRadiusFilter);
+
+  // ------------------------------------------------------------
+  // 6. Get the user's live location (falls back gracefully)
+  // ------------------------------------------------------------
+  function showBanner(msg) {
+    const el = document.getElementById('locationBanner');
+    el.textContent = msg;
+    el.classList.remove('hidden');
+  }
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => initMap({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      err => {
+        showBanner("Location access denied or unavailable — showing centres relative to a default location. Enable location for accurate distances.");
+        initMap(FALLBACK_LOCATION);
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  } else {
+    showBanner("Your browser doesn't support location — showing a default location.");
+    initMap(FALLBACK_LOCATION);
+  }
+</script>
+
+</body>
+</html>
