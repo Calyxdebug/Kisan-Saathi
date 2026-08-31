@@ -1,231 +1,374 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="light" lang="en" x-data="{ lang: 'en', activeTab: 'map', selectedMandi: { name: 'Khanna Mandi', distance: '4.2 km away', wait: '10 mins wait', statusClass: 'bg-ledger-green', lat: 30.6948, lng: 76.2160 } }">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Kisan Konnect - Nearby Centres</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Mukta:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script>
-  tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        colors: {
-          "background": "#FBF8F5",
-          "surface-container-lowest": "#ffffff",
-          "surface-container-low": "#f2f4f6",
-          "surface-container": "#eceef0",
-          "on-surface": "#191c1e",
-          "on-surface-variant": "#46464f",
-          "primary-container": "#0d1745",
-          "on-primary": "#ffffff",
-          "outline": "#767680"
-        },
-        borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px", "2xl": "1rem" },
-        fontFamily: { headline: ["Poppins", "sans-serif"], body: ["Inter", "sans-serif"], label: ["Mukta", "sans-serif"] },
-        boxShadow: { "ambient-1": "0 4px 12px rgba(0,0,0,0.04)", "ambient-2": "0 12px 24px rgba(0,0,0,0.08)" }
-      }
-    }
-  }
-</script>
-<!-- Leaflet map library — free, no API key required -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<style>
-  body { background-color: #FBF8F5 !important; -webkit-tap-highlight-color: transparent; }
-  .card-surface { background-color: theme('colors.surface-container-lowest'); box-shadow: theme('boxShadow.ambient-1'); border-radius: theme('borderRadius.2xl'); }
-  #map { height: 340px; width: 100%; border-radius: 1rem; z-index: 0; }
-  .queue-dot { width: 12px; height: 12px; border-radius: 9999px; flex-shrink: 0; }
-</style>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <title>Kisan Konnect - Live Queue & Procurement Centers</title>
+    <!-- Supabase Client Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialize Supabase with persistent session storage
+        const supabaseUrl = 'https://lwexxnbwtltigadhzasa.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3ZXh4bmJ3dGx0aWdhZGh6YXNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTEyOTIsImV4cCI6MjEwMzQyNzI5Mn0.iZzB-KI5_dAamTdROz06knj57jgahVhXkHeSvaBNiaI';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey, {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        });
+        
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                // Fallback check against localStorage before forcing redirect
+                const hasLocalSession = Object.keys(localStorage).some(key => key.includes('-auth-token'));
+                if (!hasLocalSession) {
+                    window.location.href = 'login.html';
+                }
+            }
+        }
+        checkAuth();
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Alpine.js for interactivity -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700&family=Mukta:wght@500;600&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "on-primary-fixed": "#0d1745",
+                        "secondary-container": "#fea619",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-background": "#0b1c30",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#0b1c30",
+                        "inverse-surface": "#213145",
+                        "weather-warm": "#fbbf24",
+                        "surface-bright": "#f8f9ff",
+                        "kcc-amber": "#f59e0b",
+                        "primary-fixed-dim": "#bbc3fb",
+                        "tertiary-container": "#351000",
+                        "secondary-fixed-dim": "#ffb95f",
+                        "outline": "#767680",
+                        "on-primary-fixed-variant": "#3b4473",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-tertiary-container": "#b27558",
+                        "surface-glass": "rgba(255, 255, 255, 0.85)",
+                        "surface-container-lowest": "#ffffff",
+                        "transaction-blue": "#3b82f6",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#feb695",
+                        "ledger-green": "#10b981",
+                        "on-surface-variant": "#46464f",
+                        "tertiary-fixed": "#ffdbcc",
+                        "secondary-fixed": "#ffddb8",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#000000",
+                        "primary": "#000000",
+                        "outline-variant": "#c6c5d0",
+                        "on-primary-container": "#7881b4",
+                        "primary-container": "#0d1745",
+                        "surface-variant": "#d3e4fe",
+                        "surface": "#f8f9ff",
+                        "on-secondary-container": "#684000",
+                        "surface-tint": "#525b8c",
+                        "inverse-primary": "#bbc3fb",
+                        "mandi-purple": "#8b5cf6",
+                        "on-tertiary-fixed": "#351000",
+                        "surface-dim": "#cbdbf5",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#653e00",
+                        "background": "#f8f9ff",
+                        "primary-fixed": "#dee1ff",
+                        "secondary": "#855300",
+                        "surface-container": "#e5eeff",
+                        "border-subtle": "rgba(13, 23, 69, 0.08)",
+                        "on-tertiary-fixed-variant": "#6b3a21",
+                        "surface-container-high": "#dce9ff",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#2a1700"
+                    },
+                    "fontFamily": {
+                        "headline": ["Poppins", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Mukta", "Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .map-bg {
+            background-image: linear-gradient(rgba(248, 249, 255, 0.3), rgba(248, 249, 255, 0.6)), url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .shadow-level-1 { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); }
+        .shadow-level-2 { box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08); }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
 </head>
-<body class="font-body antialiased min-h-screen flex flex-col relative pb-28">
+<body class="bg-background text-on-background font-body h-screen w-screen overflow-hidden flex flex-col relative" 
+      x-data="{ 
+          userLocationText: 'Locating via GPS...', 
+          mandis: [
+              { name: 'Khanna Mandi', distance: '4.2 km away', wait: '10 mins wait', statusClass: 'bg-ledger-green', lat: 30.6948, lng: 76.2160, top: '30%', left: '60%' },
+              { name: 'Samrala Mandi', distance: '12.5 km away', wait: '25 mins wait', statusClass: 'bg-kcc-amber', lat: 30.8407, lng: 76.1834, top: '60%', left: '25%' },
+              { name: 'Ludhiana Mandi', distance: '22.1 km away', wait: '50 mins wait', statusClass: 'bg-error', lat: 30.9010, lng: 75.8573, top: '20%', left: '20%' }
+          ],
+          initLocation() {
+              if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(
+                      (position) => {
+                          this.userLocationText = 'GPS Active: ' + position.coords.latitude.toFixed(2) + '° N, ' + position.coords.longitude.toFixed(2) + '° E';
+                      },
+                      (error) => {
+                          this.userLocationText = 'Punjab Region (GPS Default)';
+                      }
+                  );
+              } else {
+                  this.userLocationText = 'Punjab Region';
+              }
+          }
+      }" 
+      x-init="initLocation()">
 
-<!-- Top Bar (same style as your other pages) -->
-<header class="fixed top-0 w-full z-50 shadow-md bg-[#0d1745] flex items-center gap-2.5 px-4 h-16">
-  <div class="w-9 h-9 rounded-full bg-white overflow-hidden border border-white/25 shadow-sm flex items-center justify-center">
-    <img alt="Kisan Konnect Logo" class="w-full h-full object-cover" src="Logo.png"/>
-  </div>
-  <h1 class="font-headline text-[18px] sm:text-[20px] font-bold tracking-tight text-white">Nearby Procurement Centres</h1>
-</header>
+    <!-- Map Background Wrapper -->
+    <div class="absolute inset-0 z-0 map-bg"></div>
 
-<main class="flex-1 pt-24 px-4 max-w-4xl mx-auto w-full flex flex-col gap-5">
-
-  <!-- Location status banner -->
-  <div id="locationBanner" class="text-xs font-body px-3 py-2 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 hidden"></div>
-
-  <!-- Legend + distance filter -->
-  <section class="card-surface p-4 flex flex-col gap-3">
-    <div class="flex items-center gap-4 flex-wrap text-xs font-label font-medium text-on-surface-variant">
-      <span class="flex items-center gap-1.5"><span class="queue-dot bg-green-500"></span> Low queue</span>
-      <span class="flex items-center gap-1.5"><span class="queue-dot bg-yellow-500"></span> Moderate</span>
-      <span class="flex items-center gap-1.5"><span class="queue-dot bg-red-500"></span> Busy</span>
-      <span class="flex items-center gap-1.5"><span class="queue-dot bg-blue-600"></span> You</span>
-    </div>
-    <div>
-      <label class="flex justify-between text-xs font-label font-medium text-on-surface-variant mb-1">
-        <span>Show centres within</span>
-        <span id="radiusValue">50 km</span>
-      </label>
-      <input id="radiusSlider" type="range" min="5" max="100" step="5" value="50" class="w-full accent-[#0d1745]"/>
-    </div>
-  </section>
-
-  <!-- Map -->
-  <section class="card-surface p-2">
-    <div id="map"></div>
-  </section>
-
-  <!-- List of centres, sorted by distance -->
-  <section class="flex flex-col gap-3" id="centreList"></section>
-
-</main>
-
-<script>
-  // ------------------------------------------------------------
-  // 1. MOCK CENTRE DATA — replace this later with a real Supabase
-  //    query: supabase.from('procurement_centres').select('*')
-  //    joined with a live queue-count calculation per centre.
-  // ------------------------------------------------------------
-  const centres = [
-    { name: "Test Centre — Karnal",  lat: 29.6857, lng: 76.9905, queue: "low",  waitingFarmers: 8,  capacity: 30 },
-    { name: "Test Centre — Panipat", lat: 29.3909, lng: 76.9635, queue: "mid",  waitingFarmers: 19, capacity: 30 },
-    { name: "Test Centre — Sonipat", lat: 28.9931, lng: 77.0151, queue: "high", waitingFarmers: 28, capacity: 30 }
-  ];
-
-  const queueMeta = {
-    low:  { color: "#22c55e", label: "Low queue",  wait: "~10-15 min" },
-    mid:  { color: "#eab308", label: "Moderate",   wait: "~30-40 min" },
-    high: { color: "#ef4444", label: "Busy",        wait: "~60+ min" }
-  };
-
-  // Fallback location if geolocation is denied/unavailable (New Delhi area)
-  const FALLBACK_LOCATION = { lat: 28.6139, lng: 77.2090 };
-
-  // ------------------------------------------------------------
-  // 2. Haversine distance in km between two lat/lng points
-  // ------------------------------------------------------------
-  function distanceKm(lat1, lng1, lat2, lng2) {
-    const R = 6371;
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) ** 2 +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLng / 2) ** 2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  }
-
-  // ------------------------------------------------------------
-  // 3. Init map + markers once we know the user's location
-  // ------------------------------------------------------------
-  let map, userMarker;
-  const centreMarkers = {};
-
-  function initMap(userLoc) {
-    map = L.map('map').setView([userLoc.lat, userLoc.lng], 9);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-    userMarker = L.circleMarker([userLoc.lat, userLoc.lng], {
-      radius: 9, color: "#fff", weight: 2, fillColor: "#2563eb", fillOpacity: 1
-    }).addTo(map).bindPopup("You are here");
-
-    centres.forEach(c => {
-      c.distance = distanceKm(userLoc.lat, userLoc.lng, c.lat, c.lng);
-      const meta = queueMeta[c.queue];
-      const marker = L.circleMarker([c.lat, c.lng], {
-        radius: 10, color: "#fff", weight: 2, fillColor: meta.color, fillOpacity: 0.9
-      }).addTo(map).bindPopup(
-        `<strong>${c.name}</strong><br>${meta.label} · ${meta.wait}<br>${c.distance.toFixed(1)} km away`
-      );
-      centreMarkers[c.name] = marker;
-    });
-
-    renderList();
-    applyRadiusFilter();
-  }
-
-  // ------------------------------------------------------------
-  // 4. Render the card list, sorted by distance
-  // ------------------------------------------------------------
-  function renderList() {
-    const listEl = document.getElementById('centreList');
-    listEl.innerHTML = '';
-    const sorted = [...centres].sort((a, b) => a.distance - b.distance);
-
-    sorted.forEach(c => {
-      const meta = queueMeta[c.queue];
-      const row = document.createElement('div');
-      row.className = "card-surface p-4 flex items-center gap-3 cursor-pointer active:scale-[0.99] transition-all";
-      row.dataset.name = c.name;
-      row.innerHTML = `
-        <span class="queue-dot" style="background:${meta.color}"></span>
-        <div class="flex-1">
-          <p class="font-headline text-sm font-bold text-primary-container">${c.name}</p>
-          <p class="font-body text-xs text-on-surface-variant mt-0.5">${meta.label} · Est. wait ${meta.wait} · ${c.waitingFarmers}/${c.capacity} in queue</p>
+    <!-- Map Interactive Markers Layer -->
+    <div class="absolute inset-0 z-10 pointer-events-none" x-show="activeTab === 'map'">
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-pointer" @click="alert(userLocationText)">
+            <div class="w-5 h-5 bg-transaction-blue rounded-full pulse-dot border-2 border-white shadow-md"></div>
         </div>
-        <div class="text-right">
-          <p class="font-headline text-sm font-bold text-primary-container">${c.distance.toFixed(1)} km</p>
+
+        <template x-for="mandi in mandis">
+            <div class="absolute flex flex-col items-center pointer-events-auto cursor-pointer transition-transform hover:scale-110" 
+                 :style="`top: ${mandi.top}; left: ${mandi.left};`"
+                 @click="selectedMandi = mandi">
+                <div class="bg-surface-glass backdrop-blur-md px-3 py-1 rounded-full shadow-lg border border-border-subtle mb-1 flex items-center gap-1.5 font-label text-xs font-bold text-on-surface">
+                    <span class="w-2 h-2 rounded-full" :class="mandi.statusClass"></span>
+                    <span x-text="mandi.name"></span>
+                </div>
+                <span class="material-symbols-outlined text-[28px]" :class="mandi.statusClass.replace('bg-', 'text-')" style="font-variation-settings: 'FILL' 1;">location_on</span>
+            </div>
+        </template>
+    </div>
+
+    <!-- Top App Bar -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-primary-container shadow-md flex items-center px-4 h-16 justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm overflow-hidden border border-white/20">
+                <img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Konnect Logo" onerror="this.src='https://images.unsplash.com/photo-1595974482597-4787dc64de9c?w=100&auto=format&fit=crop&q=60'"/>
+            </div>
+            <div>
+                <h1 class="font-headline text-lg font-bold text-on-primary tracking-tight">KISAN KONNECT</h1>
+                <p class="text-[10px] text-primary-fixed-dim flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[12px]">my_location</span>
+                    <span x-text="userLocationText"></span>
+                </p>
+            </div>
         </div>
-      `;
-      row.addEventListener('click', () => {
-        map.flyTo([c.lat, c.lng], 12);
-        centreMarkers[c.name].openPopup();
-      });
-      listEl.appendChild(row);
-    });
-  }
 
-  // ------------------------------------------------------------
-  // 5. Distance filter slider
-  // ------------------------------------------------------------
-  function applyRadiusFilter() {
-    const radius = Number(document.getElementById('radiusSlider').value);
-    document.getElementById('radiusValue').textContent = radius + " km";
+        <div class="flex items-center gap-3">
+            <select x-model="lang" aria-label="Select Language" class="bg-white/10 hover:bg-white/20 text-white text-xs rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer font-bold border border-white/25">
+                <option value="en" class="text-black">English</option>
+                <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
+                <option value="hi" class="text-black">हिन्दी</option>
+                <option value="te" class="text-black">తెలుగు</option>
+                <option value="ta" class="text-black">தமிழ்</option>
+                <option value="ml" class="text-black">മലയാളം</option>
+                <option value="kn" class="text-black">ಕನ್ನಡ</option>
+                <option value="ur" class="text-black">اردو</option>
+            </select>
+        </div>
+    </header>
 
-    centres.forEach(c => {
-      const within = c.distance <= radius;
-      const marker = centreMarkers[c.name];
-      if (within && !map.hasLayer(marker)) marker.addTo(map);
-      if (!within && map.hasLayer(marker)) map.removeLayer(marker);
-    });
+    <!-- Toggle View Header Bar -->
+    <div class="fixed top-20 left-0 w-full z-40 px-4 flex justify-center pointer-events-none">
+        <div class="bg-surface-glass backdrop-blur-md rounded-full p-1.5 shadow-lg border border-border-subtle flex gap-2 pointer-events-auto">
+            <button @click="activeTab = 'map'" :class="activeTab === 'map' ? 'bg-primary-container text-white font-bold' : 'text-on-surface-variant'" class="px-5 py-2 rounded-full text-xs transition-all flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px]">map</span>
+                <span x-show="lang === 'en'">Live Map</span>
+                <span x-show="lang === 'pa'">ਲਾਈਵ ਨਕਸ਼ਾ</span>
+                <span x-show="lang === 'hi'">लाइव मानचित्र</span>
+            </button>
+            <button @click="activeTab = 'dashboard'" :class="activeTab === 'dashboard' ? 'bg-primary-container text-white font-bold' : 'text-on-surface-variant'" class="px-5 py-2 rounded-full text-xs transition-all flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px]">confirmation_number</span>
+                <span x-show="lang === 'en'">Token & Queue</span>
+                <span x-show="lang === 'pa'">ਟੋਕਨ ਅਤੇ ਕਤਾਰ</span>
+                <span x-show="lang === 'hi'">टोकन और कतार</span>
+            </button>
+        </div>
+    </div>
 
-    // re-render list filtered
-    const listEl = document.getElementById('centreList');
-    [...listEl.children].forEach(row => {
-      const c = centres.find(x => x.name === row.dataset.name);
-      row.style.display = c.distance <= radius ? '' : 'none';
-    });
-  }
+    <!-- Legend Overlay -->
+    <div class="absolute top-36 left-4 z-30 bg-surface-glass backdrop-blur-md rounded-xl p-3 shadow-lg border border-border-subtle flex flex-col gap-2" x-show="activeTab === 'map'">
+        <div class="flex items-center gap-2 font-label text-xs text-on-surface-variant font-medium">
+            <span class="w-3 h-3 rounded-full bg-ledger-green shadow-sm"></span> &lt; 15 mins (Fast)
+        </div>
+        <div class="flex items-center gap-2 font-label text-xs text-on-surface-variant font-medium">
+            <span class="w-3 h-3 rounded-full bg-kcc-amber shadow-sm"></span> 15 - 45 mins (Moderate)
+        </div>
+        <div class="flex items-center gap-2 font-label text-xs text-on-surface-variant font-medium">
+            <span class="w-3 h-3 rounded-full bg-error shadow-sm"></span> 45+ mins (Busy)
+        </div>
+    </div>
 
-  document.getElementById('radiusSlider').addEventListener('input', applyRadiusFilter);
+    <!-- Main Content Area -->
+    <main class="absolute inset-x-0 bottom-24 top-36 z-30 overflow-y-auto px-4 pointer-events-none flex flex-col justify-end pb-4">
+        
+        <!-- MAP VIEW: Bottom Pull-up Card -->
+        <div class="w-full max-w-md mx-auto bg-surface-glass backdrop-blur-md rounded-[24px] shadow-[0_10px_30px_rgba(13,23,69,0.15)] border border-border-subtle p-6 pointer-events-auto transform transition-all" x-show="activeTab === 'map'">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h2 class="font-headline text-xl font-bold text-on-background mb-1" x-text="selectedMandi.name"></h2>
+                    <p class="font-body text-sm text-on-surface-variant flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px] text-transaction-blue">near_me</span> 
+                        <span x-text="selectedMandi.distance"></span>
+                    </p>
+                </div>
+                <div class="bg-surface-container-low px-3 py-1.5 rounded-full border border-border-subtle flex items-center gap-2 shadow-sm">
+                    <span class="w-2.5 h-2.5 rounded-full pulse-dot" :class="selectedMandi.statusClass"></span>
+                    <span class="font-label text-xs text-on-surface font-bold" x-text="selectedMandi.wait"></span>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button @click="window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedMandi.lat},${selectedMandi.lng}`, '_blank')" class="bg-primary-container text-on-primary w-full py-3 rounded-xl font-label text-sm font-bold flex justify-center items-center gap-2 active:scale-95 transition-transform shadow-md">
+                    <span class="material-symbols-outlined text-[18px]">navigation</span> Navigate
+                </button>
+                <button @click="activeTab = 'dashboard'" class="bg-white text-primary-container border border-primary-container/30 w-full py-3 rounded-xl font-label text-sm font-bold flex justify-center items-center gap-2 active:scale-95 transition-transform hover:bg-surface-container-low">
+                    Book Slot
+                </button>
+            </div>
+        </div>
 
-  // ------------------------------------------------------------
-  // 6. Get the user's live location (falls back gracefully)
-  // ------------------------------------------------------------
-  function showBanner(msg) {
-    const el = document.getElementById('locationBanner');
-    el.textContent = msg;
-    el.classList.remove('hidden');
-  }
+        <!-- DASHBOARD VIEW -->
+        <div class="w-full max-w-screen-xl mx-auto flex flex-col gap-5 pointer-events-auto" x-show="activeTab === 'dashboard'" x-cloak>
+            <section class="bg-[#FFF4E6] rounded-[24px] p-6 shadow-level-1 relative overflow-hidden border border-amber-200">
+                <div class="absolute -right-10 -top-10 opacity-10">
+                    <span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+                </div>
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-label text-sm text-[#081240] uppercase tracking-wider font-semibold">
+                            <span x-show="lang === 'en'">Active Token</span>
+                            <span x-show="lang === 'pa'">ਸਰਗਰਮ ਟੋਕਨ</span>
+                            <span x-show="lang === 'hi'">सक्रिय टोकन</span>
+                        </span>
+                        <span class="bg-white/70 text-[#081240] px-2.5 py-1 rounded-full font-label text-xs font-bold shadow-sm">HARJINDER S.</span>
+                    </div>
+                    <h2 class="font-headline text-[38px] font-bold text-[#081240] leading-none mb-3">Token #04</h2>
+                    <div class="bg-white/75 rounded-xl p-3.5 flex items-center gap-3 backdrop-blur-sm shadow-sm border border-white/60">
+                        <div class="w-10 h-10 rounded-full bg-[#081240] flex items-center justify-center flex-shrink-0 text-white">
+                            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">counter_2</span>
+                        </div>
+                        <div>
+                            <p class="font-body text-sm font-semibold text-[#081240]">
+                                <span x-show="lang === 'en'">Waiting at Khanna Mandi Counter 2</span>
+                                <span x-show="lang === 'pa'">ਖੰਨਾ ਮੰਡੀ ਕਾਊਂਟਰ 2 'ਤੇ ਉਡੀਕ</span>
+                                <span x-show="lang === 'hi'">खन्ना मंडी काउंटर 2 पर प्रतीक्षा</span>
+                            </p>
+                            <p class="font-body text-xs text-on-surface-variant mt-0.5 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">schedule</span> 
+                                <span x-show="lang === 'en'">Est. wait: 10 mins</span>
+                                <span x-show="lang === 'pa'">ਅੰਦਾਜ਼ਨ ਉਡੀਕ: 10 ਮਿੰਟ</span>
+                                <span x-show="lang === 'hi'">अनुमानित प्रतीक्षा: 10 मिनट</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      pos => initMap({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-      err => {
-        showBanner("Location access denied or unavailable — showing centres relative to a default location. Enable location for accurate distances.");
-        initMap(FALLBACK_LOCATION);
-      },
-      { enableHighAccuracy: true, timeout: 8000 }
-    );
-  } else {
-    showBanner("Your browser doesn't support location — showing a default location.");
-    initMap(FALLBACK_LOCATION);
-  }
-</script>
+            <section class="bg-white/90 backdrop-blur-md rounded-[24px] p-5 shadow-level-1 border border-border-subtle">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-headline text-base font-bold text-primary-container">
+                        <span x-show="lang === 'en'">Nearby Procurement Centers</span>
+                        <span x-show="lang === 'pa'">ਨੇੜਲੇ ਖਰੀਦ ਕੇਂਦਰ</span>
+                        <span x-show="lang === 'hi'">निकटवर्ती खरीद केंद्र</span>
+                    </h3>
+                    <span class="font-label text-xs text-ledger-green font-bold flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-ledger-green pulse-dot"></span> Live GPS Data
+                    </span>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <template x-for="mandi in mandis">
+                        <div class="bg-surface-container-low rounded-xl p-3.5 flex items-center justify-between border border-border-subtle hover:border-transaction-blue transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white shadow-sm" :class="mandi.statusClass">
+                                    <span class="material-symbols-outlined text-[20px]">storefront</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-headline text-sm font-bold text-on-background" x-text="mandi.name"></h4>
+                                    <p class="font-body text-xs text-on-surface-variant flex items-center gap-1 mt-0.5">
+                                        <span class="material-symbols-outlined text-[12px]">near_me</span> <span x-text="mandi.distance"></span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="text-right flex flex-col items-end gap-1">
+                                <span class="font-label text-xs font-bold px-2 py-0.5 rounded-full text-on-surface shadow-sm bg-white border border-border-subtle" x-text="mandi.wait"></span>
+                                <button @click="selectedMandi = mandi; activeTab = 'map';" class="text-[11px] font-bold text-transaction-blue hover:underline flex items-center gap-0.5">
+                                    View on Map &rarr;
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden bg-white/90 backdrop-blur-xl rounded-t-2xl border-t border-white/40 shadow-2xl">
+        <a aria-label="Home" class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-3 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="index.html">
+            <span class="material-symbols-outlined text-[22px]">home</span>
+            <span class="font-label text-[11px] font-medium mt-0.5">
+                <span x-show="lang === 'en'">Home</span>
+                <span x-show="lang === 'pa'">ਘਰ</span>
+                <span x-show="lang === 'hi'">होम</span>
+            </span>
+        </a>
+        <a aria-label="Mandi" class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-3 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="mandi.html">
+            <span class="material-symbols-outlined text-[22px]">storefront</span>
+            <span class="font-label text-[11px] font-medium mt-0.5">
+                <span x-show="lang === 'en'">Mandi</span>
+                <span x-show="lang === 'pa'">ਮੰਡੀ</span>
+                <span x-show="lang === 'hi'">मंडी</span>
+            </span>
+        </a>
+        <a aria-label="Queue" class="flex flex-col items-center justify-center bg-black text-white rounded-full px-6 py-2 -mt-4 shadow-lg active:scale-95 transition-transform" href="queue.html">
+            <span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+            <span class="font-label text-[10px] font-medium mt-0.5">
+                <span x-show="lang === 'en'">Queue</span>
+                <span x-show="lang === 'pa'">ਕਤਾਰ</span>
+                <span x-show="lang === 'hi'">कतार</span>
+            </span>
+        </a>
+        <a aria-label="Profile" class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-3 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="profile.html">
+            <span class="model-symbols-outlined text-[22px] material-symbols-outlined">person</span>
+            <span class="font-label text-[11px] font-medium mt-0.5">
+                <span x-show="lang === 'en'">Profile</span>
+                <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
+                <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
+            </span>
+        </a>
+    </nav>
 
 </body>
 </html>

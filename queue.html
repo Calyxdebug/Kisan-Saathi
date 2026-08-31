@@ -1,471 +1,409 @@
 <!DOCTYPE html>
-<html class="light" lang="en" x-data="{ lang: 'en' }">
+<html class="light" lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<title>Kisan Konnect - Queue Dashboard</title>
-<!-- Supabase Client Library -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    // Initialize Supabase & Protect Route
-    const supabaseUrl = 'https://lwexxnbwtltigadhzasa.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3ZXh4bmJ3dGx0aWdhZGh6YXNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTEyOTIsImV4cCI6MjEwMzQyNzI5Mn0.iZzB-KI5_dAamTdROz06knj57jgahVhXkHeSvaBNiaI';
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-    async function checkAuth() {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-            window.location.href = 'login.html';
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <title>Kisan Konnect - Live Queue & Procurement Centers</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseUrl = 'https://lwexxnbwtltigadhzasa.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3ZXh4bmJ3dGx0aWdhZGh6YXNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTEyOTIsImV4cCI6MjEwMzQyNzI5Mn0.iZzB-KI5_dAamTdROz06knj57jgahVhXkHeSvaBNiaI';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey, {
+            auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+        });
+        
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                const hasLocalSession = Object.keys(localStorage).some(key => key.includes('-auth-token'));
+                if (!hasLocalSession) {
+                    window.location.href = 'login.html';
+                }
+            }
         }
-    }
-    checkAuth();
-</script>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<!-- Alpine.js for interactivity -->
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&amp;family=Inter:wght@400;600&amp;family=Mukta:wght@500;600&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+        checkAuth();
+    </script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700&family=Mukta:wght@500;600&display=swap" rel="stylesheet"/>
+    
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     "colors": {
-                        "on-tertiary-fixed-variant": "#6d3a00",
-                        "on-tertiary-container": "#c66d00",
-                        "primary-fixed": "#dee1ff",
-                        "on-primary-container": "#7881b4",
-                        "outline": "#767680",
                         "on-primary": "#ffffff",
-                        "on-surface": "#191c1e",
-                        "inverse-on-surface": "#eff1f3",
-                        "on-secondary-fixed-variant": "#005303",
-                        "error": "#ba1a1a",
-                        "surface-variant": "#e0e3e5",
-                        "secondary-fixed": "#94fa81",
-                        "on-surface-variant": "#46464f",
-                        "surface-bright": "#f8f9fb",
-                        "primary-container": "#0d1745",
-                        "tertiary-fixed-dim": "#ffb77a",
-                        "secondary": "#006e06",
-                        "on-secondary-container": "#007306",
-                        "primary": "#000000",
-                        "inverse-surface": "#2d3133",
-                        "on-error": "#ffffff",
-                        "surface-container-high": "#e6e8ea",
-                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#eff4ff",
                         "on-primary-fixed": "#0d1745",
-                        "surface-container-low": "#f2f4f6",
-                        "on-tertiary": "#ffffff",
-                        "outline-variant": "#c6c5d0",
-                        "surface-dim": "#d8dadc",
-                        "on-tertiary-fixed": "#2e1500",
-                        "tertiary-container": "#2e1500",
-                        "background": "#f8f9fb",
-                        "surface-container": "#eceef0",
-                        "on-secondary-fixed": "#002200",
-                        "inverse-primary": "#bbc3fb",
+                        "secondary-container": "#fea619",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-background": "#0b1c30",
                         "on-error-container": "#93000a",
-                        "on-primary-fixed-variant": "#3b4473",
-                        "tertiary": "#000000",
-                        "surface": "#f8f9fb",
-                        "secondary-container": "#91f77e",
+                        "on-surface": "#0b1c30",
+                        "inverse-surface": "#213145",
+                        "weather-warm": "#fbbf24",
+                        "surface-bright": "#f8f9ff",
+                        "kcc-amber": "#f59e0b",
                         "primary-fixed-dim": "#bbc3fb",
+                        "tertiary-container": "#351000",
+                        "secondary-fixed-dim": "#ffb95f",
+                        "outline": "#767680",
+                        "on-primary-fixed-variant": "#3b4473",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-tertiary-container": "#b27558",
+                        "surface-glass": "rgba(255, 255, 255, 0.85)",
                         "surface-container-lowest": "#ffffff",
-                        "on-background": "#191c1e",
-                        "surface-tint": "#535b8c",
-                        "tertiary-fixed": "#ffdcc2",
-                        "secondary-fixed-dim": "#79dd68",
-                        "surface-container-highest": "#e0e3e5",
-                        "error-container": "#ffdad6"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "container-padding-mobile": "16px",
-                        "touch-target-min": "48px"
+                        "transaction-blue": "#3b82f6",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#feb695",
+                        "ledger-green": "#10b981",
+                        "on-surface-variant": "#46464f",
+                        "tertiary-fixed": "#ffdbcc",
+                        "secondary-fixed": "#ffddb8",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#000000",
+                        "primary": "#000000",
+                        "outline-variant": "#c6c5d0",
+                        "on-primary-container": "#7881b4",
+                        "primary-container": "#0d1745",
+                        "surface-variant": "#d3e4fe",
+                        "surface": "#f8f9ff",
+                        "on-secondary-container": "#684000",
+                        "surface-tint": "#525b8c",
+                        "inverse-primary": "#bbc3fb",
+                        "mandi-purple": "#8b5cf6",
+                        "on-tertiary-fixed": "#351000",
+                        "surface-dim": "#cbdbf5",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#653e00",
+                        "background": "#f8f9ff",
+                        "primary-fixed": "#dee1ff",
+                        "secondary": "#855300",
+                        "surface-container": "#e5eeff",
+                        "border-subtle": "rgba(13, 23, 69, 0.08)",
+                        "on-tertiary-fixed-variant": "#6b3a21",
+                        "surface-container-high": "#dce9ff",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#2a1700"
                     },
                     "fontFamily": {
-                        "headline": ["Poppins"],
-                        "display": ["Poppins"],
-                        "body": ["Inter"],
-                        "label": ["Mukta"]
+                        "headline": ["Poppins", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Mukta", "Inter", "sans-serif"]
                     }
-                },
-            },
+                }
+            }
         }
     </script>
-<style>
-        body { font-family: 'Inter', sans-serif; background-color: #f4f6f8; -webkit-tap-highlight-color: transparent; }
-        .font-headline { font-family: 'Poppins', sans-serif; }
-        .font-label { font-family: 'Mukta', sans-serif; }
-        
-        /* Ambient shadows */
+    <style>
+        .pulse-dot { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
         .shadow-level-1 { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); }
         .shadow-level-2 { box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08); }
-        
-        /* Custom Colors based on Brand Guidelines */
-        .bg-brand-navy { background-color: #081240; }
-        .text-brand-navy { color: #081240; }
-        .bg-brand-green { background-color: #107C10; }
-        .text-brand-green { color: #107C10; }
-        .bg-brand-saffron-tint { background-color: #FFF4E6; }
-        .text-brand-saffron { color: #ff9933; }
         .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+        
+        /* Ensure Leaflet controls stay below your top bar */
+        .leaflet-top, .leaflet-bottom { z-index: 20 !important; }
     </style>
+    
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('queueApp', () => ({
+                lang: 'en',
+                activeTab: 'map',
+                mapInstance: null,
+                // Coordinates set to Dahmi Kalan region
+                userLat: 26.8420,
+                userLng: 75.5650,
+                userLocationText: 'Locating via GPS...',
+                selectedMandi: { name: 'Bagru Mandi', distance: '5.2 km away', wait: '5 mins wait', statusClass: 'bg-ledger-green', lat: 26.8150, lng: 75.5450 },
+                mandis: [
+                    { name: 'Bagru Mandi', distance: '5.2 km away', wait: '5 mins wait', statusClass: 'bg-ledger-green', color: '#10b981', lat: 26.8150, lng: 75.5450 },
+                    { name: 'Bhakrota Center', distance: '8.4 km away', wait: '25 mins wait', statusClass: 'bg-kcc-amber', color: '#f59e0b', lat: 26.8650, lng: 75.6600 },
+                    { name: 'Jaipur Main Mandi', distance: '22.1 km away', wait: '55 mins wait', statusClass: 'bg-error', color: '#ba1a1a', lat: 26.9124, lng: 75.7873 }
+                ],
+                init() {
+                    // Try to get real GPS
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                this.userLat = position.coords.latitude;
+                                this.userLng = position.coords.longitude;
+                                this.userLocationText = 'GPS Synced';
+                                this.initMap();
+                            },
+                            (error) => {
+                                this.userLocationText = 'Dahmi Kalan (Default)';
+                                this.initMap();
+                            }
+                        );
+                    } else {
+                        this.initMap();
+                    }
+
+                    // Watch for tab changes to resize map properly
+                    this.$watch('activeTab', (value) => {
+                        if (value === 'map' && this.mapInstance) {
+                            setTimeout(() => { this.mapInstance.invalidateSize(); }, 100);
+                        }
+                    });
+                },
+                initMap() {
+                    if (this.mapInstance) return;
+                    
+                    // Initialize Leaflet map, zoom set to 12 to fit nearby centers
+                    this.mapInstance = L.map('real-interactive-map', { zoomControl: false }).setView([this.userLat, this.userLng], 12);
+                    
+                    // Add OpenStreetMap layer
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                    }).addTo(this.mapInstance);
+
+                    // Add Custom Marker for User
+                    const userIcon = L.divIcon({
+                        className: 'user-pin',
+                        html: '<div class="w-5 h-5 bg-transaction-blue rounded-full pulse-dot border-2 border-white shadow-md"></div>',
+                        iconSize: [20, 20]
+                    });
+                    L.marker([this.userLat, this.userLng], { icon: userIcon }).addTo(this.mapInstance);
+
+                    // Add Custom Colored Markers for Centers
+                    this.mandis.forEach(mandi => {
+                        const mandiIcon = L.divIcon({
+                            className: 'mandi-pin',
+                            html: `
+                                <div class="flex flex-col items-center hover:scale-110 transition-transform cursor-pointer">
+                                    <div class="bg-surface-glass backdrop-blur-md px-3 py-1 rounded-full shadow-lg border border-border-subtle mb-1 flex items-center gap-1.5 font-label text-xs font-bold text-on-surface whitespace-nowrap">
+                                        <span class="w-2 h-2 rounded-full" style="background-color: ${mandi.color}"></span>
+                                        ${mandi.name}
+                                    </div>
+                                    <span class="material-symbols-outlined text-[30px] drop-shadow-md" style="color: ${mandi.color}; font-variation-settings: 'FILL' 1;">location_on</span>
+                                </div>
+                            `,
+                            iconSize: [120, 50],
+                            iconAnchor: [60, 45]
+                        });
+                        
+                        const marker = L.marker([mandi.lat, mandi.lng], { icon: mandiIcon }).addTo(this.mapInstance);
+                        marker.on('click', () => {
+                            this.selectedMandi = mandi;
+                            this.mapInstance.setView([mandi.lat, mandi.lng], 13);
+                        });
+                    });
+                }
+            }));
+        });
+    </script>
 </head>
-<body class="bg-background text-on-background pb-[100px] pt-[72px]">
+<body class="bg-background text-on-background font-body h-screen w-screen overflow-hidden flex flex-col relative" x-data="queueApp">
 
-<!-- TopAppBar -->
-<header class="fixed top-0 w-full z-50 shadow-md bg-[#0d1745] flex justify-between items-center px-4 h-16">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm overflow-hidden border border-white/20">
-<img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Konnect Logo"/>
-</div>
-<h1 class="font-headline text-[20px] font-bold tracking-tight text-white uppercase">KISAN KONNECT</h1>
-</div>
+    <div id="real-interactive-map" class="absolute inset-0 z-0" x-show="activeTab === 'map'"></div>
 
-<!-- Desktop Navigation Links -->
-<nav class="hidden xl:flex gap-6 items-center h-full pt-1">
-<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="index.html">
-    <span x-show="lang === 'en'">Home</span>
-    <span x-show="lang === 'pa'">ਘਰ</span>
-    <span x-show="lang === 'hi'">होम</span>
-    <span x-show="lang === 'te'">హోమ్</span>
-    <span x-show="lang === 'ta'">முகப்பு</span>
-    <span x-show="lang === 'ml'">ഹോം</span>
-    <span x-show="lang === 'kn'">ಮುಖಪುಟ</span>
-    <span x-show="lang === 'ur'">ہوم</span>
-</a>
-<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="mandi.html">
-    <span x-show="lang === 'en'">Mandi</span>
-    <span x-show="lang === 'pa'">ਮੰਡੀ</span>
-    <span x-show="lang === 'hi'">मंडी</span>
-    <span x-show="lang === 'te'">మండి</span>
-    <span x-show="lang === 'ta'">சந்தை</span>
-    <span x-show="lang === 'ml'">ചന്ത</span>
-    <span x-show="lang === 'kn'">ಮಂಡಿ</span>
-    <span x-show="lang === 'ur'">منڈی</span>
-</a>
-<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary border-on-primary font-semibold" href="queue.html">
-    <span x-show="lang === 'en'">Book Slot</span>
-    <span x-show="lang === 'pa'">ਸਲਾਟ ਬੁੱਕ ਕਰੋ</span>
-    <span x-show="lang === 'hi'">स्लॉट बुक करें</span>
-    <span x-show="lang === 'te'">స్లాట్ బుక్ చేయండి</span>
-    <span x-show="lang === 'ta'">ஸ்லாட் பதிவு</span>
-    <span x-show="lang === 'ml'">സ്ലോട്ട് ബുക്ക് ചെയ്യുക</span>
-    <span x-show="lang === 'kn'">ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ</span>
-    <span x-show="lang === 'ur'">سلاٹ بک کریں</span>
-</a>
-<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="profile.html">
-    <span x-show="lang === 'en'">Profile</span>
-    <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
-    <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
-    <span x-show="lang === 'te'">ప్రొఫైల్</span>
-    <span x-show="lang === 'ta'">சுயவிவரம்</span>
-    <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
-    <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
-    <span x-show="lang === 'ur'">پروفائل</span>
-</a>
-</nav>
+    <header class="fixed top-0 left-0 w-full z-50 bg-primary-container shadow-md flex items-center px-4 h-16 justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm overflow-hidden border border-white/20">
+                <img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Konnect Logo" onerror="this.src='https://images.unsplash.com/photo-1595974482597-4787dc64de9c?w=100&auto=format&fit=crop&q=60'"/>
+            </div>
+            <div>
+                <h1 class="font-headline text-lg font-bold text-on-primary tracking-tight">KISAN KONNECT</h1>
+                <p class="text-[10px] text-primary-fixed-dim flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[12px]">my_location</span>
+                    <span x-text="userLocationText"></span>
+                </p>
+            </div>
+        </div>
 
-<div class="flex items-center gap-3">
-    <!-- Language Switcher Dropdown -->
-    <select x-model="lang" aria-label="Select Language" class="bg-white/10 hover:bg-white/20 text-white text-xs rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer font-bold border border-white/25">
-        <option value="en" class="text-black">English</option>
-        <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
-        <option value="hi" class="text-black">हिन्दी</option>
-        <option value="te" class="text-black">తెలుగు</option>
-        <option value="ta" class="text-black">தமிழ்</option>
-        <option value="ml" class="text-black">മലയാളം</option>
-        <option value="kn" class="text-black">ಕನ್ನಡ</option>
-        <option value="ur" class="text-black">اردو</option>
-    </select>
-    <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-white/20 shadow-sm cursor-pointer">
-    <img alt="Harjinder Singh Profile" class="w-full h-full object-cover" src="kisan.jpg"/>
+        <div class="flex items-center gap-3">
+            <select x-model="lang" aria-label="Select Language" class="bg-white/10 hover:bg-white/20 text-white text-xs rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer font-bold border border-white/25">
+                <option value="en" class="text-black">English</option>
+                <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
+                <option value="hi" class="text-black">हिन्दी</option>
+                <option value="te" class="text-black">తెలుగు</option>
+                <option value="ta" class="text-black">தமிழ்</option>
+                <option value="ml" class="text-black">മലയാളം</option>
+                <option value="kn" class="text-black">ಕನ್ನಡ</option>
+                <option value="ur" class="text-black">اردو</option>
+            </select>
+        </div>
+    </header>
+
+    <div class="fixed top-20 left-0 w-full z-40 px-4 flex justify-center pointer-events-none">
+        <div class="bg-surface-glass backdrop-blur-md rounded-full p-1.5 shadow-lg border border-border-subtle flex gap-2 pointer-events-auto">
+            <button @click="activeTab = 'map'" :class="activeTab === 'map' ? 'bg-primary-container text-white font-bold' : 'text-on-surface-variant'" class="px-5 py-2 rounded-full text-xs transition-all flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px]">map</span>
+                <span x-show="lang === 'en'">Live Map</span>
+                <span x-show="lang === 'pa'">ਲਾਈਵ ਨਕਸ਼ਾ</span>
+                <span x-show="lang === 'hi'">लाइव मानचित्र</span>
+            </button>
+            <button @click="activeTab = 'dashboard'" :class="activeTab === 'dashboard' ? 'bg-primary-container text-white font-bold' : 'text-on-surface-variant'" class="px-5 py-2 rounded-full text-xs transition-all flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px]">confirmation_number</span>
+                <span x-show="lang === 'en'">Token & Queue</span>
+                <span x-show="lang === 'pa'">ਟੋਕਨ ਅਤੇ ਕਤਾਰ</span>
+                <span x-show="lang === 'hi'">टोकन और कतार</span>
+            </button>
+        </div>
     </div>
-</div>
-</header>
 
-<main class="px-container-padding-mobile flex flex-col gap-6 mt-4 max-w-screen-xl mx-auto">
-<!-- Active Token Section -->
-<section class="bg-brand-saffron-tint rounded-[24px] p-6 shadow-level-1 relative overflow-hidden">
-<div class="absolute -right-10 -top-10 opacity-10">
-<span class="material-symbols-outlined text-[120px]" data-weight="fill">confirmation_number</span>
-</div>
-<div class="relative z-10">
-<div class="flex justify-between items-start mb-2">
-<span class="font-label text-label-md text-brand-navy uppercase tracking-wider font-semibold">
-    <span x-show="lang === 'en'">Active Token</span>
-    <span x-show="lang === 'pa'">ਸਰਗਰਮ ਟੋਕਨ</span>
-    <span x-show="lang === 'hi'">सक्रिय टोकन</span>
-    <span x-show="lang === 'te'">సక్రియ టోకెన్</span>
-    <span x-show="lang === 'ta'">செயலில் உள்ள டோக்கன்</span>
-    <span x-show="lang === 'ml'">സജീവ ടോക്കൺ</span>
-    <span x-show="lang === 'kn'">ಸಕ್ರಿಯ ಟೋಕನ್</span>
-    <span x-show="lang === 'ur'">فعال ٹوکن</span>
-</span>
-<span class="bg-white/50 text-brand-navy px-2 py-1 rounded-full font-label text-xs font-bold shadow-sm">HARJINDER S.</span>
-</div>
-<h2 class="font-headline text-[40px] font-bold text-brand-navy leading-none mb-4">Token #04</h2>
-<div class="bg-white/60 rounded-xl p-4 flex items-center gap-4 backdrop-blur-sm shadow-sm border border-white/40">
-<div class="w-12 h-12 rounded-full bg-brand-navy flex items-center justify-center flex-shrink-0 text-white">
-<span class="material-symbols-outlined" data-weight="fill">counter_2</span>
-</div>
-<div>
-<p class="font-body text-body-md font-semibold text-brand-navy">
-    <span x-show="lang === 'en'">Waiting at Counter 2</span>
-    <span x-show="lang === 'pa'">ਕਾਊਂਟਰ 2 'ਤੇ ਉਡੀਕ ਕਰ ਰਿਹਾ ਹੈ</span>
-    <span x-show="lang === 'hi'">काउंटर 2 पर प्रतीक्षा कर रहा है</span>
-    <span x-show="lang === 'te'">కౌంటర్ 2 వద్ద వేచి ఉంది</span>
-    <span x-show="lang === 'ta'">கவுண்டர் 2 இல் காத்திருக்கிறது</span>
-    <span x-show="lang === 'ml'">കൗണ്ടർ 2-ൽ കാത്തിരിക്കുന്നു</span>
-    <span x-show="lang === 'kn'">ಕೌಂಟರ್ 2 ನಲ್ಲಿ ಕಾಯುತ್ತಿದೆ</span>
-    <span x-show="lang === 'ur'">کاؤنٹر 2 پر انتظار کر رہے ہیں</span>
-</p>
-<p class="font-body text-sm text-on-surface-variant mt-1 flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px]">schedule</span> 
-<span x-show="lang === 'en'">Est. wait: 15 mins</span>
-<span x-show="lang === 'pa'">ਅੰਦਾਜ਼ਨ ਉਡੀਕ: 15 ਮਿੰਟ</span>
-<span x-show="lang === 'hi'">अनुमानित प्रतीक्षा: 15 मिनट</span>
-<span x-show="lang === 'te'">అంచనా వేచి ఉండే సమయం: 15 నిమిషాలు</span>
-<span x-show="lang === 'ta'">மதிப்பிடப்பட்ட காத்திருப்பு: 15 நிமிடங்கள்</span>
-<span x-show="lang === 'ml'">ഏകദേശ കാത്തിരിപ്പ്: 15 മിനിറ്റ്</span>
-<span x-show="lang === 'kn'">ಅಂದಾಜು ಕಾಯುವಿಕೆ: 15 ನಿಮಿಷಗಳು</span>
-<span x-show="lang === 'ur'">تخمینہ انتظار: 15 منٹ</span>
-</p>
-</div>
-</div>
-</div>
-</section>
+    <div class="absolute top-36 left-4 z-30 bg-surface-glass backdrop-blur-md rounded-xl p-3 shadow-lg border border-border-subtle flex flex-col gap-2 pointer-events-auto" x-show="activeTab === 'map'">
+        <div class="flex items-center gap-2 font-label text-xs text-on-surface-variant font-medium">
+            <span class="w-3 h-3 rounded-full bg-ledger-green shadow-sm"></span> < 15 mins (Fast)
+        </div>
+        <div class="flex items-center gap-2 font-label text-xs text-on-surface-variant font-medium">
+            <span class="w-3 h-3 rounded-full bg-kcc-amber shadow-sm"></span> 15 - 45 mins (Moderate)
+        </div>
+        <div class="flex items-center gap-2 font-label text-xs text-on-surface-variant font-medium">
+            <span class="w-3 h-3 rounded-full bg-error shadow-sm"></span> 45+ mins (Busy)
+        </div>
+    </div>
 
-<!-- Quick Actions -->
-<section class="grid grid-cols-2 gap-4">
-<button class="bg-brand-green text-white rounded-xl p-4 flex flex-col items-center justify-center gap-2 shadow-level-1 active:scale-95 transition-transform shadow-level-2 hover:shadow-level-1 h-28 cursor-pointer">
-<span class="material-symbols-outlined text-[32px]">calendar_add_on</span>
-<span class="font-headline text-sm font-semibold">
-    <span x-show="lang === 'en'">Book New Slot</span>
-    <span x-show="lang === 'pa'">ਨਵਾਂ ਸਲਾਟ ਬੁੱਕ ਕਰੋ</span>
-    <span x-show="lang === 'hi'">नया स्लॉट बुक करें</span>
-    <span x-show="lang === 'te'">కొత్త స్లాట్ బుక్ చేయండి</span>
-    <span x-show="lang === 'ta'">புதிய ஸ்லாட்டைப் பதிவு செய்யவும்</span>
-    <span x-show="lang === 'ml'">പുതിയ സ്ലോട്ട് ബുക്ക് ചെയ്യുക</span>
-    <span x-show="lang === 'kn'">ಹೊಸ ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ</span>
-    <span x-show="lang === 'ur'">نیا سلاٹ بک کریں</span>
-</span>
-</button>
-<button class="bg-brand-navy text-white rounded-xl p-4 flex flex-col items-center justify-center gap-2 shadow-level-1 active:scale-95 transition-transform shadow-level-2 hover:shadow-level-1 h-28 cursor-pointer">
-<span class="material-symbols-outlined text-[32px]">query_stats</span>
-<span class="font-headline text-sm font-semibold">
-    <span x-show="lang === 'en'">Live Queue</span>
-    <span x-show="lang === 'pa'">ਲਾਈਵ ਕਤਾਰ</span>
-    <span x-show="lang === 'hi'">लाइव कतार</span>
-    <span x-show="lang === 'te'">లైవ్ క్యూ</span>
-    <span x-show="lang === 'ta'">நேரலை வரிசை</span>
-    <span x-show="lang === 'ml'">ലൈവ് ക്യൂ</span>
-    <span x-show="lang === 'kn'">ಲೈವ್ ಕ್ಯೂ</span>
-    <span x-show="lang === 'ur'">لائیو قطار</span>
-</span>
-</button>
-</section>
+    <main class="absolute inset-x-0 bottom-20 top-36 z-30 overflow-y-auto px-4 pointer-events-none flex flex-col justify-end pb-4">
+        
+        <div class="w-full max-w-md mx-auto bg-surface-glass backdrop-blur-md rounded-[24px] shadow-[0_10px_30px_rgba(13,23,69,0.15)] border border-border-subtle p-6 pointer-events-auto transform transition-all" x-show="activeTab === 'map'">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h2 class="font-headline text-xl font-bold text-on-background mb-1" x-text="selectedMandi.name"></h2>
+                    <p class="font-body text-sm text-on-surface-variant flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px] text-transaction-blue">near_me</span> 
+                        <span x-text="selectedMandi.distance"></span>
+                    </p>
+                </div>
+                <div class="bg-surface-container-low px-3 py-1.5 rounded-full border border-border-subtle flex items-center gap-2 shadow-sm">
+                    <span class="w-2.5 h-2.5 rounded-full pulse-dot" :class="selectedMandi.statusClass"></span>
+                    <span class="font-label text-xs text-on-surface font-bold" x-text="selectedMandi.wait"></span>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button @click="window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedMandi.lat},${selectedMandi.lng}`, '_blank')" class="bg-primary-container text-on-primary w-full py-3 rounded-xl font-label text-sm font-bold flex justify-center items-center gap-2 active:scale-95 transition-transform shadow-md">
+                    <span class="material-symbols-outlined text-[18px]">navigation</span> Navigate
+                </button>
+                <button @click="activeTab = 'dashboard'" class="bg-white text-primary-container border border-primary-container/30 w-full py-3 rounded-xl font-label text-sm font-bold flex justify-center items-center gap-2 active:scale-95 transition-transform hover:bg-surface-container-low">
+                    Book Slot
+                </button>
+            </div>
+        </div>
 
-<!-- Market Prices -->
-<section>
-<div class="flex justify-between items-end mb-4">
-<h3 class="font-headline text-headline-sm font-semibold text-brand-navy">
-    <span x-show="lang === 'en'">Today's Procured Crop Prices</span>
-    <span x-show="lang === 'pa'">ਅੱਜ ਦੀਆਂ ਖਰੀਦੀਆਂ ਫਸਲਾਂ ਦੇ ਭਾਅ</span>
-    <span x-show="lang === 'hi'">आज की खरीदी गई फसलों के भाव</span>
-    <span x-show="lang === 'te'">ఈరోజు సేకరించిన పంట ధరలు</span>
-    <span x-show="lang === 'ta'">இன்றைய கொள்முதல் பயிர் விலைகள்</span>
-    <span x-show="lang === 'ml'">ഇന്നത്തെ വിള വിലകൾ</span>
-    <span x-show="lang === 'kn'">ಇಂದಿನ ಬೆಳೆ ಬೆಲೆಗಳು</span>
-    <span x-show="lang === 'ur'">آج کی خریدی گئی فصلوں کی قیمتیں</span>
-</h3>
-<span class="font-label text-sm text-brand-green font-semibold">
-    <span x-show="lang === 'en'">Live</span>
-    <span x-show="lang === 'pa'">ਲਾਈਵ</span>
-    <span x-show="lang === 'hi'">लाइव</span>
-    <span x-show="lang === 'te'">లైవ్</span>
-    <span x-show="lang === 'ta'">நேரலை</span>
-    <span x-show="lang === 'ml'">ലൈവ്</span>
-    <span x-show="lang === 'kn'">ಲೈವ್</span>
-    <span x-show="lang === 'ur'">لائیو</span>
-</span>
-</div>
-<div class="flex flex-col gap-3">
-<!-- Crop Card 1 -->
-<div class="bg-white rounded-[16px] p-4 flex items-center shadow-level-1 border border-transparent hover:border-brand-green/20 transition-colors">
-<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center mr-4">
-<img class="w-8 h-8 object-cover rounded-md" src="wheat.jpg"/>
-</div>
-<div class="flex-grow">
-<h4 class="font-headline text-base font-semibold text-brand-navy">
-    <span x-show="lang === 'en'">Wheat</span>
-    <span x-show="lang === 'pa'">ਕਣਕ</span>
-    <span x-show="lang === 'hi'">गेहूं</span>
-    <span x-show="lang === 'te'">గోధుమలు</span>
-    <span x-show="lang === 'ta'">கோதுமை</span>
-    <span x-show="lang === 'ml'">ഗോതമ്പ്</span>
-    <span x-show="lang === 'kn'">ಗೋಧಿ</span>
-    <span x-show="lang === 'ur'">گندم</span>
-</h4>
-<p class="font-label text-sm text-on-surface-variant">
-    <span x-show="lang === 'en'">Grade A • Quintal</span>
-    <span x-show="lang === 'pa'">ਗ੍ਰੇਡ A • ਕੁਇੰਟਲ</span>
-    <span x-show="lang === 'hi'">ग्रेड A • क्विंटल</span>
-    <span x-show="lang === 'te'">గ్రేడ్ A • క్వింటాల్</span>
-    <span x-show="lang === 'ta'">தரம் A • குவிண்டால்</span>
-    <span x-show="lang === 'ml'">ഗ്രേഡ് A • ക്വിന്റൽ</span>
-    <span x-show="lang === 'kn'">ಗ್ರೇಡ್ A • ಕ್ವಿಂಟಾಲ್</span>
-    <span x-show="lang === 'ur'">گریڈ A • کوئنٹل</span>
-</p>
-</div>
-<div class="text-right">
-<div class="font-headline text-lg font-bold text-brand-navy">₹2,275</div>
-<div class="font-label text-xs text-brand-green flex items-center justify-end gap-1 font-semibold">
-<span class="material-symbols-outlined text-[14px]">trending_up</span> +1.2%
-</div>
-</div>
-</div>
-<!-- Crop Card 2 -->
-<div class="bg-white rounded-[16px] p-4 flex items-center shadow-level-1 border border-transparent hover:border-brand-green/20 transition-colors">
-<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center mr-4">
-<img class="w-8 h-8 object-cover rounded-md" src="rice.png"/>
-</div>
-<div class="flex-grow">
-<h4 class="font-headline text-base font-semibold text-brand-navy">
-    <span x-show="lang === 'en'">Rice</span>
-    <span x-show="lang === 'pa'">ਚਾਵਲ</span>
-    <span x-show="lang === 'hi'">चावल</span>
-    <span x-show="lang === 'te'">బియ్యం</span>
-    <span x-show="lang === 'ta'">அரிசி</span>
-    <span x-show="lang === 'ml'">അരി</span>
-    <span x-show="lang === 'kn'">ಅಕ್ಕಿ</span>
-    <span x-show="lang === 'ur'">چاول</span>
-</h4>
-<p class="font-label text-sm text-on-surface-variant">
-    <span x-show="lang === 'en'">Basmati • Quintal</span>
-    <span x-show="lang === 'pa'">ਬਾਸਮਤੀ • ਕੁਇੰਟਲ</span>
-    <span x-show="lang === 'hi'">बासमती • क्विंटल</span>
-    <span x-show="lang === 'te'">బాస్మతి • క్వింటాల్</span>
-    <span x-show="lang === 'ta'">பாஸ்மதி • குவிண்டால்</span>
-    <span x-show="lang === 'ml'">ബസ്മതി • ക്വിന്റൽ</span>
-    <span x-show="lang === 'kn'">ಬಾಸ್ಮತಿ • ಕ್ವಿಂಟಾಲ್</span>
-    <span x-show="lang === 'ur'">باسمتی • کوئنٹل</span>
-</p>
-</div>
-<div class="text-right">
-<div class="font-headline text-lg font-bold text-brand-navy">₹2,183</div>
-<div class="font-label text-xs text-brand-green flex items-center justify-end gap-1 font-semibold">
-<span class="material-symbols-outlined text-[14px]">trending_up</span> +0.8%
-</div>
-</div>
-</div>
-<!-- Crop Card 3 -->
-<div class="bg-white rounded-[16px] p-4 flex items-center shadow-level-1 border border-transparent hover:border-brand-green/20 transition-colors">
-<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center mr-4">
-<img class="w-8 h-8 object-cover rounded-md" src="maize.jpeg"/>
-</div>
-<div class="flex-grow">
-<h4 class="font-headline text-base font-semibold text-brand-navy">
-    <span x-show="lang === 'en'">Maize</span>
-    <span x-show="lang === 'pa'">ਮੱਕੀ</span>
-    <span x-show="lang === 'hi'">मक्का</span>
-    <span x-show="lang === 'te'">మొక్కజొన్న</span>
-    <span x-show="lang === 'ta'">மக்காச்சோளம்</span>
-    <span x-show="lang === 'ml'">ചോളം</span>
-    <span x-show="lang === 'kn'">ಮುಕ್ಕೆಜೋಳ</span>
-    <span x-show="lang === 'ur'">مکئی</span>
-</h4>
-<p class="font-label text-sm text-on-surface-variant">
-    <span x-show="lang === 'en'">Standard • Quintal</span>
-    <span x-show="lang === 'pa'">ਸਟੈਂਡਰਡ • ਕੁਇੰਟల్</span>
-    <span x-show="lang === 'hi'">मानक • क्विंटल</span>
-    <span x-show="lang === 'te'">ప్రామాణిక • క్వింటాల్</span>
-    <span x-show="lang === 'ta'">வழக்கமான • குவிண்டால்</span>
-    <span x-show="lang === 'ml'">സ്റ്റാൻഡേർഡ് • ക്വിന്റൽ</span>
-    <span x-show="lang === 'kn'">ಪ್ರಮಾಣಿತ • ಕ್ವಿಂಟಾಲ್</span>
-    <span x-show="lang === 'ur'">معیاری • کوئنٹل</span>
-</p>
-</div>
-<div class="text-right">
-<div class="font-headline text-lg font-bold text-brand-navy">₹2,090</div>
-<div class="font-label text-xs text-on-surface-variant flex items-center justify-end gap-1">
-<span class="material-symbols-outlined text-[14px]">trending_flat</span> 0.0%
-</div>
-</div>
-</div>
-</div>
-</section>
-</main>
+        <div class="w-full max-w-screen-xl mx-auto flex flex-col gap-5 pointer-events-auto bg-background min-h-full pb-10" x-show="activeTab === 'dashboard'" x-cloak>
+            
+            <section class="bg-[#FFF4E6] rounded-[24px] p-6 shadow-level-1 relative overflow-hidden border border-amber-200 mt-2">
+                <div class="absolute -right-10 -top-10 opacity-10">
+                    <span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+                </div>
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-label text-sm text-[#081240] uppercase tracking-wider font-semibold">
+                            <span x-show="lang === 'en'">Active Token</span>
+                            <span x-show="lang === 'pa'">ਸਰਗਰਮ ਟੋਕਨ</span>
+                            <span x-show="lang === 'hi'">सक्रिय टोकन</span>
+                        </span>
+                        <span class="bg-white/70 text-[#081240] px-2.5 py-1 rounded-full font-label text-xs font-bold shadow-sm">HARJINDER S.</span>
+                    </div>
+                    <h2 class="font-headline text-[38px] font-bold text-[#081240] leading-none mb-3">Token #04</h2>
+                    <div class="bg-white/75 rounded-xl p-3.5 flex items-center gap-3 backdrop-blur-sm shadow-sm border border-white/60">
+                        <div class="w-10 h-10 rounded-full bg-[#081240] flex items-center justify-center flex-shrink-0 text-white">
+                            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">counter_2</span>
+                        </div>
+                        <div>
+                            <p class="font-body text-sm font-semibold text-[#081240]">
+                                <span x-show="lang === 'en'">Waiting at Bagru Mandi Counter 2</span>
+                                <span x-show="lang === 'pa'">ਬਗਰੂ ਮੰਡੀ ਕਾਊਂਟਰ 2 'ਤੇ ਉਡੀਕ</span>
+                                <span x-show="lang === 'hi'">बगरू मंडी काउंटर 2 पर प्रतीक्षा</span>
+                            </p>
+                            <p class="font-body text-xs text-on-surface-variant mt-0.5 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">schedule</span> 
+                                <span x-show="lang === 'en'">Est. wait: 5 mins</span>
+                                <span x-show="lang === 'pa'">ਅੰਦਾਜ਼ਨ ਉਡੀਕ: 5 ਮਿੰਟ</span>
+                                <span x-show="lang === 'hi'">अनुमानित प्रतीक्षा: 5 मिनट</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-<!-- BottomNavBar (Mobile Only with Queue Active Bubble) -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden bg-white/85 backdrop-blur-xl rounded-t-lg border-t border-white/40 shadow-2xl">
-<!-- Home Button -->
-<a aria-label="Home" class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="index.html">
-<span class="material-symbols-outlined">home</span>
-<span class="font-label text-[12px] font-medium mt-1">
-    <span x-show="lang === 'en'">Home</span>
-    <span x-show="lang === 'pa'">ਘਰ</span>
-    <span x-show="lang === 'hi'">होम</span>
-    <span x-show="lang === 'te'">హోమ్</span>
-    <span x-show="lang === 'ta'">முகப்பு</span>
-    <span x-show="lang === 'ml'">ഹോം</span>
-    <span x-show="lang === 'kn'">ಮುಖಪುಟ</span>
-    <span x-show="lang === 'ur'">ہوم</span>
-</span>
-</a>
+            <section class="bg-white/90 backdrop-blur-md rounded-[24px] p-5 shadow-level-1 border border-border-subtle">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="font-headline text-base font-bold text-primary-container">
+                        <span x-show="lang === 'en'">Nearby Procurement Centers</span>
+                        <span x-show="lang === 'pa'">ਨੇੜਲੇ ਖਰੀਦ ਕੇਂਦਰ</span>
+                        <span x-show="lang === 'hi'">निकटवर्ती खरीद केंद्र</span>
+                    </h3>
+                    <span class="font-label text-xs text-ledger-green font-bold flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-ledger-green pulse-dot"></span> GPS Synced
+                    </span>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <template x-for="mandi in mandis">
+                        <div class="bg-surface-container-low rounded-xl p-3.5 flex items-center justify-between border border-border-subtle hover:border-transaction-blue transition-colors cursor-pointer">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white shadow-sm" :class="mandi.statusClass">
+                                    <span class="material-symbols-outlined text-[20px]">storefront</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-headline text-sm font-bold text-on-background" x-text="mandi.name"></h4>
+                                    <p class="font-body text-xs text-on-surface-variant flex items-center gap-1 mt-0.5">
+                                        <span class="material-symbols-outlined text-[12px]">near_me</span> <span x-text="mandi.distance"></span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="text-right flex flex-col items-end gap-1">
+                                <span class="font-label text-xs font-bold px-2 py-0.5 rounded-full text-on-surface shadow-sm bg-white border border-border-subtle" x-text="mandi.wait"></span>
+                                <button @click="selectedMandi = mandi; activeTab = 'map'; mapInstance.setView([mandi.lat, mandi.lng], 13);" class="text-[11px] font-bold text-transaction-blue hover:underline flex items-center gap-0.5 z-10 relative">
+                                    View on Map →
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </section>
+        </div>
+    </main>
 
-<!-- Mandi Button -->
-<a aria-label="Mandi" class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="mandi.html">
-<span class="material-symbols-outlined">storefront</span>
-<span class="font-label text-[12px] font-medium mt-1">
-    <span x-show="lang === 'en'">Mandi</span>
-    <span x-show="lang === 'pa'">ਮੰਡੀ</span>
-    <span x-show="lang === 'hi'">मंडी</span>
-    <span x-show="lang === 'te'">మండి</span>
-    <span x-show="lang === 'ta'">சந்தை</span>
-    <span x-show="lang === 'ml'">ചന്ത</span>
-    <span x-show="lang === 'kn'">ಮಂಡಿ</span>
-    <span x-show="lang === 'ur'">منڈی</span>
-</span>
-</a>
-
-<!-- Queue Button (Active State Bubble) -->
-<a aria-label="Queue" class="flex flex-col items-center justify-center bg-black text-white rounded-full px-7 py-2 -mt-4 shadow-md" href="queue.html">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
-<span class="font-label text-[10px] font-medium mt-0.5">
-    <span x-show="lang === 'en'">Queue</span>
-    <span x-show="lang === 'pa'">ਕਤਾਰ</span>
-    <span x-show="lang === 'hi'">ਕतार</span>
-    <span x-show="lang === 'te'">క్యూ</span>
-    <span x-show="lang === 'ta'">வரிசை</span>
-    <span x-show="lang === 'ml'">ക്യൂ</span>
-    <span x-show="lang === 'kn'">ಕ್ಯೂ</span>
-    <span x-show="lang === 'ur'">قطار</span>
-</span>
-</a>
-
-<!-- Profile Button -->
-<a aria-label="Profile" class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="profile.html">
-<span class="material-symbols-outlined">person</span>
-<span class="font-label text-[12px] font-medium mt-1">
-    <span x-show="lang === 'en'">Profile</span>
-    <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
-    <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
-    <span x-show="lang === 'te'">ప్రొఫైల్</span>
-    <span x-show="lang === 'ta'">சுயவிவரம்</span>
-    <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
-    <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
-    <span x-show="lang === 'ur'">پروفائل</span>
-</span>
-</a>
-</nav>
+    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden bg-white/90 backdrop-blur-xl rounded-t-2xl border-t border-white/40 shadow-2xl">
+        <a aria-label="Home" class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-3 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="index.html">
+            <span class="material-symbols-outlined text-[22px]">home</span>
+            <span class="font-label text-[11px] font-medium mt-0.5">
+                <span x-show="lang === 'en'">Home</span>
+                <span x-show="lang === 'pa'">ਘਰ</span>
+                <span x-show="lang === 'hi'">होम</span>
+            </span>
+        </a>
+        <a aria-label="Mandi" class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-3 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="mandi.html">
+            <span class="material-symbols-outlined text-[22px]">storefront</span>
+            <span class="font-label text-[11px] font-medium mt-0.5">
+                <span x-show="lang === 'en'">Mandi</span>
+                <span x-show="lang === 'pa'">ਮੰਡੀ</span>
+                <span x-show="lang === 'hi'">मंडी</span>
+            </span>
+        </a>
+        <a aria-label="Queue" class="flex flex-col items-center justify-center bg-black text-white rounded-full px-6 py-2 -mt-4 shadow-lg active:scale-95 transition-transform" href="queue.html">
+            <span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+            <span class="font-label text-[10px] font-medium mt-0.5">
+                <span x-show="lang === 'en'">Queue</span>
+                <span x-show="lang === 'pa'">ਕਤਾਰ</span>
+                <span x-show="lang === 'hi'">कतार</span>
+            </span>
+        </a>
+        <a aria-label="Profile" class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-3 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="profile.html">
+            <span class="material-symbols-outlined text-[22px]">person</span>
+            <span class="font-label text-[11px] font-medium mt-0.5">
+                <span x-show="lang === 'en'">Profile</span>
+                <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
+                <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
+            </span>
+        </a>
+    </nav>
 
 </body>
 </html>

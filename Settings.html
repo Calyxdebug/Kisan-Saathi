@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <title>Kisan Konnect - Settings</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-surface-variant": "#46464f",
+                        "tertiary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "outline-variant": "#c6c5d0",
+                        "surface-glass": "rgba(255, 255, 255, 0.8)",
+                        "outline": "#767680",
+                        "tertiary-fixed": "#ffdbcc",
+                        "surface-bright": "#f8f9ff",
+                        "transaction-blue": "#3b82f6",
+                        "surface-container-highest": "#d3e4fe",
+                        "ledger-green": "#10b981",
+                        "surface-container": "#e5eeff",
+                        "kcc-amber": "#f59e0b",
+                        "on-error-container": "#93000a",
+                        "on-secondary-container": "#684000",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#eff4ff",
+                        "on-primary-fixed": "#0d1745",
+                        "primary": "#000000",
+                        "inverse-surface": "#213145",
+                        "on-background": "#0b1c30",
+                        "border-subtle": "rgba(13, 23, 69, 0.08)",
+                        "secondary-container": "#fea619",
+                        "mandi-purple": "#8b5cf6",
+                        "on-secondary-fixed-variant": "#653e00",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#ffb95f",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#dce9ff",
+                        "primary-fixed-dim": "#bbc3fb",
+                        "surface": "#f8f9ff",
+                        "background": "#f8f9ff",
+                        "surface-variant": "#d3e4fe",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#b27558",
+                        "tertiary-fixed-dim": "#feb695",
+                        "on-primary-container": "#7881b4",
+                        "on-surface": "#0b1c30",
+                        "secondary-fixed": "#ffddb8",
+                        "weather-warm": "#fbbf24",
+                        "surface-tint": "#525b8c",
+                        "surface-dim": "#cbdbf5",
+                        "inverse-primary": "#bbc3fb",
+                        "on-primary-fixed-variant": "#3b4473",
+                        "on-secondary-fixed": "#2a1700",
+                        "on-tertiary-fixed-variant": "#6b3a21",
+                        "on-tertiary-fixed": "#351000",
+                        "secondary": "#855300",
+                        "primary-container": "#0d1745",
+                        "primary-fixed": "#dee1ff",
+                        "tertiary-container": "#351000"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        "margin-mobile": "16px",
+                        unit: "4px",
+                        "bento-gap": "20px",
+                        gutter: "16px",
+                        "margin-desktop": "32px"
+                    },
+                    fontFamily: {
+                        "label-sm": ["notoSans"],
+                        "headline-lg": ["Poppins"],
+                        "headline-lg-mobile": ["Poppins"],
+                        "body-md": ["Inter"],
+                        "headline-xl": ["Poppins"],
+                        "data-display": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .bento-card {
+            border: 1px solid rgba(13, 23, 69, 0.08);
+            border-radius: 16px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 12px rgba(13, 23, 69, 0.03);
+        }
+        .bento-card:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 10px 30px rgba(13, 23, 69, 0.08);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        .bg-agricultural-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .bg-agricultural-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(13, 23, 69, 0.8) 0%, rgba(248, 249, 255, 0.95) 50%, rgba(248, 249, 255, 1) 100%);
+            z-index: 1;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-[16px] antialiased min-h-screen pb-[100px]" x-data="{ lang: 'en' }">
+
+<!-- Background Image with Overlay -->
+<div class="bg-agricultural-overlay" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAi1S38nggz1AgxQOXar2lJjpAB6gzhtw2WOP9fpot4BVRYip3gSQSpN3sny-Xycgz7GAHbxC09lphflFbf0dVvaRLa2Nxjogmb7BwKwZisjINnldMzcbnrcFbo_Awt_t0Wk6v5-uUDumg3tJDOugtLlzbAMmJ8kUzWd2yRyOW-SI0h02Lq_KL19dmTnXZZFXn2XXRRMtw8G2lJ8RLE4r03Mhk8UKFWOCQobLXBT1yQk3dJtWCHRcs4')"></div>
+
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 shadow-md bg-primary-container text-white flex items-center justify-between px-4 h-16">
+    <div class="flex items-center">
+        <button class="flex items-center justify-center p-2 rounded-full hover:bg-white/10 active:scale-90 transition-transform text-white cursor-pointer mr-2" onclick="history.back()">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <h1 class="text-[18px] font-semibold text-white uppercase tracking-tight font-['Poppins']">
+            <span x-show="lang === 'en'">Settings</span>
+            <span x-show="lang === 'pa'">ਸੈਟਿੰਗਾਂ</span>
+            <span x-show="lang === 'hi'">सेटिंग्स</span>
+            <span x-show="lang === 'te'">సెట్టింగ్‌లు</span>
+            <span x-show="lang === 'ta'">அமைப்புகள்</span>
+            <span x-show="lang === 'ml'">ക്രമീകരണങ്ങൾ</span>
+            <span x-show="lang === 'kn'">ಸೆಂಟ್ಟಿಂಗ್ಸ್</span>
+            <span x-show="lang === 'ur'">ترتیبات</span>
+        </h1>
+    </div>
+
+    <!-- Language Selector Dropdown -->
+    <div class="flex items-center">
+        <select x-model="lang" aria-label="Select Language" class="bg-white/10 text-white border border-white/20 rounded-lg px-2 py-1 text-[11px] font-bold focus:outline-none cursor-pointer">
+            <option value="en" class="text-black">English</option>
+            <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
+            <option value="hi" class="text-black">हिन्दी</option>
+            <option value="te" class="text-black">తెలుగు</option>
+            <option value="ta" class="text-black">தமிழ்</option>
+            <option value="ml" class="text-black">മലയാളം</option>
+            <option value="kn" class="text-black">ಕನ್ನಡ</option>
+            <option value="ur" class="text-black">اردو</option>
+        </select>
+    </div>
+</header>
+
+<!-- Main Content Canvas -->
+<main class="w-full max-w-4xl mx-auto px-4 md:px-8 pt-24 pb-12 flex flex-col gap-5">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-5">
+        
+        <!-- Account Settings Bento -->
+        <section class="md:col-span-12 bento-card">
+            <h2 class="text-[18px] font-semibold text-on-surface mb-3 px-1 font-['Poppins']">
+                <span x-show="lang === 'en'">Account Settings</span>
+                <span x-show="lang === 'pa'">ਖਾਤਾ ਸੈਟਿੰਗਾਂ</span>
+                <span x-show="lang === 'hi'">खाता सेटिंग्स</span>
+                <span x-show="lang === 'te'">ఖాతా సెట్టింగ్‌లు</span>
+                <span x-show="lang === 'ta'">கணக்கு அமைப்புகள்</span>
+                <span x-show="lang === 'ml'">അക്കൗണ്ട് ക്രമീകരണങ്ങൾ</span>
+                <span x-show="lang === 'kn'">ಖಾತೆ ಸೆಟ್ಟಿಂಗ್‌ಗಳು</span>
+                <span x-show="lang === 'ur'">اکاؤنٹ کی ترتیبات</span>
+            </h2>
+            <div class="flex flex-col gap-2">
+                <button onclick="openModal('profileModal')" class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-highest transition-colors w-full text-left group cursor-pointer">
+                    <div class="flex items-center gap-4">
+                        <span class="material-symbols-outlined text-primary-container group-hover:text-transaction-blue transition-colors">person</span>
+                        <div>
+                            <h3 class="text-sm font-semibold text-on-surface">
+                                <span x-show="lang === 'en'">Profile Edit</span>
+                                <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ ਸੋਧੋ</span>
+                                <span x-show="lang === 'hi'">प्रोफाइल संपादित करें</span>
+                                <span x-show="lang === 'te'">ప్రొఫైల్ సవరించు</span>
+                                <span x-show="lang === 'ta'">சுயவிவரத்தைத் திருத்து</span>
+                                <span x-show="lang === 'ml'">പ്രൊഫൈൽ എഡിറ്റ് ചെയ്യുക</span>
+                                <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್ ಸಂಪಾದಿಸಿ</span>
+                                <span x-show="lang === 'ur'">پروفائل میں ترمیم کریں</span>
+                            </h3>
+                            <p class="text-xs text-on-surface-variant" id="profile-subtext">Update personal details and farm info</p>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors">chevron_right</span>
+                </button>
+                <div class="h-[1px] bg-border-subtle mx-2"></div>
+                <button onclick="openModal('securityModal')" class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-highest transition-colors w-full text-left group cursor-pointer">
+                    <div class="flex items-center gap-4">
+                        <span class="material-symbols-outlined text-primary-container group-hover:text-transaction-blue transition-colors">security</span>
+                        <div>
+                            <h3 class="text-sm font-semibold text-on-surface">
+                                <span x-show="lang === 'en'">Security</span>
+                                <span x-show="lang === 'pa'">ਸੁਰੱਖਿਆ</span>
+                                <span x-show="lang === 'hi'">सुरक्षा</span>
+                                <span x-show="lang === 'te'">భద్రత</span>
+                                <span x-show="lang === 'ta'">பாதுகாப்பு</span>
+                                <span x-show="lang === 'ml'">സുരക്ഷ</span>
+                                <span x-show="lang === 'kn'">ಭದ್ರತೆ</span>
+                                <span x-show="lang === 'ur'">سیکیورٹی</span>
+                            </h3>
+                            <p class="text-xs text-on-surface-variant">Password, PIN, and linked devices</p>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors">chevron_right</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Preferences Bento -->
+        <section class="md:col-span-6 bento-card">
+            <h2 class="text-[18px] font-semibold text-on-surface mb-3 px-1 font-['Poppins']">
+                <span x-show="lang === 'en'">Preferences</span>
+                <span x-show="lang === 'pa'">ਪਸੰਦ</span>
+                <span x-show="lang === 'hi'">प्राथमिकताएं</span>
+                <span x-show="lang === 'te'">ప్రాధాన్యతలు</span>
+                <span x-show="lang === 'ta'">விருப்பத்தேர்வுகள்</span>
+                <span x-show="lang === 'ml'">മുൻഗണനകൾ</span>
+                <span x-show="lang === 'kn'">प्राथमिकತೆಗಳು</span>
+                <span x-show="lang === 'ur'">ترجیحات</span>
+            </h2>
+            <div class="flex flex-col gap-2">
+                <button onclick="cycleLanguage()" class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-highest transition-colors w-full text-left group cursor-pointer">
+                    <div class="flex items-center gap-4">
+                        <span class="material-symbols-outlined text-amber-600">language</span>
+                        <div>
+                            <h3 class="text-sm font-semibold text-on-surface">
+                                <span x-show="lang === 'en'">Language</span>
+                                <span x-show="lang === 'pa'">ਭਾਸ਼ਾ</span>
+                                <span x-show="lang === 'hi'">भाषा</span>
+                                <span x-show="lang === 'te'">భాష</span>
+                                <span x-show="lang === 'ta'">மொழி</span>
+                                <span x-show="lang === 'ml'">ഭാഷ</span>
+                                <span x-show="lang === 'kn'">ಭಾಷೆ</span>
+                                <span x-show="lang === 'ur'">زبان</span>
+                            </h3>
+                            <p class="text-xs text-on-surface-variant" id="lang-display">English (Active)</p>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors">chevron_right</span>
+                </button>
+                <div class="h-[1px] bg-border-subtle mx-2"></div>
+                <button onclick="toggleTheme()" class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-highest transition-colors w-full text-left group cursor-pointer">
+                    <div class="flex items-center gap-4">
+                        <span class="material-symbols-outlined text-amber-600">palette</span>
+                        <div>
+                            <h3 class="text-sm font-semibold text-on-surface">
+                                <span x-show="lang === 'en'">Theme</span>
+                                <span x-show="lang === 'pa'">ਥੀਮ</span>
+                                <span x-show="lang === 'hi'">थीम</span>
+                                <span x-show="lang === 'te'">థీమ్</span>
+                                <span x-show="lang === 'ta'">தீம்</span>
+                                <span x-show="lang === 'ml'">തീം</span>
+                                <span x-show="lang === 'kn'">ಥೀಮ್</span>
+                                <span x-show="lang === 'ur'">تھیم</span>
+                            </h3>
+                            <p class="text-xs text-on-surface-variant" id="theme-display">Light Mode</p>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors">chevron_right</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Notifications Bento -->
+        <section class="md:col-span-6 bento-card">
+            <h2 class="text-[18px] font-semibold text-on-surface mb-3 px-1 font-['Poppins']">
+                <span x-show="lang === 'en'">Notifications</span>
+                <span x-show="lang === 'pa'">ਨੋਟੀਫਿਕੇਸ਼ਨ</span>
+                <span x-show="lang === 'hi'">सूचनाएं</span>
+                <span x-show="lang === 'te'">నోటిఫికేషన్‌లు</span>
+                <span x-show="lang === 'ta'">அறிவிப்புகள்</span>
+                <span x-show="lang === 'ml'">അറിയിപ്പുകൾ</span>
+                <span x-show="lang === 'kn'">ಸೂಚನೆಗಳು</span>
+                <span x-show="lang === 'ur'">اطلاعات</span>
+            </h2>
+            <div class="flex flex-col gap-2">
+                <button onclick="toggleNotifications()" class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-highest transition-colors w-full text-left group cursor-pointer">
+                    <div class="flex items-center gap-4">
+                        <span class="material-symbols-outlined text-mandi-purple">notifications</span>
+                        <div>
+                            <h3 class="text-sm font-semibold text-on-surface">
+                                <span x-show="lang === 'en'">Push Alerts</span>
+                                <span x-show="lang === 'pa'">ਪੁਸ਼ ਅਲਰਟ</span>
+                                <span x-show="lang === 'hi'">पुश अलर्ट</span>
+                                <span x-show="lang === 'te'">పుష్ హెచ్చరికలు</span>
+                                <span x-show="lang === 'ta'">புஷ் எச்சரிக்கைகள்</span>
+                                <span x-show="lang === 'ml'">പുഷ് അലേർട്ടുകൾ</span>
+                                <span x-show="lang === 'kn'">ಪುಶ್ ಎಚ್ಚರಿಕೆಗಳು</span>
+                                <span x-show="lang === 'ur'">پش الرٹس</span>
+                            </h3>
+                            <p class="text-xs text-on-surface-variant" id="notif-status">Mandi, Weather, Payments (Enabled)</p>
+                        </div>
+                    </div>
+                    <div id="toggle-bg" class="w-10 h-5 bg-ledger-green rounded-full relative shadow-sm transition-colors">
+                        <div id="toggle-dot" class="w-4 h-4 bg-white rounded-full absolute right-0.5 top-0.5 shadow-sm transition-all"></div>
+                    </div>
+                </button>
+            </div>
+        </section>
+
+        <!-- Privacy & Legal Bento -->
+        <section class="md:col-span-12 bento-card">
+            <h2 class="text-[18px] font-semibold text-on-surface mb-3 px-1 font-['Poppins']">
+                <span x-show="lang === 'en'">Privacy & Legal</span>
+                <span x-show="lang === 'pa'">ਪਰਾਈਵੇਸੀ ਅਤੇ ਕਾਨੂੰਨੀ</span>
+                <span x-show="lang === 'hi'">गोपनीयता और कानूनी</span>
+                <span x-show="lang === 'te'">గోప్యత & చట్టపరమైనవి</span>
+                <span x-show="lang === 'ta'">தனியுரிமை & சட்டப்பூர்வமானது</span>
+                <span x-show="lang === 'ml'">സ്വകാര്യത & നിയമപരമായവ</span>
+                <span x-show="lang === 'kn'">ಗೌಪ್ಯತೆ ಮತ್ತು ಕಾನೂನು</span>
+                <span x-show="lang === 'ur'">پرائیویسی اور قانونی</span>
+            </h2>
+            <div class="flex flex-col gap-2">
+                <button onclick="openModal('privacyModal')" class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-highest transition-colors w-full text-left group cursor-pointer">
+                    <div class="flex items-center gap-4">
+                        <span class="material-symbols-outlined text-slate-700 group-hover:text-on-surface transition-colors">privacy_tip</span>
+                        <div>
+                            <h3 class="text-sm font-semibold text-on-surface">
+                                <span x-show="lang === 'en'">Data Sharing</span>
+                                <span x-show="lang === 'pa'">ਡਾਟਾ ਸਾਂਝਾ ਕਰਨਾ</span>
+                                <span x-show="lang === 'hi'">डेटा साझा करना</span>
+                                <span x-show="lang === 'te'">డేటా షేరింగ్</span>
+                                <span x-show="lang === 'ta'">தரவு பகிர்வு</span>
+                                <span x-show="lang === 'ml'">ഡാറ്റ പങ്കിടൽ</span>
+                                <span x-show="lang === 'kn'">ಡೇಟಾ ಹಂಚಿಕೆ</span>
+                                <span x-show="lang === 'ur'">ڈیٹا شیئرنگ</span>
+                            </h3>
+                            <p class="text-xs text-on-surface-variant">Manage data permissions</p>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors">chevron_right</span>
+                </button>
+                <div class="h-[1px] bg-border-subtle mx-2"></div>
+                <button onclick="openModal('termsModal')" class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-highest transition-colors w-full text-left group cursor-pointer">
+                    <div class="flex items-center gap-4">
+                        <span class="material-symbols-outlined text-slate-700 group-hover:text-on-surface transition-colors">description</span>
+                        <div>
+                            <h3 class="text-sm font-semibold text-on-surface">
+                                <span x-show="lang === 'en'">Terms of Service</span>
+                                <span x-show="lang === 'pa'">ਸੇਵਾ ਦੀਆਂ ਸ਼ਰਤਾਂ</span>
+                                <span x-show="lang === 'hi'">सेवा की शर्तें</span>
+                                <span x-show="lang === 'te'">సేవా నిబంధనలు</span>
+                                <span x-show="lang === 'ta'">சேவை விதிமுறைகள்</span>
+                                <span x-show="lang === 'ml'">സേവന നിബന്ധനകൾ</span>
+                                <span x-show="lang === 'kn'">ಸೇವಾ ನಿಯಮಗಳು</span>
+                                <span x-show="lang === 'ur'">سروس کی شرائط</span>
+                            </h3>
+                            <p class="text-xs text-on-surface-variant">Read our policies</p>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-outline-variant group-hover:text-on-surface transition-colors">chevron_right</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Sign Out Button -->
+        <section class="md:col-span-12 mt-2 flex justify-center">
+            <button onclick="window.location.href='login.html'" class="bg-error/10 hover:bg-error/20 text-error font-medium px-8 py-3 rounded-full border border-error/20 transition-all flex items-center gap-2 cursor-pointer shadow-sm">
+                <span class="material-symbols-outlined">logout</span>
+                <span x-show="lang === 'en'">Sign Out</span>
+                <span x-show="lang === 'pa'">ਸਾਈਨ ਆਉਟ</span>
+                <span x-show="lang === 'hi'">साइन आउट</span>
+                <span x-show="lang === 'te'">సైన్ అవుట్</span>
+                <span x-show="lang === 'ta'">வெளியேறு</span>
+                <span x-show="lang === 'ml'">സൈൻ ഔട്ട്</span>
+                <span x-show="lang === 'kn'">ಸೈನ್ ಔಟ್</span>
+                <span x-show="lang === 'ur'">سائن آؤٹ</span>
+            </button>
+        </section>
+
+    </div>
+</main>
+
+<!-- Interactive Modals for Settings Popups -->
+<div id="appModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[99999] hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl flex flex-col gap-4 animate-in fade-in zoom-in duration-200">
+        <h3 id="modalTitle" class="text-lg font-bold text-slate-900">Modal Title</h3>
+        <p id="modalBody" class="text-sm text-slate-600">Modal details go here.</p>
+        <div id="modalContentInput" class="flex flex-col gap-3"></div>
+        <div class="flex justify-end gap-2 mt-2">
+            <button onclick="closeModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold hover:bg-slate-200 cursor-pointer">Cancel</button>
+            <button onclick="saveModal()" class="px-4 py-2 bg-[#0d1745] text-white rounded-xl text-xs font-bold hover:opacity-90 cursor-pointer">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Bottom Nav Bar with Pointer Events Enabled -->
+<nav class="md:hidden bg-white/95 backdrop-blur-md border-t border-slate-200 fixed bottom-0 left-0 w-full z-[9999] flex justify-around items-center px-4 py-2 shadow-lg rounded-t-xl pointer-events-auto">
+    <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors cursor-pointer" href="index.html">
+        <span class="material-symbols-outlined text-[24px] mb-1">home</span>
+        <span class="text-[10px] font-bold">
+            <span x-show="lang === 'en'">Home</span>
+            <span x-show="lang === 'pa'">ਹੋਮ</span>
+            <span x-show="lang === 'hi'">होम</span>
+            <span x-show="lang === 'te'">హోమ్</span>
+            <span x-show="lang === 'ta'">முகப்பு</span>
+            <span x-show="lang === 'ml'">ഹോം</span>
+            <span x-show="lang === 'kn'">ಹೋಮ್</span>
+            <span x-show="lang === 'ur'">ہوم</span>
+        </span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors cursor-pointer" href="mandi.html">
+        <span class="material-symbols-outlined text-[24px] mb-1">storefront</span>
+        <span class="text-[10px] font-bold">
+            <span x-show="lang === 'en'">Mandi</span>
+            <span x-show="lang === 'pa'">ਮੰਡੀ</span>
+            <span x-show="lang === 'hi'">मंडी</span>
+            <span x-show="lang === 'te'">మండి</span>
+            <span x-show="lang === 'ta'">மண்டி</span>
+            <span x-show="lang === 'ml'">മണ്ഡി</span>
+            <span x-show="lang === 'kn'">ಮಂಡಿ</span>
+            <span x-show="lang === 'ur'">منڈی</span>
+        </span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors cursor-pointer" href="queue.html">
+        <span class="material-symbols-outlined text-[24px] mb-1">confirmation_number</span>
+        <span class="text-[10px] font-bold">
+            <span x-show="lang === 'en'">Queue</span>
+            <span x-show="lang === 'pa'">ਕਤਾਰ</span>
+            <span x-show="lang === 'hi'">कतार</span>
+            <span x-show="lang === 'te'">క్యూ</span>
+            <span x-show="lang === 'ta'">வரிசை</span>
+            <span x-show="lang === 'ml'">ക്യൂ</span>
+            <span x-show="lang === 'kn'">ಸರತಿ</span>
+            <span x-show="lang === 'ur'">قطار</span>
+        </span>
+    </a>
+    <a class="flex flex-col items-center justify-center bg-primary-container text-white rounded-full px-6 py-2 scale-95 shadow-md cursor-pointer" href="profile.html">
+        <span class="material-symbols-outlined text-[24px] mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
+        <span class="text-[10px] font-bold">
+            <span x-show="lang === 'en'">Profile</span>
+            <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
+            <span x-show="lang === 'hi'">प्रोफाइल</span>
+            <span x-show="lang === 'te'">ప్రొఫైల్</span>
+            <span x-show="lang === 'ta'">சுயவிவரம்</span>
+            <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
+            <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
+            <span x-show="lang === 'ur'">پروفائل</span>
+        </span>
+    </a>
+</nav>
+
+<script>
+    let currentModalType = '';
+
+    function openModal(type) {
+        currentModalType = type;
+        const modal = document.getElementById('appModal');
+        const title = document.getElementById('modalTitle');
+        const body = document.getElementById('modalBody');
+        const inputContainer = document.getElementById('modalContentInput');
+        
+        inputContainer.innerHTML = '';
+        modal.classList.remove('hidden');
+
+        if (type === 'profileModal') {
+            title.innerText = "Edit Profile & Farm Info";
+            body.innerText = "Update your verified farmer profile details below:";
+            inputContainer.innerHTML = `
+                <label class="text-xs font-semibold text-slate-700">Display Name</label>
+                <input id="editName" type="text" value="Harjinder Singh" class="border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-900"/>
+                <label class="text-xs font-semibold text-slate-700 mt-1">Farm Location / Mandi</label>
+                <input id="editLocation" type="text" value="Ludhiana, Punjab" class="border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-900"/>
+            `;
+        } else if (type === 'securityModal') {
+            title.innerText = "Security Settings";
+            body.innerText = "Manage your account credentials and app lock PIN:";
+            inputContainer.innerHTML = `
+                <label class="text-xs font-semibold text-slate-700">New Password / PIN</label>
+                <input id="editPass" type="password" placeholder="Enter 4-digit PIN or password" class="border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-blue-900"/>
+            `;
+        } else if (type === 'privacyModal') {
+            title.innerText = "Data Sharing Permissions";
+            body.innerText = "Your agricultural yield data is securely shared with registered Mandis only for procurement processing.";
+        } else if (type === 'termsModal') {
+            title.innerText = "Terms of Service";
+            body.innerText = "By using Kisan Konnect, you agree to transparent Minimum Support Price (MSP) trade terms and digital queue protocols.";
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('appModal').classList.add('hidden');
+    }
+
+    function saveModal() {
+        if (currentModalType === 'profileModal') {
+            const name = document.getElementById('editName').value;
+            const loc = document.getElementById('editLocation').value;
+            document.getElementById('profile-subtext').innerText = `${name} • ${loc}`;
+        } else if (currentModalType === 'securityModal') {
+            alert("Security credentials updated successfully!");
+        }
+        closeModal();
+    }
+
+    let langIndex = 0;
+    const languages = ["English (Active)", "ਪੰਜਾਬੀ (Active)", "हिन्दी (Active)"];
+    function cycleLanguage() {
+        langIndex = (langIndex + 1) % languages.length;
+        document.getElementById('lang-display').innerText = languages[langIndex];
+    }
+
+    let isDark = false;
+    function toggleTheme() {
+        isDark = !isDark;
+        document.getElementById('theme-display').innerText = isDark ? "Dark Mode" : "Light Mode";
+        document.documentElement.classList.toggle('dark', isDark);
+    }
+
+    let notifEnabled = true;
+    function toggleNotifications() {
+        notifEnabled = !notifEnabled;
+        const bg = document.getElementById('toggle-bg');
+        const dot = document.getElementById('toggle-dot');
+        const status = document.getElementById('notif-status');
+
+        if (notifEnabled) {
+            bg.classList.add('bg-ledger-green');
+            bg.classList.remove('bg-slate-300');
+            dot.style.right = '0.125rem';
+            dot.style.left = 'unset';
+            status.innerText = "Mandi, Weather, Payments (Enabled)";
+        } else {
+            bg.classList.remove('bg-ledger-green');
+            bg.classList.add('bg-slate-300');
+            dot.style.left = '0.125rem';
+            dot.style.right = 'unset';
+            status.innerText = "Push Alerts (Disabled)";
+        }
+    }
+</script>
+</body>
+</html>

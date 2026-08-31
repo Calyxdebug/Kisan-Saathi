@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <title>My Bookings - Kisan Konnect</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed": "#dee1ff",
+                        "on-tertiary-container": "#b27558",
+                        "on-tertiary-fixed-variant": "#6b3a21",
+                        "ledger-green": "#10b981",
+                        "on-error-container": "#93000a",
+                        "transaction-blue": "#3b82f6",
+                        "surface-container-highest": "#d3e4fe",
+                        "kcc-amber": "#f59e0b",
+                        "tertiary-fixed": "#ffdbcc",
+                        "inverse-surface": "#213145",
+                        "surface-variant": "#d3e4fe",
+                        "on-error": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#855300",
+                        "on-secondary-fixed-variant": "#653e00",
+                        "on-background": "#0b1c30",
+                        "on-secondary-container": "#684000",
+                        "background": "#f8f9ff",
+                        "surface": "#f8f9ff",
+                        "surface-glass": "rgba(255, 255, 255, 0.8)",
+                        "inverse-on-surface": "#eaf1ff",
+                        "primary-container": "#0d1745",
+                        "surface-container-high": "#dce9ff",
+                        "weather-warm": "#fbbf24",
+                        "on-secondary-fixed": "#2a1700",
+                        "surface-container-low": "#eff4ff",
+                        "mandi-purple": "#8b5cf6",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#cbdbf5",
+                        "primary-fixed-dim": "#bbc3fb",
+                        "surface-container": "#e5eeff",
+                        "surface-tint": "#525b8c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#ffb95f",
+                        "on-primary-fixed": "#0d1745",
+                        "surface-bright": "#f8f9ff",
+                        "border-subtle": "rgba(13, 23, 69, 0.08)",
+                        "tertiary-fixed-dim": "#feb695",
+                        "on-primary-container": "#7881b4",
+                        "on-primary-fixed-variant": "#3b4473",
+                        "secondary-container": "#fea619",
+                        "inverse-primary": "#bbc3fb",
+                        "outline": "#767680",
+                        "tertiary": "#000000",
+                        "on-surface": "#0b1c30",
+                        "tertiary-container": "#351000",
+                        "outline-variant": "#c6c5d0",
+                        "primary": "#000000",
+                        "on-tertiary-fixed": "#351000",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#46464f",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#ffddb8"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        "bento-gap": "20px",
+                        unit: "4px",
+                        "margin-desktop": "32px",
+                        "margin-mobile": "16px",
+                        gutter: "16px"
+                    },
+                    fontFamily: {
+                        "headline-lg-mobile": ["Poppins"],
+                        "headline-lg": ["Poppins"],
+                        "label-sm": ["Noto Sans"],
+                        "data-display": ["Inter"],
+                        "headline-xl": ["Poppins"],
+                        "body-md": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .bento-card {
+            border: 1px solid rgba(13, 23, 69, 0.08);
+            border-radius: 16px;
+            padding: 16px;
+            background: #ffffff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 12px rgba(13, 23, 69, 0.03);
+        }
+        .bento-card:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 10px 30px rgba(13, 23, 69, 0.08);
+        }
+        .frosted-glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+        .bg-agricultural-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .bg-agricultural-overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(13, 23, 69, 0.8) 0%, rgba(248, 249, 255, 0.95) 50%, rgba(248, 249, 255, 1) 100%);
+            z-index: 1;
+        }
+        .tab-active {
+            background-color: #0d1745;
+            color: #ffffff;
+        }
+        .tab-inactive {
+            background-color: transparent;
+            color: #46464f;
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-[16px] antialiased min-h-screen pb-[100px]" x-data="{ lang: 'en' }">
+
+<!-- Background Image with Overlay -->
+<div class="bg-agricultural-overlay" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDx6FsZMtBmh1HSue0IF2MqBQ8WMgHzLeHNUPgrSnGvQne1ziz3nFsMak4i4uKlr_VuNaXURlFRjYBAS_KZpMjbTxsiAxgZ8UQYdZmx8Q3pn7jOHa9sg8u7zfNsmgSnAsaXOhmNGq7ZKW-Wi1Vh3DzCzVUL4F1ALqURnPgAAzNeo1Q6a5O6sgfU-sPpxmC4i7hGXvwuc2DmccHYFCWeeL3mctHoon3LnEOJnxLbu9sN5FZiUI3I6DCY')"></div>
+
+<!-- TopAppBar -->
+<header class="bg-primary-container text-white shadow-md flex items-center justify-between px-4 w-full h-16 fixed top-0 z-50">
+    <button class="flex items-center justify-center p-2 rounded-full hover:bg-white/10 active:scale-90 transition-transform text-white cursor-pointer" onclick="history.back()">
+        <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+    <h1 class="text-[18px] font-semibold text-white absolute left-1/2 -translate-x-1/2 uppercase tracking-tight font-['Poppins']">
+        <span x-show="lang === 'en'">My Bookings</span>
+        <span x-show="lang === 'pa'">ਮੇਰੀਆਂ ਬੁਕਿੰਗਾਂ</span>
+        <span x-show="lang === 'hi'">मेरी बुकिंग</span>
+        <span x-show="lang === 'te'">నా బుకింగ్‌లు</span>
+        <span x-show="lang === 'ta'">எனது முன்பதிவுகள்</span>
+        <span x-show="lang === 'ml'">എന്റെ ബുക്കിംഗുകൾ</span>
+        <span x-show="lang === 'kn'">ನನ್ನ ಬುಕಿಂಗ್‌ಗಳು</span>
+        <span x-show="lang === 'ur'">میری بکنگ</span>
+    </h1>
+    
+    <!-- Language Selector Dropdown -->
+    <div class="flex items-center">
+        <select x-model="lang" aria-label="Select Language" class="bg-white/10 text-white border border-white/20 rounded-lg px-2 py-1 text-[11px] font-bold focus:outline-none cursor-pointer">
+            <option value="en" class="text-black">English</option>
+            <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
+            <option value="hi" class="text-black">हिन्दी</option>
+            <option value="te" class="text-black">తెలుగు</option>
+            <option value="ta" class="text-black">தமிழ்</option>
+            <option value="ml" class="text-black">മലയാളം</option>
+            <option value="kn" class="text-black">ಕನ್ನಡ</option>
+            <option value="ur" class="text-black">اردو</option>
+        </select>
+    </div>
+</header>
+
+<!-- Main Content Canvas -->
+<main class="pt-[88px] px-4 md:px-8 max-w-[1200px] mx-auto relative z-10 flex flex-col gap-5">
+    
+    <!-- Segmented Control -->
+    <div class="flex p-1 bg-surface-container-low rounded-xl border border-border-subtle w-full max-w-sm mx-auto shadow-sm">
+        <button class="flex-1 py-2 text-center rounded-lg text-xs font-bold transition-colors duration-200 tab-active cursor-pointer" id="tab-upcoming" onclick="switchTab('upcoming')">
+            <span x-show="lang === 'en'">Upcoming</span>
+            <span x-show="lang === 'pa'">आਉਣ ਵਾਲੇ</span>
+            <span x-show="lang === 'hi'">आगामी</span>
+            <span x-show="lang === 'te'">రాబోయేవి</span>
+            <span x-show="lang === 'ta'">வரவிருக்கும்</span>
+            <span x-show="lang === 'ml'"> വരാനിരിക്കുന്നവ</span>
+            <span x-show="lang === 'kn'">ಮುಂಬರುವ</span>
+            <span x-show="lang === 'ur'">آنے والے</span>
+        </button>
+        <button class="flex-1 py-2 text-center rounded-lg text-xs font-bold transition-colors duration-200 tab-inactive cursor-pointer" id="tab-past" onclick="switchTab('past')">
+            <span x-show="lang === 'en'">Past</span>
+            <span x-show="lang === 'pa'">ਪਿછਲੇ</span>
+            <span x-show="lang === 'hi'">पिछले</span>
+            <span x-show="lang === 'te'">గత</span>
+            <span x-show="lang === 'ta'">கடந்த</span>
+            <span x-show="lang === 'ml'">കഴിഞ്ഞത്</span>
+            <span x-show="lang === 'kn'">ಹಿಂದಿನ</span>
+            <span x-show="lang === 'ur'">گزشتہ</span>
+        </button>
+    </div>
+
+    <!-- Bookings List (Upcoming) -->
+    <div class="flex flex-col gap-4" id="list-upcoming">
+        <!-- Booking Card 1 -->
+        <div class="bento-card frosted-glass flex flex-col gap-3 relative overflow-hidden group cursor-pointer">
+            <div class="absolute top-0 left-0 w-full h-1 bg-ledger-green opacity-85"></div>
+            <div class="flex justify-between items-start">
+                <div class="flex flex-col">
+                    <span class="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Wheat Procurement</span>
+                    <h3 class="text-[18px] font-semibold text-on-background mt-1">Ludhiana Mandi</h3>
+                </div>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#ecfdf5] text-ledger-green border border-[#d1fae5]">
+                    <span x-show="lang === 'en'">Confirmed</span>
+                    <span x-show="lang === 'pa'">ਪੁਸ਼ਟੀ ਕੀਤੀ</span>
+                    <span x-show="lang === 'hi'">पुष्टि की गई</span>
+                    <span x-show="lang === 'te'">నిధ్ధారించబడింది</span>
+                    <span x-show="lang === 'ta'">உறுதிப்படுத்தப்பட்டது</span>
+                    <span x-show="lang === 'ml'"> സ്ഥിരീകരിച്ചു</span>
+                    <span x-show="lang === 'kn'">ಖಚಿತಪಡಿಸಲಾಗಿದೆ</span>
+                    <span x-show="lang === 'ur'">تصدیق شدہ</span>
+                </span>
+            </div>
+            <div class="flex items-center gap-2 text-on-surface-variant mt-1">
+                <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                <span class="text-sm font-medium">25 Oct, 10:30 AM</span>
+            </div>
+            <div class="flex items-center gap-2 text-on-surface-variant">
+                <span class="material-symbols-outlined text-[18px]">scale</span>
+                <span class="text-sm font-medium">Expected Qty: 150 Quintals</span>
+            </div>
+            <div class="mt-2 pt-3 border-t border-border-subtle flex justify-end">
+                <button class="flex items-center gap-2 px-4 py-2 bg-primary-container text-white rounded-lg text-xs font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">qr_code_2</span>
+                    <span x-show="lang === 'en'">View Pass</span>
+                    <span x-show="lang === 'pa'">ਪਾਸ ਵੇਖੋ</span>
+                    <span x-show="lang === 'hi'">पास देखें</span>
+                    <span x-show="lang === 'te'">పాస్ వీక్షించండి</span>
+                    <span x-show="lang === 'ta'">பாஸைக் காண்க</span>
+                    <span x-show="lang === 'ml'">പാസ് കാണുക</span>
+                    <span x-show="lang === 'kn'">ಪಾಸ್ ವೀಕ್ಷಿಸಿ</span>
+                    <span x-show="lang === 'ur'">پاس دیکھیں</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Booking Card 2 -->
+        <div class="bento-card frosted-glass flex flex-col gap-3 relative overflow-hidden group cursor-pointer">
+            <div class="absolute top-0 left-0 w-full h-1 bg-kcc-amber opacity-85"></div>
+            <div class="flex justify-between items-start">
+                <div class="flex flex-col">
+                    <span class="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Paddy Storage</span>
+                    <h3 class="text-[18px] font-semibold text-on-background mt-1">Khanna Warehouse</h3>
+                </div>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#fffbeb] text-kcc-amber border border-[#fef3c7]">
+                    <span x-show="lang === 'en'">Pending</span>
+                    <span x-show="lang === 'pa'">ਬਕਾਇਆ</span>
+                    <span x-show="lang === 'hi'">लंबित</span>
+                    <span x-show="lang === 'te'">పెండింగ్‌లో ఉంది</span>
+                    <span x-show="lang === 'ta'">நிலுவையில் உள்ளது</span>
+                    <span x-show="lang === 'ml'">തീർപ്പുകൽപ്പിക്കാത്തത്</span>
+                    <span x-show="lang === 'kn'">ಬಾಕಿ ಉಳಿದಿದೆ</span>
+                    <span x-show="lang === 'ur'">زیر التواء</span>
+                </span>
+            </div>
+            <div class="flex items-center gap-2 text-on-surface-variant mt-1">
+                <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                <span class="text-sm font-medium">28 Oct, 02:00 PM</span>
+            </div>
+            <div class="flex items-center gap-2 text-on-surface-variant">
+                <span class="material-symbols-outlined text-[18px]">local_shipping</span>
+                <span class="text-sm font-medium">Vehicle: PB10 AB 1234</span>
+            </div>
+            <div class="mt-2 pt-3 border-t border-border-subtle flex justify-end">
+                <button class="flex items-center gap-2 px-4 py-2 border border-primary-container text-primary-container rounded-lg text-xs font-bold hover:bg-surface-container-low transition-all active:scale-95 cursor-pointer">
+                    <span class="material-symbols-outlined text-[16px]">edit_calendar</span>
+                    <span x-show="lang === 'en'">Reschedule</span>
+                    <span x-show="lang === 'pa'">ਦੁਬਾਰਾ ਸਮਾਂ ਤੈਅ ਕਰੋ</span>
+                    <span x-show="lang === 'hi'">पुनर्निर्धारित करें</span>
+                    <span x-show="lang === 'te'">పునర్నియమించండి</span>
+                    <span x-show="lang === 'ta'">மறுதுவக்கம்</span>
+                    <span x-show="lang === 'ml'">പുനഃക്രമീകരിക്കുക</span>
+                    <span x-show="lang === 'kn'">ಮರುನಿಗದಿಪಡಿಸಿ</span>
+                    <span x-show="lang === 'ur'">دوبارہ طے کریں</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bookings List (Past) - Initially Hidden -->
+    <div class="hidden flex-col gap-4" id="list-past">
+        <!-- Booking Card Past 1 -->
+        <div class="bento-card frosted-glass flex flex-col gap-3 relative overflow-hidden opacity-85">
+            <div class="absolute top-0 left-0 w-full h-1 bg-outline opacity-50"></div>
+            <div class="flex justify-between items-start">
+                <div class="flex flex-col">
+                    <span class="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Mustard Procurement</span>
+                    <h3 class="text-[18px] font-semibold text-on-background mt-1">Moga Mandi</h3>
+                </div>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-surface-container-low text-on-surface-variant border border-border-subtle">
+                    <span x-show="lang === 'en'">Completed</span>
+                    <span x-show="lang === 'pa'">ਪੂਰਾ ਹੋ ਗਿਆ</span>
+                    <span x-show="lang === 'hi'">पूर्ण किया गया</span>
+                    <span x-show="lang === 'te'">పూర్తయింది</span>
+                    <span x-show="lang === 'ta'">நிறைவடைந்தது</span>
+                    <span x-show="lang === 'ml'">പൂർത്തിയായി</span>
+                    <span x-show="lang === 'kn'">ಪೂರ್ಣಗೊಂಡಿದೆ</span>
+                    <span x-show="lang === 'ur'">مکمل ہو گیا</span>
+                </span>
+            </div>
+            <div class="flex items-center gap-2 text-on-surface-variant mt-1">
+                <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                <span class="text-sm font-medium">12 Oct, 09:15 AM</span>
+            </div>
+            <div class="flex items-center gap-2 text-on-surface-variant">
+                <span class="material-symbols-outlined text-[18px]">receipt_long</span>
+                <span class="text-sm font-medium">Receipt: #RC-9982</span>
+            </div>
+            <div class="mt-2 pt-3 border-t border-border-subtle flex justify-end">
+                <button class="flex items-center gap-2 px-4 py-2 text-transaction-blue text-xs font-bold hover:underline active:opacity-80 cursor-pointer">
+                    <span x-show="lang === 'en'">View Details</span>
+                    <span x-show="lang === 'pa'">ਵੇਰਵੇ ਵੇਖੋ</span>
+                    <span x-show="lang === 'hi'">विवरण देखें</span>
+                    <span x-show="lang === 'te'">వివరాలను వీక్షించండి</span>
+                    <span x-show="lang === 'ta'">விவரங்களைக் காண்க</span>
+                    <span x-show="lang === 'ml'">വിവരങ്ങൾ കാണുക</span>
+                    <span x-show="lang === 'kn'">ವಿವರಗಳನ್ನು ವೀಕ್ಷಿಸಿ</span>
+                    <span x-show="lang === 'ur'">تفصیلات دیکھیں</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- BottomNavBar with Pointer Events Fully Enabled -->
+<nav class="bg-white/95 backdrop-blur-md border-t border-slate-200 fixed bottom-0 left-0 w-full z-[9999] flex justify-around items-center px-4 py-2 shadow-lg rounded-t-xl pointer-events-auto">
+    <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors cursor-pointer" href="index.html">
+        <span class="material-symbols-outlined text-[24px] mb-1">home</span>
+        <span class="text-[10px] font-bold">
+            <span x-show="lang === 'en'">Home</span>
+            <span x-show="lang === 'pa'">ਹੋਮ</span>
+            <span x-show="lang === 'hi'">होम</span>
+            <span x-show="lang === 'te'">హోమ్</span>
+            <span x-show="lang === 'ta'">முகப்பு</span>
+            <span x-show="lang === 'ml'">ഹോം</span>
+            <span x-show="lang === 'kn'">ಹೋಮ್</span>
+            <span x-show="lang === 'ur'">ہوم</span>
+        </span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors cursor-pointer" href="mandi.html">
+        <span class="material-symbols-outlined text-[24px] mb-1">storefront</span>
+        <span class="text-[10px] font-bold">
+            <span x-show="lang === 'en'">Mandi</span>
+            <span x-show="lang === 'pa'">ਮੰਡੀ</span>
+            <span x-show="lang === 'hi'">मंडी</span>
+            <span x-show="lang === 'te'">మండి</span>
+            <span x-show="lang === 'ta'">மண்டி</span>
+            <span x-show="lang === 'ml'">മണ്ഡി</span>
+            <span x-show="lang === 'kn'">ಮಂಡಿ</span>
+            <span x-show="lang === 'ur'">منڈی</span>
+        </span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors cursor-pointer" href="queue.html">
+        <span class="material-symbols-outlined text-[24px] mb-1">confirmation_number</span>
+        <span class="text-[10px] font-bold">
+            <span x-show="lang === 'en'">Queue</span>
+            <span x-show="lang === 'pa'">ਕਤਾਰ</span>
+            <span x-show="lang === 'hi'">कतार</span>
+            <span x-show="lang === 'te'">క్యూ</span>
+            <span x-show="lang === 'ta'">வரிசை</span>
+            <span x-show="lang === 'ml'">ക്യൂ</span>
+            <span x-show="lang === 'kn'">ಸರತಿ</span>
+            <span x-show="lang === 'ur'">قطار</span>
+        </span>
+    </a>
+    <a class="flex flex-col items-center justify-center bg-primary-container text-white rounded-full px-6 py-2 scale-95 shadow-md cursor-pointer" href="profile.html">
+        <span class="material-symbols-outlined text-[24px] mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
+        <span class="text-[10px] font-bold">
+            <span x-show="lang === 'en'">Profile</span>
+            <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
+            <span x-show="lang === 'hi'">प्रोफाइल</span>
+            <span x-show="lang === 'te'">ప్రొఫైల్</span>
+            <span x-show="lang === 'ta'">சுயவிவரம்</span>
+            <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
+            <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
+            <span x-show="lang === 'ur'">پروفائل</span>
+        </span>
+    </a>
+</nav>
+
+<script>
+    function switchTab(tab) {
+        const upBtn = document.getElementById('tab-upcoming');
+        const pastBtn = document.getElementById('tab-past');
+        const upList = document.getElementById('list-upcoming');
+        const pastList = document.getElementById('list-past');
+
+        if (tab === 'upcoming') {
+            upBtn.classList.add('tab-active');
+            upBtn.classList.remove('tab-inactive');
+            pastBtn.classList.add('tab-inactive');
+            pastBtn.classList.remove('tab-active');
+            
+            upList.classList.remove('hidden');
+            upList.classList.add('flex');
+            pastList.classList.add('hidden');
+            pastList.classList.remove('flex');
+        } else {
+            pastBtn.classList.add('tab-active');
+            pastBtn.classList.remove('tab-inactive');
+            upBtn.classList.add('tab-inactive');
+            upBtn.classList.remove('tab-active');
+            
+            pastList.classList.remove('hidden');
+            pastList.classList.add('flex');
+            upList.classList.add('hidden');
+            upList.classList.remove('flex');
+        }
+    }
+</script>
+</body>
+</html>
