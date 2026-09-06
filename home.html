@@ -229,7 +229,7 @@
             closeModal: 'बंद करें',
             news1Full: 'मौसम विभाग के अनुसार उत्तर और पश्चिम भारत के कृषि क्षेत्रों में हल्की बारिश की संभावना है। यह गेहूं की बुवाई से पहले नमी बनाए रखने के लिए बहुत उपयुक्त है।',
             news2Full: 'कृषि मंत्रालय ने सौर ऊर्जा से चलने वाले ड्रिप सिंचाई सिस्टम के लिए 50% प्रत्यक्ष पूंजी सब्सिडी की घोषणा की है।',
-            news3Full: 'बढ़ती लागत को ध्यान में रखते हुए केंद्र सरकार ने गेहूं के न्यूनतम समर्थन मूल्य (MSP) में 7% की वृद्धि को मंजूरी दी है।'
+            news3Full: 'बढ़ती लागत को ध्यान में रखते हुए केंद्र सरकार ने गेहूं के न्यूनतम समर्थन मूल्य (MSP) में 7% की वृद्धि को मंजूरी दी है।'
         },
         te: {
             appTitle: 'కిసాన్ సాథీ',
@@ -313,7 +313,7 @@
             greetingEvening: 'மாலை வணக்கம், ஹர்ஜிந்தர் சிங்!',
             subGreeting: 'இன்றைய உங்கள் விவசாய கண்ணோட்டம் இதோ.',
             recMandiTag: 'பரிந்துரைக்கப்பட்ட சந்தை (குறைந்த வரிசை)',
-            fastEntryBadge: 'வேகமான பிரவேசம் ಲभ್ಯಮ್',
+            fastEntryBadge: 'వేగవంతమైన ప్రవేశం ಲಭ್ಯම්',
             mandiCenterName: 'தஹ்மி கலான் துணை மையம்',
             capQueueStatus: 'கொள்ளளவு & வரிசை நிலை',
             trucksWaiting: '(2 லாரிகள் காத்திருக்கின்றன)',
@@ -578,7 +578,13 @@
             aboutFeat2Title: 'سمارٹ قطار بکنگ',
             aboutFeat2Desc: 'انتظار سے بچنے کے لیے پہلے سے سلاٹ بک کریں۔',
             aboutFeat3Title: 'ڈیجیٹل ریکارڈز',
-            aboutFeat3Desc: 'اپنے KCC اور سیلز کے تمام ریکارڈز تک رسائی حاصل کریں۔'
+            aboutFeat3Desc: 'اپنے KCC اور سیلز کے تمام ریکارڈز تک رسائی حاصل کریں۔',
+            modalNewsTitle: 'تمام زرعی خبریں اور موسمی ہدایات',
+            readMore: 'مکمل تفصیلات دیکھیں',
+            closeModal: 'بند کریں',
+            news1Full: 'محکمہ موسمیات نے ہلکی بارش کا امکان ظاہر کیا ہے۔',
+            news2Full: 'ڈرپ آبپاشی کے نظام پر 50 فیصد سبسڈی کا اعلان کیا گیا ہے۔',
+            news3Full: 'گندم کی سرکاری قیمت (MSP) میں 7 فیصد اضافہ کیا گیا ہے۔'
         }
     },
     t(key) {
@@ -598,7 +604,7 @@
     async function enforceLogin() {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) {
-            window.location.href = 'index.html';
+            window.location.href = 'login.html';
         }
     }
     enforceLogin();
@@ -1066,7 +1072,7 @@
 </section>
 </main>
 
-<!-- Modal for All News & Updates -->
+<!-- Modal for All News & Updates (Expanded with 5 comprehensive items) -->
 <div x-show="showAllNews" x-transition.opacity class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 md:p-8" style="display: none;">
 <div @click.outside="showAllNews = false" class="frosted-pearl w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-[2.5rem] p-6 md:p-10 flex flex-col gap-6 shadow-2xl relative">
 <div class="flex justify-between items-center border-b border-black/10 pb-4">
@@ -1106,7 +1112,7 @@
 <p class="text-xs text-on-surface-variant line-clamp-2" x-text="t('news3Desc')">Wheat MSP rises by 7% for the upcoming procurement season.</p>
 </div>
 </div>
-<!-- Modal Item 4 -->
+<!-- Modal Item 4 (New) -->
 <div @click="showAllNews = false; selectedNews = { tag: t('news4Tag'), title: t('news4Title'), desc: t('news4Full'), img: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=800&auto=format&fit=crop' }" class="rounded-2xl bg-white/70 border border-black/5 overflow-hidden flex flex-col cursor-pointer hover:shadow-xl hover:scale-[1.02] transition-all">
 <div class="h-36 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=800&auto=format&fit=crop')"></div>
 <div class="p-4 flex flex-col gap-2 flex-grow">
@@ -1115,7 +1121,7 @@
 <p class="text-xs text-on-surface-variant line-clamp-2" x-text="t('news4Desc')">India crosses 1,000 lakh hectares in Kharif sowing with increased acreage in pulses.</p>
 </div>
 </div>
-<!-- Modal Item 5 -->
+<!-- Modal Item 5 (New) -->
 <div @click="showAllNews = false; selectedNews = { tag: t('news5Tag'), title: t('news5Title'), desc: t('news5Full'), img: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=800&auto=format&fit=crop' }" class="rounded-2xl bg-white/70 border border-black/5 overflow-hidden flex flex-col cursor-pointer hover:shadow-xl hover:scale-[1.02] transition-all">
 <div class="h-36 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=800&auto=format&fit=crop')"></div>
 <div class="p-4 flex flex-col gap-2 flex-grow">
