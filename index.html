@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-    <title>Kisan Konnect - Login & Sign Up</title>
+    <title>Kisan Saathi - Login & Sign Up</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <!-- Alpine.js for interactivity -->
@@ -82,9 +82,9 @@
 
         <!-- Logo & Brand -->
         <div class="flex flex-col items-center mb-6 w-full pt-4 sm:pt-0">
-            <!-- FIXED LOGO WRAPPER WITH CIRCULAR CLIPPING -->
+            <!-- FIXED LOGO WRAPPER WITH EXACT CAPITAL "Logo.png" AND FALLBACK -->
             <div class="w-20 h-20 sm:w-24 sm:h-24 mb-3 rounded-full overflow-hidden flex items-center justify-center bg-white shadow-md border-2 border-white/50 relative flex-shrink-0">
-                <img alt="Kisan Konnect Logo" class="w-full h-full object-cover object-center" src="logo.png"/>
+                <img alt="Kisan Saathi Logo" class="w-full h-full object-cover object-center" src="Logo.png" onerror="this.src='https://images.unsplash.com/photo-1595974482597-4787dc64de9c?w=200&auto=format&fit=crop&q=80'"/>
             </div>
 
             <!-- INDIAN FLAG COLOR-FADING GRADIENT TEXT -->
@@ -255,7 +255,7 @@
                         <input x-model="phone" 
                                type="tel"
                                class="block w-full pl-12 pr-4 py-4 bg-black/30 border border-white/30 rounded-xl text-white text-lg placeholder-gray-300 focus:ring-2 focus:ring-[#FF9933] focus:border-[#FF9933] focus:outline-none transition-shadow shadow-sm" 
-                               :placeholder="lang === 'en' ? 'Enter Mobile Number' : (lang === 'pa' ? 'ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ' : (lang === 'hi' ? 'मोबाइल नंबर दर्ज करें' : (lang === 'te' ? 'మొబైల్ నంబర్‌ను నమోదు చేయండి' : (lang === 'ta' ? 'மொபைல் எண்ணை உள்ளிடவும்' : (lang === 'ml' ? 'മൊബൈൽ നമ്പർ നൽകുക' : (lang === 'kn' ? 'ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮूदಿಸಿ' : 'موبائل نمبر درج کریں'))))))" 
+                               :placeholder="lang === 'en' ? 'Enter Mobile Number' : (lang === 'pa' ? 'ਮੋਬਾਈਲ ਨੰਬਰ ਦਰਜ ਕਰੋ' : (lang === 'hi' ? 'मोबाइल नंबर दर्ज करें' : (lang === 'te' ? 'మొబైల్ నంబర్‌ను నమోదు చేయండి' : (lang === 'ta' ? 'மொபைல் எண்ணை உள்ளிடவும்' : (lang === 'ml' ? 'മൊബൈൽ നമ്പർ നൽകുക' : (lang === 'kn' ? 'ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ' : 'موبائل نمبر درج کریں'))))))" 
                                required/>
                     </div>
                     <p class="text-xs text-gray-200 text-center">
@@ -384,7 +384,7 @@
                 <span x-show="lang === 'kn'">ಗೌಪ್ಯತಾ ನೀತಿ</span>
                 <span x-show="lang === 'ur'">رازداری کی پالیسی</span>
             </a>
-            <span x-show="lang === 'pa'">ਨਾਲ ਸਹਿમત ਹੋ।</span>
+            <span x-show="lang === 'pa'">ਨਾਲ ਸਹਿਮਤ ਹੋ।</span>
             <span x-show="lang === 'hi'">के सहमत हैं।</span>
         </p>
     </div>
@@ -460,7 +460,7 @@
                         } else {
                             if (!this.signupPhone) {
                                 this.isError = true;
-                                this.message = this.lang === 'en' ? 'Please enter your phone number.' : (this.lang === 'pa' ? 'ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ ਫੋਨ ਨੰਬਰ ਦਰਜ ਕਰੋ।' : (this.lang === 'hi' ? 'कृपया अपना फोन नंबर दर्ज करें।' : (this.lang === 'te' ? 'దయచేసి మీ ఫోన్ నంబర్‌ను నమోదు చేయండి.' : (this.lang === 'ta' ? 'உங்கள் தொலைபேசி எண்ணை உள்ளிடவும்.' : (this.lang === 'ml' ? 'നിങ്ങളുടെ ഫോൺ നമ്പർ നൽകുക.' : (this.lang === 'kn' ? 'ದಯವಿಟ್ಟು ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮूदಿಸಿ.' : 'براہ کرم اپنا فون نمبر درج کریں۔'))))));
+                                this.message = this.lang === 'en' ? 'Please enter your phone number.' : (this.lang === 'pa' ? 'ਕਿਰਪਾ ਕਰਕੇ ਆਪਣਾ ਫੋਨ ਨੰਬਰ ਦਰਜ ਕਰੋ।' : (this.lang === 'hi' ? 'कृपया अपना फोन नंबर दर्ज करें।' : (this.lang === 'te' ? 'దయచేసి మీ ఫోన్ నంబర్‌ను నమోదు చేయండి.' : (this.lang === 'ta' ? 'உங்கள் தொலைபேசி எண்ணை உள்ளிடவும்.' : (this.lang === 'ml' ? 'നിങ്ങളുടെ ഫോൺ നമ്പർ നൽകുക.' : (this.lang === 'kn' ? 'ದಯವಿಟ್ಟು ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆಯನ್ನು ನಮೂದಿಸಿ.' : 'براہ کرم اپنا فون نمبر درج کریں۔'))))));
                                 return;
                             }
                             setTimeout(() => {
@@ -498,7 +498,7 @@
                         }
 
                         this.isError = true;
-                        this.message = this.lang === 'en' ? 'Invalid credentials. Check email/password.' : (this.lang === 'pa' ? 'ਗਲਤ ਵੇਰਵੇ। ਈਮੇਲ/ਪਾਸਵਰਡ ਚੈੱਕ ਕਰੋ।' : (this.lang === 'hi' ? 'अमान्य विवरण। ईमेल/पासवर्ड जांचें।' : (this.lang === 'te' ? 'చెల్లని ఆధారాలు. ఇమెయిల్/పాస్‌వర్డ్‌ని తనిఖీ చేయండి।' : (this.lang === 'ta' ? 'தவறான சான்றுகள். மின்னஞ்சல்/கடவுச்சொல்லைச் சரிபார்க்கவும்.' : (this.lang === 'ml' ? 'തെറ്റായ വിവരങ്ങൾ. ഇമെയിൽ/പാസ്‌വേഡ് പരിശോധിക്കുക.' : (this.lang === 'kn' ? 'ಅಮೂರ್ತ ವಿವರಗಳು. ಇಮೇಲ್/ಪಾಸ್‌ವರ್ಡ್ ಪರಿಶೀಲಿಸಿ.' : 'غلط تفصیلات۔ ای میل/پاس ورڈ چیک کریں۔'))))));
+                        this.message = this.lang === 'en' ? 'Invalid credentials. Check email/password.' : (this.lang === 'pa' ? 'ਗਲਤ ਵੇਰਵੇ। ਈਮੇਲ/ਪਾਸਵਰਡ ਚੈੱਕ ਕਰੋ।' : (this.lang === 'hi' ? 'अमान्य विवरण। ईमेल/पासवर्ड जांचें।' : (this.lang === 'te' ? 'చెల్లని ఆధారాలు. ఇమెయిల్/పాస్‌వర్డ్‌ని తనిਖీ చేయండి।' : (this.lang === 'ta' ? 'தவறான சான்றுகள். மின்னஞ்சல்/கடவுச்சொல்லைச் சரிபார்க்கவும்.' : (this.lang === 'ml' ? 'തെറ്റായ വിവരങ്ങൾ. ഇമെയിൽ/പാസ്‌വേഡ് പരിശോധിക്കുക.' : (this.lang === 'kn' ? 'ಅಮೂರ್ತ ವಿವರಗಳು. ಇಮೇಲ್/ಪಾಸ್‌ವರ್ಡ್ ಪರಿಶೀಲಿಸಿ.' : 'غلط تفصیلات۔ ای میل/پاس ورڈ چیک کریں۔'))))));
                     } else {
                         this.message = this.lang === 'en' ? 'Success! Redirecting...' : (this.lang === 'pa' ? 'ਸਫਲਤਾ! ਰੀਡਾਇਰੈਕਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...' : (this.lang === 'hi' ? 'सफलता! रीडायरेक्ट किया जा रहा है...' : (this.lang === 'te' ? 'విజయం! దారి మళ్లిస్తోంది...' : (this.lang === 'ta' ? 'வெற்றி! திருப்பி விடப்படுகிறது...' : (this.lang === 'ml' ? 'വിജയം! റീഡയറക്‌ടുന്നു...' : (this.lang === 'kn' ? 'ಯಶಸ್ಸು! ಮರುನಿರ್ದೇಶಿಸಲಾಗುತ್ತಿದೆ...' : 'کامیابی! ری ڈائریکٹ کیا جا رہا ہے...'))))));
                         setTimeout(() => {
