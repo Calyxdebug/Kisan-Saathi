@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html class="light" lang="en">
+<html class="light" lang="en" x-data="queueApp()">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-    <title>Kisan Konnect - Live Queue & Procurement Centers</title>
+    <title>Kisan Saathi - Live Queue & Procurement Centers</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
@@ -113,30 +113,212 @@
         }
         .shadow-level-1 { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); }
         .shadow-level-2 { box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08); }
-        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
-        
-        /* Ensure Leaflet controls stay below your top bar */
         .leaflet-top, .leaflet-bottom { z-index: 20 !important; }
     </style>
     
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('queueApp', () => ({
-                lang: 'en',
-                activeTab: 'map',
+                activeTab: 'dashboard',
                 mapInstance: null,
-                // Coordinates set to Dahmi Kalan region
                 userLat: 26.8420,
                 userLng: 75.5650,
-                userLocationText: 'Locating via GPS...',
-                selectedMandi: { name: 'Bagru Mandi', distance: '5.2 km away', wait: '5 mins wait', statusClass: 'bg-ledger-green', lat: 26.8150, lng: 75.5450 },
+                userLocationText: 'Dahmi Kalan (GPS Synced)',
+                lang: 'en',
+                translations: {
+                    en: {
+                        appTitle: 'Kisan Saathi',
+                        liveMap: 'Live Map',
+                        tokenQueue: 'Token & Queue',
+                        activeTokenTitle: 'Active Token & Live Queue',
+                        queueStatus: 'Queue Status',
+                        farmersAhead: 'farmers ahead of you',
+                        waitingAt: 'Waiting at',
+                        estWait: 'Est. wait:',
+                        allCenters: 'All Procurement Centers & Live Queues',
+                        bookNewSlot: '+ Book New Slot',
+                        viewMap: 'View Map',
+                        bookSlot: 'Book Slot',
+                        navigate: 'Navigate',
+                        home: 'Home',
+                        mandi: 'Mandi',
+                        queue: 'Book Slot',
+                        profile: 'Profile'
+                    },
+                    pa: {
+                        appTitle: 'ਕਿਸਾਨ ਸਾਥੀ',
+                        liveMap: 'ਲਾਈਵ ਨਕਸ਼ਾ',
+                        tokenQueue: 'ਟੋਕਨ ਅਤੇ ਕਤਾਰ',
+                        activeTokenTitle: 'ਸਰਗਰਮ ਟੋਕਨ ਅਤੇ ਲਾਈਵ ਕਤਾਰ',
+                        queueStatus: 'ਕਤਾਰ ਸਥਿਤੀ',
+                        farmersAhead: 'ਕਿਸਾਨ ਤੁਹਾਡੇ ਤੋਂ ਅੱਗੇ ਹਨ',
+                        waitingAt: 'ਤੇ ਉਡੀਕ ਕਰ ਰਹੇ ਹਾਂ',
+                        estWait: 'ਅੰਦਾਜ਼ਨ ਉਡੀਕ:',
+                        allCenters: 'ਸਾਰੇ ਖਰੀਦ ਕੇਂਦਰ ਅਤੇ ਲਾਈਵ ਕਤਾਰਾਂ',
+                        bookNewSlot: '+ ਨਵਾਂ ਸਲਾਟ ਬੁੱਕ ਕਰੋ',
+                        viewMap: 'ਨਕਸ਼ਾ ਦੇਖੋ',
+                        bookSlot: 'ਸਲਾਟ ਬੁੱਕ ਕਰੋ',
+                        navigate: 'ਨੇਵੀਗੇਟ ਕਰੋ',
+                        home: 'ਘਰ',
+                        mandi: 'ਮੰਡੀ',
+                        queue: 'ਸਲਾਟ ਬੁੱਕ ਕਰੋ',
+                        profile: 'ਪ੍ਰੋਫਾਈਲ'
+                    },
+                    hi: {
+                        appTitle: 'किसान साथी',
+                        liveMap: 'लाइव मानचित्र',
+                        tokenQueue: 'टोकन और कतार',
+                        activeTokenTitle: 'सक्रिय टोकन और लाइव कतार',
+                        queueStatus: 'कतार स्थिति',
+                        farmersAhead: 'किसान आपसे आगे हैं',
+                        waitingAt: 'पर प्रतीक्षा कर रहे हैं',
+                        estWait: 'अनुमानित प्रतीक्षा:',
+                        allCenters: 'सभी खरीद केंद्र और लाइव कतारें',
+                        bookNewSlot: '+ नया स्लॉट बुक करें',
+                        viewMap: 'मैप देखें',
+                        bookSlot: 'स्लॉट बुक करें',
+                        navigate: 'नेविगेट करें',
+                        home: 'होम',
+                        mandi: 'मंडी',
+                        queue: 'स्लॉट बुक करें',
+                        profile: 'प्रोफाइल'
+                    },
+                    te: {
+                        appTitle: 'కిసాన్ సాథీ',
+                        liveMap: 'లైవ్ మ్యాప్',
+                        tokenQueue: 'టోకెన్ & క్యూ',
+                        activeTokenTitle: 'యాక్టివ్ టోకెన్ & లైవ్ క్యూ',
+                        queueStatus: 'క్యూ స్థితి',
+                        farmersAhead: 'రైతులు మీ ముందున్నారు',
+                        waitingAt: 'వద్ద వేచి ఉన్నారు',
+                        estWait: 'అంచనా వేచి ఉండే సమయం:',
+                        allCenters: 'అన్ని కొనుగోలు కేంద్రాలు & లైవ్ క్యూలు',
+                        bookNewSlot: '+ కొత్త స్లాట్ బుక్ చేయండి',
+                        viewMap: 'మ్యాప్ చూడండి',
+                        bookSlot: 'స్లాట్ బుక్ చేయండి',
+                        navigate: 'నావిగేట్ చేయండి',
+                        home: 'హోమ్',
+                        mandi: 'మండి',
+                        queue: 'స్లాట్ బుక్ చేయండి',
+                        profile: 'ప్రొఫైల్'
+                    },
+                    ta: {
+                        appTitle: 'கிசான் சாதி',
+                        liveMap: 'நேரலை வரைபடம்',
+                        tokenQueue: 'டோக்கன் & வரிசை',
+                        activeTokenTitle: 'செயலில் உள்ள டோக்கன் & நேரலை வரிசை',
+                        queueStatus: 'வரிசை நிலை',
+                        farmersAhead: 'விவசாயிகள் உங்களுக்கு முன்னால் உள்ளனர்',
+                        waitingAt: 'இல் காத்திருக்கிறது',
+                        estWait: 'மதிப்பிடப்பட்ட காத்திருப்பு:',
+                        allCenters: 'அனைத்து கொள்முதல் மையங்கள் & நேரலை வரிசைகள்',
+                        bookNewSlot: '+ புதிய ஸ்லாட்டை முன்பதிவு செய்',
+                        viewMap: 'வரைபடம் காண்க',
+                        bookSlot: 'ஸ்லாட் பதிவு செய்',
+                        navigate: 'செல்ல வழி',
+                        home: 'முகப்பு',
+                        mandi: 'மண்டி',
+                        queue: 'ஸ்லாட் பதிவு',
+                        profile: 'சுயவிவரம்'
+                    },
+                    ml: {
+                        appTitle: 'കിസാൻ സാഥി',
+                        liveMap: 'ലൈവ് മാപ്പ്',
+                        tokenQueue: 'ടോക്കൺ & ക്യൂ',
+                        activeTokenTitle: 'സജീവമായ ടോക്കൺ & ലൈവ് ക്യൂ',
+                        queueStatus: 'ക്യൂ നില',
+                        farmersAhead: 'കർഷകർ നിങ്ങൾക്ക് മുന്നിലുണ്ട്',
+                        waitingAt: 'സ്ഥലത്ത് കാത്തിരിക്കുന്നു',
+                        estWait: 'പ്രതീക്ഷിക്കുന്ന കാത്തിരിപ്പ്:',
+                        allCenters: 'എല്ലാ പ്രൊക്യുർമെന്റ് കേന്ദ്രങ്ങളും ക്യൂകളും',
+                        bookNewSlot: '+ പുതിയ സ്ലോട്ട് ബുക്ക് ചെയ്യുക',
+                        viewMap: 'മാപ്പ് കാണുക',
+                        bookSlot: 'സ്ലോട്ട് ബുക്ക് ചെയ്യുക',
+                        navigate: 'വഴി കണ്ടെത്തുക',
+                        home: 'ഹോം',
+                        mandi: 'മണ്ടി',
+                        queue: 'സ്ലോട്ട് ബുക്ക് ചെയ്യുക',
+                        profile: 'പ്രൊഫൈൽ'
+                    },
+                    kn: {
+                        appTitle: 'ಕಿಸಾನ್ ಸಾಥಿ',
+                        liveMap: 'ಲೈವ್ ನಕ್ಷೆ',
+                        tokenQueue: 'ಟೋಕನ್ ಮತ್ತು ಸಾಲು',
+                        activeTokenTitle: 'ಸಕ್ರಿಯ ಟೋಕನ್ ಮತ್ತು ಲೈವ್ ಕ್ಯೂ',
+                        queueStatus: 'ಕ್ಯೂ ಸ್ಥಿತಿ',
+                        farmersAhead: 'ರೈತರು ನಿಮ್ಮ ಮುಂದಿದ್ದಾರೆ',
+                        waitingAt: 'ನಲ್ಲಿ ಕಾಯಲಾಗುತ್ತಿದೆ',
+                        estWait: 'ಅಂದಾಜು ಕಾಯುವಿಕೆ:',
+                        allCenters: 'ಎಲ್ಲಾ ಖರೀದಿ ಕೇಂದ್ರಗಳು ಮತ್ತು ಲೈವ್ ಕ್ಯೂಗಳು',
+                        bookNewSlot: '+ ಹೊಸ ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ',
+                        viewMap: 'ನಕ್ಷೆ ನೋಡಿ',
+                        bookSlot: 'ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ',
+                        navigate: 'ನ್ಯಾವಿಗೇಟ್ ಮಾಡಿ',
+                        home: 'ಮುಖಪುಟ',
+                        mandi: 'ಮಂಡಿ',
+                        queue: 'ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ',
+                        profile: 'ಪ್ರೊಫೈಲ್'
+                    },
+                    ur: {
+                        appTitle: 'کیسان ساتھی',
+                        liveMap: 'لائیو نقشہ',
+                        tokenQueue: 'ٹوکن اور قطار',
+                        activeTokenTitle: 'فعال ٹوکن اور لائیو قطار',
+                        queueStatus: 'قطار کی حیثیت',
+                        farmersAhead: 'کسان آپ سے آگے ہیں',
+                        waitingAt: 'پر انتظار کر رہے ہیں',
+                        estWait: 'تخمینہ انتظار:',
+                        allCenters: 'تمام خریداری کے مراکز اور لائیو قطاریں',
+                        bookNewSlot: '+ نیا سلاٹ بک کریں',
+                        viewMap: 'نقشہ دیکھیں',
+                        bookSlot: 'سلاٹ بک کریں',
+                        navigate: 'تشریف لے جائیں',
+                        home: 'ہوم',
+                        mandi: 'منڈی',
+                        queue: 'سلاٹ بک کریں',
+                        profile: 'پروفائل'
+                    }
+                },
+                t(key) {
+                    return (this.translations[this.lang] && this.translations[this.lang][key]) || this.translations['en'][key] || key;
+                },
+                selectedMandi: { name: 'Bagru Mandi', distance: '5.2 km away', wait: '5 mins wait', queueCount: 4, statusClass: 'bg-ledger-green', lat: 26.8150, lng: 75.5450 },
                 mandis: [
-                    { name: 'Bagru Mandi', distance: '5.2 km away', wait: '5 mins wait', statusClass: 'bg-ledger-green', color: '#10b981', lat: 26.8150, lng: 75.5450 },
-                    { name: 'Bhakrota Center', distance: '8.4 km away', wait: '25 mins wait', statusClass: 'bg-kcc-amber', color: '#f59e0b', lat: 26.8650, lng: 75.6600 },
-                    { name: 'Jaipur Main Mandi', distance: '22.1 km away', wait: '55 mins wait', statusClass: 'bg-error', color: '#ba1a1a', lat: 26.9124, lng: 75.7873 }
+                    { name: 'Bagru Mandi', distance: '5.2 km away', wait: '5 mins wait', queueCount: 4, statusClass: 'bg-ledger-green', color: '#10b981', lat: 26.8150, lng: 75.5450 },
+                    { name: 'Bhakrota Center', distance: '8.4 km away', wait: '25 mins wait', queueCount: 12, statusClass: 'bg-kcc-amber', color: '#f59e0b', lat: 26.8650, lng: 75.6600 },
+                    { name: 'Jaipur Main Mandi', distance: '22.1 km away', wait: '55 mins wait', queueCount: 28, statusClass: 'bg-error', color: '#ba1a1a', lat: 26.9124, lng: 75.7873 },
+                    { name: 'Dahmi Kalan Sub-Center', distance: '1.2 km away', wait: '2 mins wait', queueCount: 2, statusClass: 'bg-ledger-green', color: '#10b981', lat: 26.8420, lng: 75.5650 },
+                    { name: 'Ajmer Road Grain Yard', distance: '14.5 km away', wait: '35 mins wait', queueCount: 19, statusClass: 'bg-kcc-amber', color: '#f59e0b', lat: 26.8850, lng: 75.6120 }
                 ],
+                crops: [
+                    'Wheat Procurement',
+                    'Paddy Storage',
+                    'Mustard Sale',
+                    'Soybean Sale',
+                    'Barley (Jau)',
+                    'Chickpea (Chana)',
+                    'Pearl Millet (Bajra)',
+                    'Cotton (Kapas)',
+                    'Maize (Makka)'
+                ],
+                activeToken: {
+                    number: 'Token #04',
+                    center: 'Bagru Mandi',
+                    category: 'Wheat Procurement',
+                    queuePosition: 2,
+                    wait: '5 mins',
+                    time: '25 Oct, 10:30 AM'
+                },
+                showBookingModal: false,
+                bookingStep: 1,
+                bookingCenter: 'Bagru Mandi',
+                bookingCategory: 'Wheat Procurement',
+                bookingDate: '',
+                bookingTimeSlot: '09:00 AM - 11:00 AM',
+                bookingQty: '100',
+                successAlert: '',
+
                 init() {
-                    // Try to get real GPS
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(
                             (position) => {
@@ -146,15 +328,19 @@
                                 this.initMap();
                             },
                             (error) => {
+                                this.userLat = 26.8420;
+                                this.userLng = 75.5650;
                                 this.userLocationText = 'Dahmi Kalan (Default)';
                                 this.initMap();
                             }
                         );
                     } else {
+                        this.userLat = 26.8420;
+                        this.userLng = 75.5650;
+                        this.userLocationText = 'Dahmi Kalan (Default)';
                         this.initMap();
                     }
 
-                    // Watch for tab changes to resize map properly
                     this.$watch('activeTab', (value) => {
                         if (value === 'map' && this.mapInstance) {
                             setTimeout(() => { this.mapInstance.invalidateSize(); }, 100);
@@ -164,23 +350,29 @@
                 initMap() {
                     if (this.mapInstance) return;
                     
-                    // Initialize Leaflet map, zoom set to 12 to fit nearby centers
-                    this.mapInstance = L.map('real-interactive-map', { zoomControl: false }).setView([this.userLat, this.userLng], 12);
+                    this.mapInstance = L.map('real-interactive-map', { zoomControl: false }).setView([this.userLat, this.userLng], 13);
                     
-                    // Add OpenStreetMap layer
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         maxZoom: 19,
                     }).addTo(this.mapInstance);
 
-                    // Add Custom Marker for User
                     const userIcon = L.divIcon({
-                        className: 'user-pin',
-                        html: '<div class="w-5 h-5 bg-transaction-blue rounded-full pulse-dot border-2 border-white shadow-md"></div>',
-                        iconSize: [20, 20]
+                        className: 'user-current-pin',
+                        html: `
+                            <div class="flex flex-col items-center relative">
+                                <div class="bg-transaction-blue text-white px-2.5 py-0.5 rounded-full shadow-lg border border-white mb-1 font-label text-[10px] font-bold whitespace-nowrap">
+                                    Your Location
+                                </div>
+                                <div class="w-6 h-6 bg-transaction-blue rounded-full pulse-dot border-3 border-white shadow-xl flex items-center justify-center">
+                                    <div class="w-2 h-2 bg-white rounded-full"></div>
+                                </div>
+                            </div>
+                        `,
+                        iconSize: [100, 60],
+                        iconAnchor: [50, 45]
                     });
-                    L.marker([this.userLat, this.userLng], { icon: userIcon }).addTo(this.mapInstance);
+                    L.marker([this.userLat, this.userLng], { icon: userIcon, zIndexOffset: 1000 }).addTo(this.mapInstance);
 
-                    // Add Custom Colored Markers for Centers
                     this.mandis.forEach(mandi => {
                         const mandiIcon = L.divIcon({
                             className: 'mandi-pin',
@@ -203,22 +395,50 @@
                             this.mapInstance.setView([mandi.lat, mandi.lng], 13);
                         });
                     });
+                },
+                getQueueCountForSelectedCenter() {
+                    const found = this.mandis.find(m => m.name === this.bookingCenter);
+                    return found ? found.queueCount : 3;
+                },
+                openBookingFor(centerName) {
+                    this.bookingCenter = centerName || 'Bagru Mandi';
+                    this.bookingStep = 1;
+                    this.showBookingModal = true;
+                },
+                confirmBooking() {
+                    if (!this.bookingDate) {
+                        alert('Please select a date.');
+                        return;
+                    }
+                    const randomTokenNum = Math.floor(Math.random() * 50) + 10;
+                    this.activeToken = {
+                        number: `Token #${randomTokenNum}`,
+                        center: this.bookingCenter,
+                        category: this.bookingCategory,
+                        queuePosition: this.getQueueCountForSelectedCenter() + 1,
+                        wait: '10 mins',
+                        time: `${this.bookingDate}, ${this.bookingTimeSlot.split(' - ')[0]}`
+                    };
+
+                    this.showBookingModal = false;
+                    this.successAlert = `Successfully booked slot at ${this.bookingCenter}! Token #${randomTokenNum} generated.`;
+                    setTimeout(() => { this.successAlert = ''; }, 6000);
                 }
             }));
         });
     </script>
 </head>
-<body class="bg-background text-on-background font-body h-screen w-screen overflow-hidden flex flex-col relative" x-data="queueApp">
+<body class="bg-background text-on-background font-body min-h-screen flex flex-col relative" x-data="queueApp()">
 
-    <div id="real-interactive-map" class="absolute inset-0 z-0" x-show="activeTab === 'map'"></div>
+    <div id="real-interactive-map" class="fixed inset-0 z-0" x-show="activeTab === 'map'"></div>
 
     <header class="fixed top-0 left-0 w-full z-50 bg-primary-container shadow-md flex items-center px-4 h-16 justify-between">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm overflow-hidden border border-white/20">
-                <img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Konnect Logo" onerror="this.src='https://images.unsplash.com/photo-1595974482597-4787dc64de9c?w=100&auto=format&fit=crop&q=60'"/>
+                <img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Saathi Logo" onerror="this.src='https://images.unsplash.com/photo-1595974482597-4787dc64de9c?w=100&auto=format&fit=crop&q=60'"/>
             </div>
             <div>
-                <h1 class="font-headline text-lg font-bold text-on-primary tracking-tight">KISAN KONNECT</h1>
+                <h1 class="font-headline text-lg font-bold text-on-primary tracking-tight" x-text="t('appTitle')"></h1>
                 <p class="text-[10px] text-primary-fixed-dim flex items-center gap-1">
                     <span class="material-symbols-outlined text-[12px]">my_location</span>
                     <span x-text="userLocationText"></span>
@@ -242,165 +462,272 @@
 
     <div class="fixed top-20 left-0 w-full z-40 px-4 flex justify-center pointer-events-none">
         <div class="bg-surface-glass backdrop-blur-md rounded-full p-1.5 shadow-lg border border-border-subtle flex gap-2 pointer-events-auto">
-            <button @click="activeTab = 'map'" :class="activeTab === 'map' ? 'bg-primary-container text-white font-bold' : 'text-on-surface-variant'" class="px-5 py-2 rounded-full text-xs transition-all flex items-center gap-1.5">
+            <button @click="activeTab = 'map'" :class="activeTab === 'map' ? 'bg-primary-container text-white font-bold' : 'text-on-surface-variant'" class="px-5 py-2 rounded-full text-xs transition-all flex items-center gap-1.5 cursor-pointer">
                 <span class="material-symbols-outlined text-[16px]">map</span>
-                <span x-show="lang === 'en'">Live Map</span>
-                <span x-show="lang === 'pa'">ਲਾਈਵ ਨਕਸ਼ਾ</span>
-                <span x-show="lang === 'hi'">लाइव मानचित्र</span>
+                <span x-text="t('liveMap')"></span>
             </button>
-            <button @click="activeTab = 'dashboard'" :class="activeTab === 'dashboard' ? 'bg-primary-container text-white font-bold' : 'text-on-surface-variant'" class="px-5 py-2 rounded-full text-xs transition-all flex items-center gap-1.5">
+            <button @click="activeTab = 'dashboard'" :class="activeTab === 'dashboard' ? 'bg-primary-container text-white font-bold' : 'text-on-surface-variant'" class="px-5 py-2 rounded-full text-xs transition-all flex items-center gap-1.5 cursor-pointer">
                 <span class="material-symbols-outlined text-[16px]">confirmation_number</span>
-                <span x-show="lang === 'en'">Token & Queue</span>
-                <span x-show="lang === 'pa'">ਟੋਕਨ ਅਤੇ ਕਤਾਰ</span>
-                <span x-show="lang === 'hi'">टोकन और कतार</span>
+                <span x-text="t('tokenQueue')"></span>
             </button>
         </div>
     </div>
 
-    <div class="absolute top-36 left-4 z-30 bg-surface-glass backdrop-blur-md rounded-xl p-3 shadow-lg border border-border-subtle flex flex-col gap-2 pointer-events-auto" x-show="activeTab === 'map'">
-        <div class="flex items-center gap-2 font-label text-xs text-on-surface-variant font-medium">
-            <span class="w-3 h-3 rounded-full bg-ledger-green shadow-sm"></span> < 15 mins (Fast)
-        </div>
-        <div class="flex items-center gap-2 font-label text-xs text-on-surface-variant font-medium">
-            <span class="w-3 h-3 rounded-full bg-kcc-amber shadow-sm"></span> 15 - 45 mins (Moderate)
-        </div>
-        <div class="flex items-center gap-2 font-label text-xs text-on-surface-variant font-medium">
-            <span class="w-3 h-3 rounded-full bg-error shadow-sm"></span> 45+ mins (Busy)
-        </div>
+    <!-- Success Alert Banner -->
+    <div x-show="successAlert" x-transition class="fixed top-28 left-1/2 -translate-x-1/2 z-50 bg-green-100 border border-green-400 text-green-800 px-6 py-3 rounded-xl shadow-xl text-xs font-bold flex items-center gap-2" style="display: none;">
+        <span class="material-symbols-outlined text-green-600">check_circle</span>
+        <span x-text="successAlert"></span>
     </div>
 
-    <main class="absolute inset-x-0 bottom-20 top-36 z-30 overflow-y-auto px-4 pointer-events-none flex flex-col justify-end pb-4">
+    <main class="pt-[90px] pb-[110px] px-4 md:px-8 max-w-[1200px] mx-auto relative z-30 flex flex-col gap-5 w-full" x-show="activeTab === 'dashboard'">
         
-        <div class="w-full max-w-md mx-auto bg-surface-glass backdrop-blur-md rounded-[24px] shadow-[0_10px_30px_rgba(13,23,69,0.15)] border border-border-subtle p-6 pointer-events-auto transform transition-all" x-show="activeTab === 'map'">
-            <div class="flex justify-between items-start mb-4">
-                <div>
-                    <h2 class="font-headline text-xl font-bold text-on-background mb-1" x-text="selectedMandi.name"></h2>
-                    <p class="font-body text-sm text-on-surface-variant flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[16px] text-transaction-blue">near_me</span> 
-                        <span x-text="selectedMandi.distance"></span>
-                    </p>
-                </div>
-                <div class="bg-surface-container-low px-3 py-1.5 rounded-full border border-border-subtle flex items-center gap-2 shadow-sm">
-                    <span class="w-2.5 h-2.5 rounded-full pulse-dot" :class="selectedMandi.statusClass"></span>
-                    <span class="font-label text-xs text-on-surface font-bold" x-text="selectedMandi.wait"></span>
-                </div>
+        <!-- ACTIVE TOKEN & QUEUE CARD ON TOP -->
+        <section class="bg-[#FFF4E6] rounded-[24px] p-5 md:p-6 shadow-level-1 relative overflow-hidden border border-amber-200">
+            <div class="absolute -right-10 -top-10 opacity-10 pointer-events-none">
+                <span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
             </div>
-            <div class="grid grid-cols-2 gap-3">
-                <button @click="window.open(`https://www.google.com/maps/dir/?api=1&destination=${selectedMandi.lat},${selectedMandi.lng}`, '_blank')" class="bg-primary-container text-on-primary w-full py-3 rounded-xl font-label text-sm font-bold flex justify-center items-center gap-2 active:scale-95 transition-transform shadow-md">
-                    <span class="material-symbols-outlined text-[18px]">navigation</span> Navigate
-                </button>
-                <button @click="activeTab = 'dashboard'" class="bg-white text-primary-container border border-primary-container/30 w-full py-3 rounded-xl font-label text-sm font-bold flex justify-center items-center gap-2 active:scale-95 transition-transform hover:bg-surface-container-low">
-                    Book Slot
-                </button>
-            </div>
-        </div>
-
-        <div class="w-full max-w-screen-xl mx-auto flex flex-col gap-5 pointer-events-auto bg-background min-h-full pb-10" x-show="activeTab === 'dashboard'" x-cloak>
-            
-            <section class="bg-[#FFF4E6] rounded-[24px] p-6 shadow-level-1 relative overflow-hidden border border-amber-200 mt-2">
-                <div class="absolute -right-10 -top-10 opacity-10">
-                    <span class="material-symbols-outlined text-[120px]" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+            <div class="relative z-10 flex flex-col gap-3">
+                <div class="flex flex-wrap justify-between items-center gap-2">
+                    <span class="font-label text-xs md:text-sm text-[#081240] uppercase tracking-wider font-bold" x-text="t('activeTokenTitle')"></span>
+                    <span class="bg-white/80 text-[#081240] px-3 py-1 rounded-full font-label text-xs font-extrabold shadow-sm">HARJINDER S. (PB-9842)</span>
                 </div>
-                <div class="relative z-10">
-                    <div class="flex justify-between items-start mb-2">
-                        <span class="font-label text-sm text-[#081240] uppercase tracking-wider font-semibold">
-                            <span x-show="lang === 'en'">Active Token</span>
-                            <span x-show="lang === 'pa'">ਸਰਗਰਮ ਟੋਕਨ</span>
-                            <span x-show="lang === 'hi'">सक्रिय टोकन</span>
-                        </span>
-                        <span class="bg-white/70 text-[#081240] px-2.5 py-1 rounded-full font-label text-xs font-bold shadow-sm">HARJINDER S.</span>
+                
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/60 p-4 rounded-2xl border border-amber-200/60">
+                    <div>
+                        <h2 class="font-headline text-[32px] md:text-[38px] font-bold text-[#081240] leading-none" x-text="activeToken.number"></h2>
+                        <p class="text-xs font-bold text-[#653e00] mt-1" x-text="activeToken.category"></p>
                     </div>
-                    <h2 class="font-headline text-[38px] font-bold text-[#081240] leading-none mb-3">Token #04</h2>
-                    <div class="bg-white/75 rounded-xl p-3.5 flex items-center gap-3 backdrop-blur-sm shadow-sm border border-white/60">
-                        <div class="w-10 h-10 rounded-full bg-[#081240] flex items-center justify-center flex-shrink-0 text-white">
-                            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">counter_2</span>
-                        </div>
+                    <div class="bg-white rounded-xl px-4 py-2.5 border border-amber-300 flex items-center gap-3 shadow-sm self-start sm:self-auto">
+                        <span class="material-symbols-outlined text-amber-600 text-[26px]">groups</span>
                         <div>
-                            <p class="font-body text-sm font-semibold text-[#081240]">
-                                <span x-show="lang === 'en'">Waiting at Bagru Mandi Counter 2</span>
-                                <span x-show="lang === 'pa'">ਬਗਰੂ ਮੰਡੀ ਕਾਊਂਟਰ 2 'ਤੇ ਉਡੀਕ</span>
-                                <span x-show="lang === 'hi'">बगरू मंडी काउंटर 2 पर प्रतीक्षा</span>
-                            </p>
-                            <p class="font-body text-xs text-on-surface-variant mt-0.5 flex items-center gap-1">
-                                <span class="material-symbols-outlined text-[14px]">schedule</span> 
-                                <span x-show="lang === 'en'">Est. wait: 5 mins</span>
-                                <span x-show="lang === 'pa'">ਅੰਦਾਜ਼ਨ ਉਡੀਕ: 5 ਮਿੰਟ</span>
-                                <span x-show="lang === 'hi'">अनुमानित प्रतीक्षा: 5 मिनट</span>
-                            </p>
+                            <p class="text-[10px] uppercase font-extrabold text-slate-500" x-text="t('queueStatus')"></p>
+                            <p class="text-xs font-black text-[#081240]"><span x-text="activeToken.queuePosition"></span> <span x-text="t('farmersAhead')"></span></p>
                         </div>
                     </div>
                 </div>
-            </section>
 
-            <section class="bg-white/90 backdrop-blur-md rounded-[24px] p-5 shadow-level-1 border border-border-subtle">
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-headline text-base font-bold text-primary-container">
-                        <span x-show="lang === 'en'">Nearby Procurement Centers</span>
-                        <span x-show="lang === 'pa'">ਨੇੜਲੇ ਖਰੀਦ ਕੇਂਦਰ</span>
-                        <span x-show="lang === 'hi'">निकटवर्ती खरीद केंद्र</span>
-                    </h3>
-                    <span class="font-label text-xs text-ledger-green font-bold flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-ledger-green pulse-dot"></span> GPS Synced
-                    </span>
+                <div class="bg-white/90 rounded-xl p-3.5 flex items-center gap-3 backdrop-blur-sm shadow-sm border border-white">
+                    <div class="w-10 h-10 rounded-full bg-[#081240] flex items-center justify-center flex-shrink-0 text-white">
+                        <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">storefront</span>
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="font-body text-sm font-bold text-[#081240] truncate"><span x-text="t('waitingAt')"></span> <span x-text="activeToken.center"></span></p>
+                        <p class="font-body text-xs text-on-surface-variant mt-0.5 flex flex-wrap items-center gap-2">
+                            <span class="flex items-center gap-1 font-medium"><span class="material-symbols-outlined text-[14px]">schedule</span> <span x-text="t('estWait')"></span> <span x-text="activeToken.wait"></span></span>
+                            <span>•</span>
+                            <span class="font-semibold text-slate-700" x-text="activeToken.time"></span>
+                        </p>
+                    </div>
                 </div>
-                <div class="flex flex-col gap-3">
-                    <template x-for="mandi in mandis">
-                        <div class="bg-surface-container-low rounded-xl p-3.5 flex items-center justify-between border border-border-subtle hover:border-transaction-blue transition-colors cursor-pointer">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white shadow-sm" :class="mandi.statusClass">
-                                    <span class="material-symbols-outlined text-[20px]">storefront</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-headline text-sm font-bold text-on-background" x-text="mandi.name"></h4>
-                                    <p class="font-body text-xs text-on-surface-variant flex items-center gap-1 mt-0.5">
-                                        <span class="material-symbols-outlined text-[12px]">near_me</span> <span x-text="mandi.distance"></span>
-                                    </p>
-                                </div>
+            </div>
+        </section>
+
+        <section class="bg-white/90 backdrop-blur-md rounded-[24px] p-5 shadow-level-1 border border-border-subtle">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-headline text-lg font-bold text-primary-container" x-text="t('allCenters')"></h3>
+                <button @click="openBookingFor('Bagru Mandi')" class="bg-primary-container text-white px-4 py-2 rounded-xl text-xs font-bold shadow-sm hover:opacity-90 cursor-pointer" x-text="t('bookNewSlot')"></button>
+            </div>
+            <div class="flex flex-col gap-3">
+                <template x-for="mandi in mandis">
+                    <div class="bg-surface-container-low rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between border border-border-subtle gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center text-white shadow-sm flex-shrink-0" :class="mandi.statusClass">
+                                <span class="material-symbols-outlined text-[24px]">storefront</span>
                             </div>
-                            <div class="text-right flex flex-col items-end gap-1">
-                                <span class="font-label text-xs font-bold px-2 py-0.5 rounded-full text-on-surface shadow-sm bg-white border border-border-subtle" x-text="mandi.wait"></span>
-                                <button @click="selectedMandi = mandi; activeTab = 'map'; mapInstance.setView([mandi.lat, mandi.lng], 13);" class="text-[11px] font-bold text-transaction-blue hover:underline flex items-center gap-0.5 z-10 relative">
-                                    View on Map →
-                                </button>
+                            <div>
+                                <h4 class="font-headline text-base font-bold text-on-background" x-text="mandi.name"></h4>
+                                <p class="font-body text-xs text-on-surface-variant flex items-center gap-2 mt-0.5 flex-wrap">
+                                    <span class="flex items-center gap-0.5"><span class="material-symbols-outlined text-[14px]">near_me</span> <span x-text="mandi.distance"></span></span>
+                                    <span>•</span>
+                                    <span class="font-semibold text-on-surface" x-text="mandi.wait"></span>
+                                    <span>•</span>
+                                    <span class="font-bold text-transaction-blue" x-text="mandi.queueCount + ' in queue'"></span>
+                                </p>
                             </div>
                         </div>
-                    </template>
-                </div>
-            </section>
-        </div>
+                        <div class="flex items-center gap-2 self-end md:self-auto">
+                            <button @click="selectedMandi = mandi; activeTab = 'map'; mapInstance.setView([mandi.lat, mandi.lng], 13);" class="px-3 py-2 bg-white border border-border-subtle text-on-surface rounded-lg text-xs font-bold hover:bg-slate-50 cursor-pointer" x-text="t('viewMap')"></button>
+                            <button @click="openBookingFor(mandi.name)" class="px-4 py-2 bg-primary-container text-white rounded-lg text-xs font-bold shadow-sm hover:opacity-90 cursor-pointer" x-text="t('bookSlot')"></button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </section>
     </main>
 
-    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden bg-white/90 backdrop-blur-xl rounded-t-2xl border-t border-white/40 shadow-2xl">
-        <a aria-label="Home" class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-3 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="index.html">
-            <span class="material-symbols-outlined text-[22px]">home</span>
-            <span class="font-label text-[11px] font-medium mt-0.5">
+    <!-- MAP VIEW CARD OVERLAY AT BOTTOM -->
+    <div class="w-full max-w-md mx-auto bg-surface-glass backdrop-blur-md rounded-[24px] shadow-[0_10px_30px_rgba(13,23,69,0.15)] border border-border-subtle p-6 fixed bottom-24 left-1/2 -translate-x-1/2 z-40" x-show="activeTab === 'map'" style="display: none;">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <h2 class="font-headline text-xl font-bold text-on-background mb-1" x-text="selectedMandi.name"></h2>
+                <p class="font-body text-sm text-on-surface-variant flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[16px] text-transaction-blue">near_me</span> 
+                    <span x-text="selectedMandi.distance"></span>
+                </p>
+            </div>
+            <div class="bg-surface-container-low px-3 py-1.5 rounded-full border border-border-subtle flex items-center gap-2 shadow-sm">
+                <span class="w-2.5 h-2.5 rounded-full pulse-dot" :class="selectedMandi.statusClass"></span>
+                <span class="font-label text-xs text-on-surface font-bold" x-text="selectedMandi.wait"></span>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+            <button @click="window.open(`https://maps.google.com/?q=${selectedMandi.lat},${selectedMandi.lng}`, '_blank')" class="bg-primary-container text-on-primary w-full py-3 rounded-xl font-label text-sm font-bold flex justify-center items-center gap-2 active:scale-95 transition-transform shadow-md cursor-pointer">
+                <span class="material-symbols-outlined text-[18px]">navigation</span> 
+                <span x-text="t('navigate')"></span>
+            </button>
+            <button @click="openBookingFor(selectedMandi.name)" class="bg-white text-primary-container border border-primary-container/30 w-full py-3 rounded-xl font-label text-sm font-bold flex justify-center items-center gap-2 active:scale-95 transition-transform hover:bg-surface-container-low cursor-pointer">
+                <span x-text="t('bookSlot')"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- BOOK SLOT MODAL -->
+    <div x-show="showBookingModal" x-transition.opacity class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4" style="display: none;">
+        <div @click.outside="showBookingModal = false" class="bg-white w-full max-w-lg rounded-[28px] p-6 md:p-8 flex flex-col gap-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <div>
+                    <span class="text-xs font-bold text-primary-container uppercase tracking-wider">Mandi Procurement</span>
+                    <h3 class="font-headline text-xl font-bold text-on-background">Book Slot & Live Queue Check</h3>
+                </div>
+                <button @click="showBookingModal = false" class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </button>
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <template x-if="bookingStep === 1">
+                    <div class="flex flex-col gap-4">
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-bold text-on-surface-variant">Select Procurement Center:</label>
+                            <select x-model="bookingCenter" class="p-3 rounded-xl border border-border-subtle bg-surface-container-low text-xs font-semibold focus:outline-none cursor-pointer">
+                                <template x-for="m in mandis">
+                                    <option :value="m.name" x-text="m.name + ' (' + m.distance + ' • ' + m.queueCount + ' farmers in queue)'"></option>
+                                </template>
+                            </select>
+                        </div>
+
+                        <!-- LIVE QUEUE PREVIEW BANNER -->
+                        <div class="bg-blue-50 border border-blue-200 p-3.5 rounded-xl flex items-center gap-3">
+                            <span class="material-symbols-outlined text-transaction-blue text-[24px]">info</span>
+                            <div class="text-xs text-on-surface">
+                                <p class="font-bold text-transaction-blue">Current Queue at <span x-text="bookingCenter"></span>:</p>
+                                <p class="text-slate-600 mt-0.5"><span class="font-bold text-on-background" x-text="getQueueCountForSelectedCenter()"></span> farmers currently waiting. Estimated wait time is minimal.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-bold text-on-surface-variant">Select Crop Category:</label>
+                            <select x-model="bookingCategory" class="p-3 rounded-xl border border-border-subtle bg-surface-container-low text-xs font-semibold focus:outline-none cursor-pointer">
+                                <template x-for="crop in crops">
+                                    <option :value="crop" x-text="crop"></option>
+                                </template>
+                            </select>
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-bold text-on-surface-variant">Expected Quantity (Quintals):</label>
+                            <input type="number" x-model="bookingQty" class="p-3 rounded-xl border border-border-subtle bg-surface-container-low text-xs font-semibold focus:outline-none" min="10" max="1000"/>
+                        </div>
+
+                        <button @click="bookingStep = 2" class="w-full bg-primary-container text-white py-3.5 rounded-xl font-bold text-sm shadow-md mt-2 cursor-pointer">
+                            Next: Choose Date & Time →
+                        </button>
+                    </div>
+                </template>
+
+                <template x-if="bookingStep === 2">
+                    <div class="flex flex-col gap-4">
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-bold text-on-surface-variant">Select Date:</label>
+                            <input type="date" x-model="bookingDate" class="p-3 rounded-xl border border-border-subtle bg-surface-container-low text-xs font-semibold focus:outline-none"/>
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-bold text-on-surface-variant">Select Time Slot:</label>
+                            <select x-model="bookingTimeSlot" class="p-3 rounded-xl border border-border-subtle bg-surface-container-low text-xs font-semibold focus:outline-none cursor-pointer">
+                                <option value="08:00 AM - 10:00 AM">Morning (08:00 AM - 10:00 AM)</option>
+                                <option value="10:30 AM - 12:30 PM">Late Morning (10:30 AM - 12:30 PM)</option>
+                                <option value="02:00 PM - 04:00 PM">Afternoon (02:00 PM - 04:00 PM)</option>
+                                <option value="04:30 PM - 06:30 PM">Evening (04:30 PM - 06:30 PM)</option>
+                            </select>
+                        </div>
+
+                        <div class="bg-surface-container-low p-3.5 rounded-xl flex flex-col gap-1.5 text-xs text-on-surface border border-border-subtle">
+                            <div class="flex justify-between"><span class="text-outline">Farmer:</span> <span class="font-bold">Harjinder Singh (PB-9842)</span></div>
+                            <div class="flex justify-between"><span class="text-outline">Center:</span> <span class="font-bold text-primary-container" x-text="bookingCenter"></span></div>
+                            <div class="flex justify-between"><span class="text-outline">Crop & Qty:</span> <span class="font-bold" x-text="bookingCategory + ' (' + bookingQty + ' Qtl)'"></span></div>
+                            <div class="flex justify-between"><span class="text-outline">Time Slot:</span> <span class="font-bold" x-text="bookingTimeSlot"></span></div>
+                        </div>
+
+                        <div class="flex gap-3 mt-2">
+                            <button @click="bookingStep = 1" class="w-1/3 bg-slate-100 text-slate-700 py-3 rounded-xl font-bold text-xs cursor-pointer hover:bg-slate-200">← Back</button>
+                            <button @click="confirmBooking()" class="w-2/3 bg-ledger-green text-white py-3 rounded-xl font-bold text-sm shadow-md cursor-pointer hover:opacity-90">Confirm & Generate Token</button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar with Queue Active -->
+    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden bg-[#e8f0e8] rounded-t-[2.5rem] shadow-[0_-8px_20px_rgba(0,0,0,0.06)]">
+        <!-- Home -->
+        <a aria-label="Home" class="flex flex-col items-center justify-center text-[#3a4d3a] py-1 px-3 hover:opacity-80 transition-opacity" href="index.html">
+            <span class="material-symbols-outlined text-[24px]">home</span>
+            <span class="font-body text-[12px] font-medium mt-1">
                 <span x-show="lang === 'en'">Home</span>
                 <span x-show="lang === 'pa'">ਘਰ</span>
                 <span x-show="lang === 'hi'">होम</span>
+                <span x-show="lang === 'te'">హోమ్</span>
+                <span x-show="lang === 'ta'">முகப்பு</span>
+                <span x-show="lang === 'ml'">ഹോം</span>
+                <span x-show="lang === 'kn'">ಮುಖಪುಟ</span>
+                <span x-show="lang === 'ur'">ہوم</span>
             </span>
         </a>
-        <a aria-label="Mandi" class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-3 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="mandi.html">
-            <span class="material-symbols-outlined text-[22px]">storefront</span>
-            <span class="font-label text-[11px] font-medium mt-0.5">
+
+        <!-- Mandi -->
+        <a aria-label="Mandi" class="flex flex-col items-center justify-center text-[#3a4d3a] py-1 px-3 hover:opacity-80 transition-opacity" href="mandi.html">
+            <span class="material-symbols-outlined text-[24px]">storefront</span>
+            <span class="font-body text-[12px] font-medium mt-1">
                 <span x-show="lang === 'en'">Mandi</span>
                 <span x-show="lang === 'pa'">ਮੰਡੀ</span>
                 <span x-show="lang === 'hi'">मंडी</span>
+                <span x-show="lang === 'te'">మండి</span>
+                <span x-show="lang === 'ta'">சந்தை</span>
+                <span x-show="lang === 'ml'">ചന്ത</span>
+                <span x-show="lang === 'kn'">ಮಂಡಿ</span>
+                <span x-show="lang === 'ur'">منڈی</span>
             </span>
         </a>
-        <a aria-label="Queue" class="flex flex-col items-center justify-center bg-black text-white rounded-full px-6 py-2 -mt-4 shadow-lg active:scale-95 transition-transform" href="queue.html">
+
+        <!-- Active Tab: Book Slot / Queue -->
+        <a aria-label="Book Slot" class="flex flex-col items-center justify-center bg-black text-white px-6 py-2.5 rounded-[2rem] shadow-md transition-all" href="queue.html">
             <span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
-            <span class="font-label text-[10px] font-medium mt-0.5">
-                <span x-show="lang === 'en'">Queue</span>
-                <span x-show="lang === 'pa'">ਕਤਾਰ</span>
-                <span x-show="lang === 'hi'">कतार</span>
+            <span class="font-body text-[12px] font-medium mt-0.5">
+                <span x-show="lang === 'en'">Book Slot</span>
+                <span x-show="lang === 'pa'">ਸਲਾਟ ਬੁੱਕ ਕਰੋ</span>
+                <span x-show="lang === 'hi'">स्लॉट बुक करें</span>
+                <span x-show="lang === 'te'">స్లాట్ బుక్ చేయండి</span>
+                <span x-show="lang === 'ta'">ஸ்லாட் பதிவு</span>
+                <span x-show="lang === 'ml'">സ്ലോട്ട് ബുക്ക് ചെയ്യുക</span>
+                <span x-show="lang === 'kn'">ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ</span>
+                <span x-show="lang === 'ur'">سلاٹ بک کریں</span>
             </span>
         </a>
-        <a aria-label="Profile" class="flex flex-col items-center justify-center text-on-surface-variant py-1 px-3 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="profile.html">
-            <span class="material-symbols-outlined text-[22px]">person</span>
-            <span class="font-label text-[11px] font-medium mt-0.5">
+
+        <!-- Profile -->
+        <a aria-label="Profile" class="flex flex-col items-center justify-center text-[#3a4d3a] py-1 px-3 hover:opacity-80 transition-opacity" href="profile.html">
+            <span class="material-symbols-outlined text-[24px]">person</span>
+            <span class="font-body text-[12px] font-medium mt-1">
                 <span x-show="lang === 'en'">Profile</span>
                 <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
                 <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
+                <span x-show="lang === 'te'">ప్రొఫైల్</span>
+                <span x-show="lang === 'ta'">சுயவிவரம்</span>
+                <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
+                <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
+                <span x-show="lang === 'ur'">پروفائل</span>
             </span>
         </a>
     </nav>

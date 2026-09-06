@@ -1,9 +1,120 @@
 <!DOCTYPE html>
-<html class="light" lang="en">
+<html class="light" lang="en" x-data="{ 
+    lang: 'en',
+    translations: {
+        en: {
+            appTitle: 'Kisan Saathi',
+            farmerName: 'Harjinder Singh',
+            farmerId: 'ID: PB-9842',
+            myBookings: 'My Bookings',
+            transactions: 'Transaction History',
+            settings: 'Settings',
+            support: 'Support',
+            navHome: 'Home',
+            navMandi: 'Mandi',
+            navQueue: 'Queue',
+            navProfile: 'Profile'
+        },
+        pa: {
+            appTitle: 'ਕਿਸਾਨ ਸਾਥੀ',
+            farmerName: 'ਹਰਜਿੰਦਰ ਸਿੰਘ',
+            farmerId: 'ਆਈ.ਡੀ: PB-9842',
+            myBookings: 'ਮੇਰੀਆਂ ਬੁਕਿੰਗਾਂ',
+            transactions: 'ਲੈਣ-ਦੇਣ ਦਾ ਇਤਿਹਾਸ',
+            settings: 'ਸੈਟਿੰਗਾਂ',
+            support: 'ਸਹਾਇਤਾ',
+            navHome: 'ਘਰ',
+            navMandi: 'ਮੰਡੀ',
+            navQueue: 'ਕਤਾਰ',
+            navProfile: 'ਪ੍ਰੋਫਾਈਲ'
+        },
+        hi: {
+            appTitle: 'किसान साथी',
+            farmerName: 'हरजिंदर सिंह',
+            farmerId: 'आईडी: PB-9842',
+            myBookings: 'मेरी बुकिंग',
+            transactions: 'लेन-देन का इतिहास',
+            settings: 'सेटिंग्स',
+            support: 'सहायता',
+            navHome: 'होम',
+            navMandi: 'मंडी',
+            navQueue: 'कतार',
+            navProfile: 'प्रोफ़ाइल'
+        },
+        te: {
+            appTitle: 'కిసాన్ సాథీ',
+            farmerName: 'హర్జిందర్ సింగ్',
+            farmerId: 'ఐడి: PB-9842',
+            myBookings: 'నా బుకింగ్‌లు',
+            transactions: 'లావాదేవీల చరిత్ర',
+            settings: 'సెట్టింగ్‌లు',
+            support: 'సహాయం',
+            navHome: 'హోమ్',
+            navMandi: 'మండి',
+            navQueue: 'క్యూ',
+            navProfile: 'ప్రొఫైల్'
+        },
+        ta: {
+            appTitle: 'கிசான் சாதி',
+            farmerName: 'ஹர்ஜிந்தர் சிங்',
+            farmerId: 'ஐடி: PB-9842',
+            myBookings: 'எனது முன்பதிவுகள்',
+            transactions: 'பரிவர்த்தனை வரலாறு',
+            settings: 'அமைப்புகள்',
+            support: 'ஆதரவு',
+            navHome: 'முகப்பு',
+            navMandi: 'சந்தை',
+            navQueue: 'வரிசை',
+            navProfile: 'சுயவிவரம்'
+        },
+        ml: {
+            appTitle: 'കിസാൻ സാഥി',
+            farmerName: 'ഹർജീന്ദർ സിംഗ്',
+            farmerId: 'ഐഡി: PB-9842',
+            myBookings: 'എന്റെ ബുക്കിംഗുകൾ',
+            transactions: 'ഇടപാട് ചരിത്രം',
+            settings: 'ക്രമീകരണങ്ങൾ',
+            support: 'പിന്തുണ',
+            navHome: 'ഹോം',
+            navMandi: 'ചന്ത',
+            navQueue: 'ക്യൂ',
+            navProfile: 'പ്രൊഫൈൽ'
+        },
+        kn: {
+            appTitle: 'ಕಿಸಾನ್ ಸಾಥಿ',
+            farmerName: 'ಹರ್ಜಿಂದರ್ ಸಿಂಗ್',
+            farmerId: 'ಐಡಿ: PB-9842',
+            myBookings: 'ನನ್ನ ಬುಕಿಂಗ್‌ಗಳು',
+            transactions: 'ವಹಿವಾಟು ಇತಿಹಾಸ',
+            settings: 'ಸೆಂಟ್ಟಿಂಗ್ಸ್',
+            support: 'ಬೆಂಬಲ',
+            navHome: 'ಮುಖಪುಟ',
+            navMandi: 'ಮಂಡಿ',
+            navQueue: 'ಕ್ಯೂ',
+            navProfile: 'ಪ್ರೊಫೈಲ್'
+        },
+        ur: {
+            appTitle: 'کیسان ساتھی',
+            farmerName: 'ہرجندر سنگھ',
+            farmerId: 'آئی ڈی: PB-9842',
+            myBookings: 'میری بکنگ',
+            transactions: 'لین دین کی تاریخ',
+            settings: 'ترتیبات',
+            support: 'معاونت',
+            navHome: 'ہوم',
+            navMandi: 'منڈی',
+            navQueue: 'قطار',
+            navProfile: 'پروفائل'
+        }
+    },
+    t(key) {
+        return (this.translations[this.lang] && this.translations[this.lang][key]) || this.translations['en'][key] || key;
+    }
+}">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Kisan Konnect - Profile</title>
+    <title>Kisan Saathi - Profile</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
@@ -21,26 +132,6 @@
             }
         }
         checkAuth();
-
-        // DEFINITIVE LOGOUT FIX: Bypasses async blockers and forces a clean wipe
-        window.forceLogout = function(event) {
-            if (event) event.preventDefault();
-            
-            // Clear local tracking and session details instantly
-            localStorage.clear();
-            sessionStorage.clear();
-            
-            // Kill any supabase auth cookies or keys explicitly
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key && (key.includes('supabase') || key.includes('auth'))) {
-                    localStorage.removeItem(key);
-                }
-            }
-
-            // Force hard redirect immediately
-            window.location.replace('login.html');
-        };
     </script>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -123,7 +214,7 @@
     </style>
 </head>
 
-<body class="text-[#0b1c30] relative pb-36" x-data="{ lang: 'en' }">
+<body class="text-[#0b1c30] relative pb-36">
 
     <div class="fixed-bg"></div>
     <div class="fixed-overlay"></div>
@@ -134,7 +225,7 @@
                 <div class="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm overflow-hidden border border-white/20">
                     <img class="w-full h-full object-cover" src="Logo.png" alt="Logo" onerror="this.src='https://images.unsplash.com/photo-1595974482597-4787dc64de9c?w=100&auto=format&fit=crop&q=60'"/>
                 </div>
-                <h1 class="text-[18px] font-headline-lg font-bold tracking-tighter uppercase">KISAN KONNECT</h1>
+                <h1 class="text-[18px] font-headline-lg font-bold tracking-tighter uppercase" x-text="t('appTitle')"></h1>
             </div>
             
             <div class="flex items-center gap-3">
@@ -161,32 +252,23 @@
             <div class="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-4 border-white shadow-md relative z-10 mb-4 bg-white mx-auto">
                 <img alt="Harjinder Singh Profile" class="w-full h-full object-cover" src="kisan.jpg" onerror="this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80'"/>
             </div>
-            <h2 class="text-[24px] font-headline-lg text-center font-bold mb-2">Harjinder Singh</h2>
+            <h2 class="text-[24px] font-headline-lg text-center font-bold mb-2" x-text="t('farmerName')"></h2>
             <div class="flex justify-center">
                 <div class="inline-flex items-center gap-2 bg-slate-100 border border-slate-200 rounded-full px-4 py-1.5 shadow-sm text-slate-700">
                     <span class="material-symbols-outlined text-[16px]">badge</span>
-                    <span class="text-[12px] font-label-sm font-bold tracking-wide uppercase">ID: PB-9842</span>
+                    <span class="text-[12px] font-label-sm font-bold tracking-wide uppercase" x-text="t('farmerId')"></span>
                 </div>
             </div>
         </section>
 
-        <section class="flex flex-col gap-3 mx-2 md:mx-0">
+        <section class="flex flex-col gap-3 mx-2 md:mx-0 pb-16">
             
             <a href="My Bookings.html" class="bento-card rounded-xl p-4 items-center justify-between group text-left cursor-pointer no-underline text-inherit">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-primary-container group-hover:text-white transition-colors">
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">book_online</span>
                     </div>
-                    <span class="text-[16px] font-body-md font-semibold">
-                        <span x-show="lang === 'en'">My Bookings</span>
-                        <span x-show="lang === 'pa'">ਮੇਰੀਆਂ ਬੁਕਿੰਗਾਂ</span>
-                        <span x-show="lang === 'hi'">मेरी बुकिंग</span>
-                        <span x-show="lang === 'te'">నా బుకింగ్‌లు</span>
-                        <span x-show="lang === 'ta'">எனது முன்பதிவுகள்</span>
-                        <span x-show="lang === 'ml'">എന്റെ ബുക്കിംഗുകൾ</span>
-                        <span x-show="lang === 'kn'">ನನ್ನ ಬುಕಿಂಗ್‌ಗಳು</span>
-                        <span x-show="lang === 'ur'">میری بکنگ</span>
-                    </span>
+                    <span class="text-[16px] font-body-md font-semibold" x-text="t('myBookings')"></span>
                 </div>
                 <span class="material-symbols-outlined text-slate-400 group-hover:text-slate-800 transition-transform group-hover:translate-x-1">chevron_right</span>
             </a>
@@ -196,16 +278,7 @@
                     <div class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors">
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
                     </div>
-                    <span class="text-[16px] font-body-md font-semibold">
-                        <span x-show="lang === 'en'">Transaction History</span>
-                        <span x-show="lang === 'pa'">ਲੈਣ-ਦੇਣ ਦਾ ਇਤਿਹਾਸ</span>
-                        <span x-show="lang === 'hi'">लेन-देन का इतिहास</span>
-                        <span x-show="lang === 'te'">లావాదేవీల చరిత్ర</span>
-                        <span x-show="lang === 'ta'">பரிவர்த்தனை வரலாறு</span>
-                        <span x-show="lang === 'ml'">ഇടപാട് ചരിത്രം</span>
-                        <span x-show="lang === 'kn'">ವಹಿವಾಟು ಇತಿಹಾಸ</span>
-                        <span x-show="lang === 'ur'">لین دین کی تاریخ</span>
-                    </span>
+                    <span class="text-[16px] font-body-md font-semibold" x-text="t('transactions')"></span>
                 </div>
                 <span class="material-symbols-outlined text-slate-400 group-hover:text-slate-800 transition-transform group-hover:translate-x-1">chevron_right</span>
             </a>
@@ -215,16 +288,7 @@
                     <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 group-hover:bg-primary-container group-hover:text-white transition-colors">
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
                     </div>
-                    <span class="text-[16px] font-body-md font-semibold">
-                        <span x-show="lang === 'en'">Settings</span>
-                        <span x-show="lang === 'pa'">ਸੈਟਿੰਗਾਂ</span>
-                        <span x-show="lang === 'hi'">सेटिंग्स</span>
-                        <span x-show="lang === 'te'">సెట్టింగ్‌లు</span>
-                        <span x-show="lang === 'ta'">அமைப்புகள்</span>
-                        <span x-show="lang === 'ml'">ക്രമീകരണങ്ങൾ</span>
-                        <span x-show="lang === 'kn'">ಸೆಂಟ್ಟಿಂಗ್ಸ್</span>
-                        <span x-show="lang === 'ur'">ترتیبات</span>
-                    </span>
+                    <span class="text-[16px] font-body-md font-semibold" x-text="t('settings')"></span>
                 </div>
                 <span class="material-symbols-outlined text-slate-400 group-hover:text-slate-800 transition-transform group-hover:translate-x-1">chevron_right</span>
             </a>
@@ -234,58 +298,35 @@
                     <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center text-orange-600 group-hover:bg-orange-500 group-hover:text-white transition-colors">
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">support_agent</span>
                     </div>
-                    <span class="text-[16px] font-body-md font-semibold">
-                        <span x-show="lang === 'en'">Support</span>
-                        <span x-show="lang === 'pa'">ਸਹਾਇਤਾ</span>
-                        <span x-show="lang === 'hi'">सहायता</span>
-                        <span x-show="lang === 'te'">సహాయం</span>
-                        <span x-show="lang === 'ta'">ஆதரவு</span>
-                        <span x-show="lang === 'ml'">പിന്തുണ</span>
-                        <span x-show="lang === 'kn'">ಬೆಂಬಲ</span>
-                        <span x-show="lang === 'ur'">معاونت</span>
-                    </span>
+                    <span class="text-[16px] font-body-md font-semibold" x-text="t('support')"></span>
                 </div>
                 <span class="material-symbols-outlined text-slate-400 group-hover:text-slate-800 transition-transform group-hover:translate-x-1">chevron_right</span>
             </a>
 
         </section>
-
-        <section class="mt-2 mx-2 md:mx-0 pb-16">
-            <button type="button" onclick="forceLogout(event)" class="bento-card bg-red-50/50 rounded-xl p-4 w-full flex items-center gap-4 group cursor-pointer hover:bg-red-100 border border-red-100 transition-all">
-                <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">logout</span>
-                </div>
-                <span class="text-[16px] font-body-md text-red-600 font-bold">
-                    <span x-show="lang === 'en'">Logout</span>
-                    <span x-show="lang === 'pa'">ਲੌਗ ਆਉਟ</span>
-                    <span x-show="lang === 'hi'">लॉग आउट</span>
-                    <span x-show="lang === 'te'">లాగ్‌అవుట్</span>
-                    <span x-show="lang === 'ta'">வெளியேறு</span>
-                    <span x-show="lang === 'ml'">പുറത്തുപോവുക</span>
-                    <span x-show="lang === 'kn'">ಲಾಗ್ ಔಟ್</span>
-                    <span x-show="lang === 'ur'">لاگ آؤٹ</span>
-                </span>
-            </button>
-        </section>
     </main>
 
-    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-white/95 backdrop-blur-md border-t border-slate-200 shadow-lg md:hidden rounded-t-xl">
-        <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors" href="index.html">
-            <span class="material-symbols-outlined text-[24px] mb-1">home</span>
-            <span class="text-[10px] font-label-sm font-bold">Home</span>
+    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden bg-[#e8f0e8] rounded-t-[2.5rem] shadow-[0_-8px_20px_rgba(0,0,0,0.06)]">
+        <a aria-label="Home" class="flex flex-col items-center justify-center text-[#3a4d3a] py-1 px-3 hover:opacity-80 transition-opacity" href="index.html">
+            <span class="material-symbols-outlined text-[24px]">home</span>
+            <span class="font-body text-[12px] font-medium mt-1" x-text="t('navHome')"></span>
         </a>
-        <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors" href="mandi.html">
-            <span class="material-symbols-outlined text-[24px] mb-1">storefront</span>
-            <span class="text-[10px] font-label-sm font-bold">Mandi</span>
+
+        <a aria-label="Mandi" class="flex flex-col items-center justify-center text-[#3a4d3a] py-1 px-3 hover:opacity-80 transition-opacity" href="mandi.html">
+            <span class="material-symbols-outlined text-[24px]">storefront</span>
+            <span class="font-body text-[12px] font-medium mt-1" x-text="t('navMandi')"></span>
         </a>
-        <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors" href="queue.html">
-            <span class="material-symbols-outlined text-[24px] mb-1">confirmation_number</span>
-            <span class="text-[10px] font-label-sm font-bold">Queue</span>
+
+        <a aria-label="Queue" class="flex flex-col items-center justify-center text-[#3a4d3a] py-1 px-3 hover:opacity-80 transition-opacity" href="queue.html">
+            <span class="material-symbols-outlined text-[24px]">confirmation_number</span>
+            <span class="font-body text-[12px] font-medium mt-1" x-text="t('navQueue')"></span>
         </a>
-        <a class="flex flex-col items-center justify-center bg-primary-container text-white rounded-full px-6 py-2 scale-95 shadow-md transition-transform hover:scale-100" href="profile.html">
-            <span class="material-symbols-outlined text-[24px] mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
-            <span class="text-[10px] font-label-sm font-bold">Profile</span>
+
+        <a aria-label="Profile" class="flex flex-col items-center justify-center bg-black text-white px-6 py-2.5 rounded-[2rem] shadow-md transition-all" href="profile.html">
+            <span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">person</span>
+            <span class="font-body text-[12px] font-medium mt-0.5" x-text="t('navProfile')"></span>
         </a>
     </nav>
+
 </body>
 </html>

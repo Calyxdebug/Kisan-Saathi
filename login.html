@@ -82,13 +82,14 @@
 
         <!-- Logo & Brand -->
         <div class="flex flex-col items-center mb-6 w-full pt-4 sm:pt-0">
-            <div class="w-24 h-24 mb-3 rounded-full overflow-hidden flex items-center justify-center bg-white/80 shadow-md border-2 border-white/50">
-                <img alt="Kisan Konnect Logo" class="w-full h-full object-cover scale-110" src="logo.png"/>
+            <!-- FIXED LOGO WRAPPER WITH CIRCULAR CLIPPING -->
+            <div class="w-20 h-20 sm:w-24 sm:h-24 mb-3 rounded-full overflow-hidden flex items-center justify-center bg-white shadow-md border-2 border-white/50 relative flex-shrink-0">
+                <img alt="Kisan Konnect Logo" class="w-full h-full object-cover object-center" src="logo.png"/>
             </div>
 
             <!-- INDIAN FLAG COLOR-FADING GRADIENT TEXT -->
             <h1 class="text-3xl sm:text-4xl font-extrabold text-center tracking-tight mt-2 bg-gradient-to-r from-[#FF9933] via-[#138808] to-[#000080] bg-clip-text text-transparent drop-shadow-sm">
-                KISAN KONNECT
+                Kisan Saathi
             </h1>
 
             <p class="text-base text-gray-100 text-center mt-2 font-medium drop-shadow-sm">
@@ -100,7 +101,7 @@
                     <span x-show="lang === 'ta'">உங்கள் விவசாய கணக்கை உருவாக்கவும்</span>
                     <span x-show="lang === 'ml'">നിങ്ങളുടെ കർഷക അക്കൗണ്ട് സൃഷ്ടിക്കുക</span>
                     <span x-show="lang === 'kn'">ನಿಮ್ಮ ರೈತ ಖಾತೆಯನ್ನು ರಚಿಸಿ</span>
-                    <span x-show="lang === 'ur'">اپنا کسان اکاؤنٹ بنائیں</span>
+                    <span x-show="lang === 'ur'">अपना کسان اکاؤنٹ بنائیں</span>
                 </span>
                 <span x-show="!isSignUp">
                     <span x-show="lang === 'en'">Empowering Your Agricultural Journey</span>
@@ -497,7 +498,7 @@
                         }
 
                         this.isError = true;
-                        this.message = this.lang === 'en' ? 'Invalid credentials. Check email/password.' : (this.lang === 'pa' ? 'ਗਲਤ ਵੇਰਵੇ। ਈਮੇਲ/ਪਾਸਵਰਡ ਚੈੱਕ ਕਰੋ।' : (this.lang === 'hi' ? 'अमान्य विवरण। ईमेल/पासवर्ड जांचें।' : (this.lang === 'te' ? 'చెల్లని ఆధారాలు. ఇమెయిల్/పాస్‌వర్డ్‌ని తనిఖీ చేయండి.' : (this.lang === 'ta' ? 'தவறான சான்றுகள். மின்னஞ்சல்/கடவுச்சொல்லைச் சரிபார்க்கவும்.' : (this.lang === 'ml' ? 'തെറ്റായ വിവരങ്ങൾ. ഇമെയിൽ/പാസ്‌വേഡ് പരിശോധിക്കുക.' : (this.lang === 'kn' ? 'ಅಮೂರ್ತ ವಿವರಗಳು. ಇಮೇಲ್/ಪಾಸ್‌ವರ್ಡ್ ಪರಿಶೀಲಿಸಿ.' : 'غلط تفصیلات۔ ای میل/پاس ورڈ چیک کریں۔'))))));
+                        this.message = this.lang === 'en' ? 'Invalid credentials. Check email/password.' : (this.lang === 'pa' ? 'ਗਲਤ ਵੇਰਵੇ। ਈਮੇਲ/ਪਾਸਵਰਡ ਚੈੱਕ ਕਰੋ।' : (this.lang === 'hi' ? 'अमान्य विवरण। ईमेल/पासवर्ड जांचें।' : (this.lang === 'te' ? 'చెల్లని ఆధారాలు. ఇమెయిల్/పాస్‌వర్డ్‌ని తనిఖీ చేయండి।' : (this.lang === 'ta' ? 'தவறான சான்றுகள். மின்னஞ்சல்/கடவுச்சொல்லைச் சரிபார்க்கவும்.' : (this.lang === 'ml' ? 'തെറ്റായ വിവരങ്ങൾ. ഇമെയിൽ/പാസ്‌വേഡ് പരിശോധിക്കുക.' : (this.lang === 'kn' ? 'ಅಮೂರ್ತ ವಿವರಗಳು. ಇಮೇಲ್/ಪಾಸ್‌ವರ್ಡ್ ಪರಿಶೀಲಿಸಿ.' : 'غلط تفصیلات۔ ای میل/پاس ورڈ چیک کریں۔'))))));
                     } else {
                         this.message = this.lang === 'en' ? 'Success! Redirecting...' : (this.lang === 'pa' ? 'ਸਫਲਤਾ! ਰੀਡਾਇਰੈਕਟ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...' : (this.lang === 'hi' ? 'सफलता! रीडायरेक्ट किया जा रहा है...' : (this.lang === 'te' ? 'విజయం! దారి మళ్లిస్తోంది...' : (this.lang === 'ta' ? 'வெற்றி! திருப்பி விடப்படுகிறது...' : (this.lang === 'ml' ? 'വിജയം! റീഡയറക്‌ടുന്നു...' : (this.lang === 'kn' ? 'ಯಶಸ್ಸು! ಮರುನಿರ್ದೇಶಿಸಲಾಗುತ್ತಿದೆ...' : 'کامیابی! ری ڈائریکٹ کیا جا رہا ہے...'))))));
                         setTimeout(() => {

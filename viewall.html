@@ -1,9 +1,100 @@
 <!DOCTYPE html>
-<html class="light" lang="en" x-data="{ lang: 'en', showAllNews: false }">
+<html class="light" lang="en" x-data="{ 
+    lang: 'en', 
+    activeModal: null,
+    calculatorInput: 5,
+    calculatedYield() { return this.calculatorInput * 22; },
+    calculatedRevenue() { return this.calculatedYield() * 2450; },
+    fertilizerBooked: false,
+    kccRenewed: false,
+    paymentRequested: false,
+    modals: {
+        msp: {
+            en: { title: 'MSP & Government Procurement', subtitle: 'Current Season Rates' },
+            pa: { title: 'ਐਮ.ਐਸ.ਪੀ ਅਤੇ ਸਰਕਾਰੀ ਖਰੀਦ', subtitle: 'ਮੌਜੂਦਾ ਸੀਜ਼ਨ ਦੇ ਭਾਅ' },
+            hi: { title: 'MSP और सरकारी खरीद', subtitle: 'वर्तमान सीजन दरें' },
+            te: { title: 'MSP & ప్రభుత్వ కొనుగోలు', subtitle: 'ప్రస్తుత సీజన్ ధరలు' },
+            ta: { title: 'MSP மற்றும் அரசு கொள்முதல்', subtitle: 'தற்போதைய பருவ விலைகள்' },
+            ml: { title: 'MSP & സർക്കാർ സംഭരണം', subtitle: 'നിലവിലെ സീസൺ നിരക്കുകൾ' },
+            kn: { title: 'MSP ಮತ್ತು ಸರ್ಕಾರಿ ಖರೀದಿ', subtitle: 'ಪ್ರಸ್ತುತ season ತುುವಿನ ದರಗಳು' },
+            ur: { title: 'MSP اور سرکاری خریداری', subtitle: 'موجودہ سیزن کی شرحیں' }
+        },
+        calculator: {
+            en: { title: 'Live Crop Yield & Income Calculator', subtitle: 'Dynamic Harvest Valuation' },
+            pa: { title: 'ਲਾਈਵ ਫਸਲ ਝਾੜ ਅਤੇ ਆਮਦਨ ਕੈਲਕੁਲੇਟਰ', subtitle: 'ਡਾਇਨਾਮਿਕ ਵਾਢੀ ਮੁੱਲ' },
+            hi: { title: 'लाइव फसल उपज और आय कैलकुलेटर', subtitle: 'डैनेमिक फसल मूल्यांकन' },
+            te: { title: 'లైవ్ పంట దిగుబడి & ఆదాయ కాలిక్యులేటర్', subtitle: 'డైనమిక్ రాబడి' },
+            ta: { title: 'நேரலை பயிர் மகசூல் & வருமான கால்குலேட்டர்', subtitle: 'மதிப்பிடப்பட்ட வருமானம்' },
+            ml: { title: 'ലൈവ് വിള കാൽക്കുലേറ്റർ', subtitle: 'വരുമാന കണക്കുകൾ' },
+            kn: { title: 'ಲೈವ್ ಬೆಳೆ ಇಳುವರಿ ಮತ್ತು ಆದಾಯ ಕ್ಯಾಲ್ಕುಲೇಟರ್', subtitle: 'ಅಂದಾಜು ಆದಾಯ' },
+            ur: { title: 'لائیو فصل کی پیداوار اور آمدنی کیلکولیٹر', subtitle: 'متحرک تخمینہ' }
+        },
+        fertilizer: {
+            en: { title: 'Direct Fertilizer Quota Booking', subtitle: 'Subsidized Urea & DAP Quota' },
+            pa: { title: 'ਸਿੱਧੀ ਖਾਦ ਕੋਟਾ ਬੁਕਿੰਗ', subtitle: 'ਸਬਸਿਡੀ ਵਾਲੀ ਯੂਰੀਆ ਅਤੇ ਡੀ.ਏ.ਪੀ' },
+            hi: { title: 'प्रत्यक्ष उर्वरक कोटा बुकिंग', subtitle: 'सब्सिडीयुक्त यूरिया और डीएपी' },
+            te: { title: 'నేరుగా ఎరువుల కోటా బుకింగ్', subtitle: 'సబ్సిడీ యూరియా & DAP' },
+            ta: { title: 'நேரடி உர ஒதுக்கீடு முன்பதிவு', subtitle: 'மானிய விலையில் யூரியா & DAP' },
+            ml: { title: 'വളം ക്വാട്ട ബുക്കിംഗ്', subtitle: 'സബ്സിഡി യൂറിയ & DAP' },
+            kn: { title: 'ನೇರ ಗೊಬ್ಬರ ಕೋಟಾ ಬುಕಿಂಗ್', subtitle: 'ಸಬ್ಸಿಡಿ ಯೂರಿಯಾ ಮತ್ತು ಡಿಎಪಿ' },
+            ur: { title: 'براہ راست کھاد کوٹہ کی بکنگ', subtitle: 'سبسڈی یافتہ یوریا اور ڈی اے پی' }
+        },
+        irrigation: {
+            en: { title: 'Weather & Smart Irrigation Advisory', subtitle: 'Agro-Met Field Guidance' },
+            pa: { title: 'ਮੌਸਮ ਅਤੇ ਸਿੰਚਾਈ ਸਲਾਹ', subtitle: 'ਖੇਤ ਦੀ ਅਗਵਾਈ' },
+            hi: { title: 'मौसम और स्मार्ट सिंचाई सलाह', subtitle: 'कृषि-मौसम मार्गदर्शन' },
+            te: { title: 'వాతావరణం & సేద్యపు నీటి సలహా', subtitle: 'వ్యవసాయ మార్గదర్శకం' },
+            ta: { title: 'வானிலை & நீர்ப்பாசன ஆலோசனை', subtitle: 'விவசாய வழிகாட்டுதல்' },
+            ml: { title: 'കാലാവസ്ഥയും ജലസേചന ഉപദേശവും', subtitle: 'കാർഷിക നിർദ്ദേശം' },
+            kn: { title: 'ಹವಾಮಾನ ಮತ್ತು ನೀರಾವರಿ ಸಲಹೆ', subtitle: 'ಕೃಷಿ ಮಾರ್ಗದರ್ಶನ' },
+            ur: { title: 'موسم اور اسمارٹ آبپاشی کا مشورہ', subtitle: 'زراعت کی رہنمائی' }
+        },
+        kcc: {
+            en: { title: 'Kisan Credit Card (KCC) Limit & Renewal', subtitle: 'Account # PB-9842-KCC' },
+            pa: { title: 'ਕਿਸਾਨ ਕ੍ਰੈਡਿਟ ਕਾਰਡ ਸੀਮਾ ਅਤੇ ਨਵੀਨੀਕਰਨ', subtitle: 'ਖਾਤਾ # PB-9842-KCC' },
+            hi: { title: 'किसान क्रेडिट कार्ड सीमा और नवीनीकरण', subtitle: 'खाता # PB-9842-KCC' },
+            te: { title: 'కిసాన్ క్రెడిట్ కార్డ్ పరిమితి & పునరుద్ధరణ', subtitle: 'ఖాతా # PB-9842-KCC' },
+            ta: { title: 'கிசான் கடன் அட்டை வரம்பு மற்றும் புதுப்பித்தல்', subtitle: 'கணக்கு # PB-9842-KCC' },
+            ml: { title: 'കിസാൻ ക്രെഡിറ്റ് കാർഡ് പരിധിയും പുതുക്കലും', subtitle: 'അക്കൗണ്ട് # PB-9842-KCC' },
+            kn: { title: 'ಕಿಸಾನ್ ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್ ಮಿತಿ ಮತ್ತು ನವೀಕರಣ', subtitle: 'ಖಾತೆ # PB-9842-KCC' },
+            ur: { title: 'کسان کریڈٹ کارڈ کی حد اور تجدید', subtitle: 'اکاؤنٹ # PB-9842-KCC' }
+        },
+        ledger: {
+            en: { title: 'Payments & Ledger Dashboard', subtitle: 'Account Balance Summary' },
+            pa: { title: 'ਭੁਗਤਾਨ ਅਤੇ ਲੇਜ਼ਰ ਡੈਸ਼ਬোর্ਡ', subtitle: 'ਖਾਤਾ ਬਕਾਇਆ ਸੰਖੇਪ' },
+            hi: { title: 'भुगतान और लेजर डैशबोर्ड', subtitle: 'खाता शेष सारांश' },
+            te: { title: 'చెల్లింపులు & లెడ్జర్ డాష్‌బోర్డ్', subtitle: 'ఖాతా నిల్వ సారాంశం' },
+            ta: { title: 'கொடுப்பனவுகள் & லெட்ஜர் டாஷ்போர்டு', subtitle: 'கணக்கு இருப்பு சுருக்கம்' },
+            ml: { title: 'പേയ്‌മെന്റുകൾ & ലെഡ്ജർ ഡാഷ്‌ബോർഡ്', subtitle: 'അക്കൗണ്ട് ബാലൻസ് സംഗ്രഹം' },
+            kn: { title: 'ಪಾವತಿಗಳು ಮತ್ತು ಲೆಡ್ಜರ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್', subtitle: 'ಖಾತೆ ಬಾಕಿ ಸಾರಾಂಶ' },
+            ur: { title: 'ادائیگییں اور لیجر ڈیش بورڈ', subtitle: 'اکاؤنٹ بیلنس کا خلاصہ' }
+        },
+        transactions: {
+            en: { title: 'Past Transactions History', subtitle: 'Recent Crop Sales & Purchases' },
+            pa: { title: 'ਪਿਛਲੇ ਲੈਣ-ਦੇਣ ਦਾ ਇਤਿਹਾਸ', subtitle: 'ਤਾਜ਼ਾ ਫਸਲ ਦੀ ਵਿਕਰੀ ਅਤੇ ਖਰੀਦ' },
+            hi: { title: 'पिछले लेन-देन का इतिहास', subtitle: 'हालिया फसल बिक्री और खरीद' },
+            te: { title: 'గత లావాదేవీల చరిత్ర', subtitle: 'ఇటీవలి పంట అమ్మకాలు & కొనుగోళ్లు' },
+            ta: { title: 'கடந்த பரிவர்த்தனை வரலாறு', subtitle: 'சமீபத்திய பயிர் விற்பனை மற்றும் வாங்குதல்கள்' },
+            ml: { title: 'കഴിഞ്ഞ ഇടപാടുകളുടെ ചരിത്രം', subtitle: 'സമീപകാല വിള വിൽപനകളും വാങ്ങലുകളും' },
+            kn: { title: 'ಹಿಂದಿನ ವಹಿವಾಟುಗಳ ಇತಿಹಾಸ', subtitle: 'ಇತ್ತೀಚಿನ ಬೆಳೆ ಮಾರಾಟ ಮತ್ತು ಖರೀದಿ' },
+            ur: { title: 'پچھلے لین دین کی تاریخ', subtitle: 'حالیہ فصل کی فروخت اور خریداری' }
+        },
+        pass: {
+            en: { title: 'Mandi Gate Pass History', subtitle: 'Active & Completed Digital Passes' },
+            pa: { title: 'ਮੰਡੀ ਗੇਟ ਪਾਸ ਇਤਿਹਾਸ', subtitle: 'ਸਰਗਰਮ ਅਤੇ ਪੂਰੇ ਹੋਏ ਡਿਜੀਟਲ ਪਾਸ' },
+            hi: { title: 'मंडी गेट पास इतिहास', subtitle: 'सक्रिय और पूर्ण डिजिटल पास' },
+            te: { title: 'మండి గేట్ పాస్ చరిత్ర', subtitle: 'సక్రియ & పూర్తయిన డిజిటల్ పాస్‌లు' },
+            ta: { title: 'சந்தை நுழைவுச் சீட்டு வரலாறு', subtitle: 'செயலில் உள்ள & முடிந்த டிஜிட்டல் பாஸ்கள்' },
+            ml: { title: 'ചന്ത ഗേറ്റ് പാസ് ചരിത്രം', subtitle: 'സജീവവും പൂർത്തിയായതുമായ പാസുകൾ' },
+            kn: { title: 'ಮಂಡಿ ಗೇಟ್ ಪಾಸ್ ಇತಿಹಾಸ', subtitle: 'ಸಕ್ರಿಯ ಮತ್ತು ಪೂರ್ಣಗೊಂಡ ಪಾಸ್‌ಗಳು' },
+            ur: { title: 'منڈی گیٹ پاس کی تاریخ', subtitle: 'فعال اور مکمل ڈیجیٹل پاس' }
+        }
+    }
+}">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>All Agricultural Services - Kisan Konnect</title>
+<title>Farmer Services - Kisan Konnect</title>
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -82,20 +173,11 @@
                         "2xl": "1rem",
                         "3xl": "1.5rem"
                     },
-                    "spacing": {
-                        "margin-mobile": "16px",
-                        "gutter": "16px",
-                        "margin-desktop": "32px",
-                        "unit": "4px",
-                        "bento-gap": "20px"
-                    },
                     "fontFamily": {
                         "data-display": ["Inter"],
                         "headline-lg": ["Poppins"],
-                        "headline-xl": ["Poppins"],
                         "body-md": ["Inter"],
-                        "label-sm": ["notoSans"],
-                        "headline-lg-mobile": ["Poppins"]
+                        "label-sm": ["notoSans"]
                     }
                 }
             }
@@ -111,10 +193,7 @@
         }
         .bg-constant {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: -10;
             background-color: #0d1745;
             background-size: cover;
@@ -132,24 +211,23 @@
 <nav class="fixed top-0 left-0 w-full z-50 bg-[#0d1745] shadow-md border-b border-white/10">
 <div class="flex items-center justify-between px-4 h-16 w-full">
 <div class="flex items-center gap-3">
-<a class="flex items-center justify-center p-2 rounded-full hover:bg-white/10 transition-colors active:scale-95 duration-200 text-white cursor-pointer" href="index.html">
+<a class="flex items-center justify-center p-2 rounded-full hover:bg-white/10 transition-colors text-white cursor-pointer" href="index.html">
 <span class="material-symbols-outlined">arrow_back</span>
 </a>
 <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center overflow-hidden border border-white/25">
-<img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Konnect Logo"/>
+<img class="w-full h-full object-cover" src="Logo.png" alt="Logo"/>
 </div>
 <h1 class="font-headline text-[18px] sm:text-[20px] font-bold tracking-tight text-white">
-    <span x-show="lang === 'en'">All Agricultural Services</span>
-    <span x-show="lang === 'pa'">ਸਾਰੀਆਂ ਖੇਤੀਬਾੜੀ ਸੇਵਾਵਾਂ</span>
-    <span x-show="lang === 'hi'">सभी कृषि सेवाएं</span>
-    <span x-show="lang === 'te'">అన్ని వ్యవసాయ సేవలు</span>
-    <span x-show="lang === 'ta'">அனைத்து விவசாய சேவைகள்</span>
-    <span x-show="lang === 'ml'">എല്ലാ കാർഷിക സേവനങ്ങളും</span>
-    <span x-show="lang === 'kn'">ಎಲ್ಲಾ ಕೃಷಿ ಸೇವೆಗಳು</span>
-    <span x-show="lang === 'ur'">تمام زرعی خدمات</span>
+    <span x-show="lang === 'en'">Kisan Saathi Portal</span>
+    <span x-show="lang === 'pa'">ਕਿਸਾਨ ਸਾਥੀ ਪੋਰਟਲ</span>
+    <span x-show="lang === 'hi'">किसान साथी पोर्टल</span>
+    <span x-show="lang === 'te'">కిసాన్ సాథీ పోర్టల్</span>
+    <span x-show="lang === 'ta'">கிசான் சாதி தளம்</span>
+    <span x-show="lang === 'ml'">കിസാൻ സാഥി പോർട്ടൽ</span>
+    <span x-show="lang === 'kn'">ಕಿಸಾನ್ ಸಾಥಿ ಪೋರ್ಟಲ್</span>
+    <span x-show="lang === 'ur'">کیسان ساتھی پورٹل</span>
 </h1>
 </div>
-<!-- Language Switcher -->
 <div>
 <select x-model="lang" aria-label="Select Language" class="bg-white/10 hover:bg-white/20 text-white text-xs rounded-lg px-2.5 py-1.5 focus:outline-none cursor-pointer font-bold border border-white/20">
     <option value="en" class="text-black">English</option>
@@ -167,90 +245,99 @@
 
 <!-- Main Content Canvas -->
 <main class="max-w-4xl mx-auto pt-24 pb-24 px-4 flex-1 w-full flex flex-col gap-6">
+
+<!-- Farmer Essential Quick Tools Section -->
 <section class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-2xl">
-<div class="flex items-center justify-between mb-6">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-[#fea619]" style="font-variation-settings: 'FILL' 1;">bolt</span>
-<h2 class="font-headline text-xl font-bold text-primary-container">
-    <span x-show="lang === 'en'">Complete Services & Records</span>
-    <span x-show="lang === 'pa'">ਪੂਰੀਆਂ ਸੇਵਾਵਾਂ ਅਤੇ ਰਿਕਾਰਡ</span>
-    <span x-show="lang === 'hi'">पूर्ण सेवाएं और रिकॉर्ड</span>
-    <span x-show="lang === 'te'">పూర్తి సేవలు మరియు రికార్డులు</span>
-    <span x-show="lang === 'ta'">முழுமையான சேவைகள் மற்றும் பதிவுகள்</span>
-    <span x-show="lang === 'ml'">സേവനങ്ങളും രേഖകളും</span>
-    <span x-show="lang === 'kn'">ಸಂಪೂರ್ಣ ಸೇವೆಗಳು ಮತ್ತು ದಾಖಲೆಗಳು</span>
-    <span x-show="lang === 'ur'">مکمل خدمات اور ریکارڈ</span>
-</h2>
-</div>
-<button @click="showAllNews = true" class="text-xs font-semibold text-secondary hover:underline cursor-pointer">View News & Updates</button>
-</div>
-<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-<a href="queue.html" class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/90 border border-black/5 hover:bg-white transition-all duration-200 hover:scale-[1.02] active:scale-95 group shadow-sm">
-<div class="w-12 h-12 rounded-full bg-ledger-green/15 flex items-center justify-center group-hover:bg-ledger-green/25 transition-colors">
-<span class="material-symbols-outlined text-ledger-green">sell</span>
-</div>
-<span class="font-label text-xs text-primary-container font-semibold">
-    <span x-show="lang === 'en'">Sell Crop</span>
-    <span x-show="lang === 'pa'">ਫਸਲ ਵੇਚੋ</span>
-    <span x-show="lang === 'hi'">फसल बेचें</span>
-    <span x-show="lang === 'te'">పంట అమ్మండి</span>
-    <span x-show="lang === 'ta'">பயிர் விற்பனை</span>
-    <span x-show="lang === 'ml'">വിള വിൽക്കുക</span>
-    <span x-show="lang === 'kn'">ಬೆಳೆ ಮಾರಾಟ</span>
-    <span x-show="lang === 'ur'">فصل فروخت کریں</span>
-</span>
-</a>
-<a href="market.html" class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/90 border border-black/5 hover:bg-white transition-all duration-200 hover:scale-[1.02] active:scale-95 group shadow-sm">
-<div class="w-12 h-12 rounded-full bg-mandi-purple/15 flex items-center justify-center group-hover:bg-mandi-purple/25 transition-colors">
-<span class="material-symbols-outlined text-mandi-purple">storefront</span>
-</div>
-<span class="font-label text-xs text-primary-container font-semibold">
-    <span x-show="lang === 'en'">Market Prices</span>
-    <span x-show="lang === 'pa'">ਮੰਡੀ ਭਾਅ</span>
-    <span x-show="lang === 'hi'">बाजार भाव</span>
-    <span x-show="lang === 'te'">మార్కెట్ ధరలు</span>
-    <span x-show="lang === 'ta'">சந்தை விலைகள்</span>
-    <span x-show="lang === 'ml'">വിപണി വിലകൾ</span>
-    <span x-show="lang === 'kn'">ಮಾರುಕಟ್ಟೆ ಬೆಲೆಗಳು</span>
-    <span x-show="lang === 'ur'">مارکیٹ کی قیمتیں</span>
-</span>
-</a>
-<a href="queue.html" class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/90 border border-black/5 hover:bg-white transition-all duration-200 hover:scale-[1.02] active:scale-95 group shadow-sm">
-<div class="w-12 h-12 rounded-full bg-transaction-blue/15 flex items-center justify-center group-hover:bg-transaction-blue/25 transition-colors">
-<span class="material-symbols-outlined text-transaction-blue">line_weight</span>
-</div>
-<span class="font-label text-xs text-primary-container font-semibold">
-    <span x-show="lang === 'en'">Live Queue</span>
-    <span x-show="lang === 'pa'">ਲਾਈਵ ਕਤਾਰ</span>
-    <span x-show="lang === 'hi'">लाइव कतार</span>
-    <span x-show="lang === 'te'">లైవ్ క్యూ</span>
-    <span x-show="lang === 'ta'">நேரலை வரிசை</span>
-    <span x-show="lang === 'ml'">ലൈവ് ക്യൂ</span>
-    <span x-show="lang === 'kn'">ಲೈವ್ ಕ್ಯೂ</span>
-    <span x-show="lang === 'ur'">لائیو قطار</span>
-</span>
-</a>
-<a href="profile.html" class="flex flex-col items-center gap-3 p-4 rounded-xl bg-white/90 border border-black/5 hover:bg-white transition-all duration-200 hover:scale-[1.02] active:scale-95 group shadow-sm">
-<div class="w-12 h-12 rounded-full bg-secondary-container/25 flex items-center justify-center group-hover:bg-secondary-container/40 transition-colors">
-<span class="material-symbols-outlined text-secondary">support_agent</span>
-</div>
-<span class="font-label text-xs text-primary-container font-semibold">
-    <span x-show="lang === 'en'">Agri Support</span>
-    <span x-show="lang === 'pa'">ਖੇਤੀ ਸਹਾਇਤਾ</span>
-    <span x-show="lang === 'hi'">कृषि सहायता</span>
-    <span x-show="lang === 'te'">వ్యవసాయ మద్దతు</span>
-    <span x-show="lang === 'ta'">விவசாய ஆதரவு</span>
-    <span x-show="lang === 'ml'">കാർഷിക പിന്തുണ</span>
-    <span x-show="lang === 'kn'">ಕೃಷಿ ಬೆಂಬಲ</span>
-    <span x-show="lang === 'ur'">زرعی معاونت</span>
-</span>
-</a>
-</div>
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-ledger-green" style="font-variation-settings: 'FILL' 1;">agriculture</span>
+            <h2 class="font-headline text-xl font-bold text-primary-container">
+                <span x-show="lang === 'en'">Farmer Daily Utility Hub</span>
+                <span x-show="lang === 'pa'">ਕਿਸਾਨ ਰੋਜ਼ਾਨਾ ਸਹੂਲਤ ਕੇਂਦਰ</span>
+                <span x-show="lang === 'hi'">किसान दैनिक उपयोगिता केंद्र</span>
+                <span x-show="lang === 'te'">రైతు రోజువారీ సేవల కేంద్రం</span>
+                <span x-show="lang === 'ta'">விவசாயி தினசரி சேவை மையம்</span>
+                <span x-show="lang === 'ml'">കർഷക സേവനങ്ങൾ</span>
+                <span x-show="lang === 'kn'">ರೈತ ದೈನಂದಿನ ಸೇವಾ ಕೇಂದ್ರ</span>
+                <span x-show="lang === 'ur'">کسان روزمرہ کی خدمات کا مرکز</span>
+            </h2>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <!-- MSP & Procurement Rates -->
+        <div @click="activeModal = 'msp'" class="flex flex-col items-center gap-3 p-4 rounded-2xl bg-white/90 border border-black/5 hover:bg-white transition-all duration-200 hover:scale-[1.03] active:scale-95 group shadow-sm cursor-pointer text-center">
+            <div class="w-12 h-12 rounded-full bg-green-500/15 flex items-center justify-center group-hover:bg-green-500/25 transition-colors">
+                <span class="material-symbols-outlined text-green-700" style="font-variation-settings: 'FILL' 1;">verified</span>
+            </div>
+            <span class="font-label text-xs text-primary-container font-semibold leading-tight">
+                <span x-show="lang === 'en'">MSP & Rates</span>
+                <span x-show="lang === 'pa'">MSP ਅਤੇ ਭਾਅ</span>
+                <span x-show="lang === 'hi'">MSP और दरें</span>
+                <span x-show="lang === 'te'">MSP & ధరలు</span>
+                <span x-show="lang === 'ta'">MSP & விலைகள்</span>
+                <span x-show="lang === 'ml'">MSP നിരക്കുകൾ</span>
+                <span x-show="lang === 'kn'">MSP ಮತ್ತು ದರಗಳು</span>
+                <span x-show="lang === 'ur'">MSP اور شرحیں</span>
+            </span>
+        </div>
+
+        <!-- Crop Yield Calculator -->
+        <div @click="activeModal = 'calculator'" class="flex flex-col items-center gap-3 p-4 rounded-2xl bg-white/90 border border-black/5 hover:bg-white transition-all duration-200 hover:scale-[1.03] active:scale-95 group shadow-sm cursor-pointer text-center">
+            <div class="w-12 h-12 rounded-full bg-amber-500/15 flex items-center justify-center group-hover:bg-amber-500/25 transition-colors">
+                <span class="material-symbols-outlined text-amber-700" style="font-variation-settings: 'FILL' 1;">calculate</span>
+            </div>
+            <span class="font-label text-xs text-primary-container font-semibold leading-tight">
+                <span x-show="lang === 'en'">Yield Calculator</span>
+                <span x-show="lang === 'pa'">ਝਾੜ ਕੈਲਕੁਲੇਟਰ</span>
+                <span x-show="lang === 'hi'">उपज कैलकुलेटर</span>
+                <span x-show="lang === 'te'">దిగుబడి కాలిక్యులేటర్</span>
+                <span x-show="lang === 'ta'">மகசூல் கால்குலேட்டர்</span>
+                <span x-show="lang === 'ml'">യീൽഡ് കാൽക്കുലേറ്റർ</span>
+                <span x-show="lang === 'kn'">ಇಳುವರಿ ಕ್ಯಾಲ್ಕುಲೇಟರ್</span>
+                <span x-show="lang === 'ur'">پیداوار کیلکولیٹر</span>
+            </span>
+        </div>
+
+        <!-- Direct Fertilizer Quota Booking -->
+        <div @click="activeModal = 'fertilizer'" class="flex flex-col items-center gap-3 p-4 rounded-2xl bg-white/90 border border-black/5 hover:bg-white transition-all duration-200 hover:scale-[1.03] active:scale-95 group shadow-sm cursor-pointer text-center">
+            <div class="w-12 h-12 rounded-full bg-blue-500/15 flex items-center justify-center group-hover:bg-blue-500/25 transition-colors">
+                <span class="material-symbols-outlined text-blue-700" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+            </div>
+            <span class="font-label text-xs text-primary-container font-semibold leading-tight">
+                <span x-show="lang === 'en'">Fertilizer Quota</span>
+                <span x-show="lang === 'pa'">ਖਾਦ ਕੋਟਾ ਬੁੱਕ ਕਰੋ</span>
+                <span x-show="lang === 'hi'">उर्वरक कोटा बुक करें</span>
+                <span x-show="lang === 'te'">ఎరువుల కోటా</span>
+                <span x-show="lang === 'ta'">உர ஒதுக்கீடு</span>
+                <span x-show="lang === 'ml'">വളം ക്വാട്ട</span>
+                <span x-show="lang === 'kn'">ಗೊಬ್ಬರ ಕೋಟಾ</span>
+                <span x-show="lang === 'ur'">کھاد کا کوٹہ</span>
+            </span>
+        </div>
+
+        <!-- Smart Irrigation Advisory -->
+        <div @click="activeModal = 'irrigation'" class="flex flex-col items-center gap-3 p-4 rounded-2xl bg-white/90 border border-black/5 hover:bg-white transition-all duration-200 hover:scale-[1.03] active:scale-95 group shadow-sm cursor-pointer text-center">
+            <div class="w-12 h-12 rounded-full bg-cyan-500/15 flex items-center justify-center group-hover:bg-cyan-500/25 transition-colors">
+                <span class="material-symbols-outlined text-cyan-700" style="font-variation-settings: 'FILL' 1;">humidity_percentage</span>
+            </div>
+            <span class="font-label text-xs text-primary-container font-semibold leading-tight">
+                <span x-show="lang === 'en'">Smart Irrigation</span>
+                <span x-show="lang === 'pa'">ਸਿੰਚਾਈ ਸਲਾਹ</span>
+                <span x-show="lang === 'hi'">स्मार्ट सिंचाई</span>
+                <span x-show="lang === 'te'">స్మార్ట్ సేద్యం</span>
+                <span x-show="lang === 'ta'">நீர்ப்பாசன வழிகாட்டி</span>
+                <span x-show="lang === 'ml'">ജലസേചന ഉപദേശം</span>
+                <span x-show="lang === 'kn'">ನೀರಾವರಿ ಸಲಹೆ</span>
+                <span x-show="lang === 'ur'">آبپاشی کی ہدایت</span>
+            </span>
+        </div>
+    </div>
 </section>
 
-<!-- Detailed Records Grid -->
+<!-- Financial & Record Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<a class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group" href="#">
+<div @click="activeModal = 'kcc'" class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group cursor-pointer">
 <div class="p-3 bg-kcc-amber/15 rounded-2xl shrink-0">
 <span class="material-symbols-outlined text-kcc-amber" style="font-variation-settings: 'FILL' 1;">credit_card</span>
 </div>
@@ -276,9 +363,9 @@
     <span x-show="lang === 'ur'">اپنی موجودہ KCC حد اور تجدید کی تفصیلات دیکھیں۔</span>
 </p>
 </div>
-</a>
+</div>
 
-<a class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group" href="#">
+<div @click="activeModal = 'ledger'" class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group cursor-pointer">
 <div class="p-3 bg-ledger-green/15 rounded-2xl shrink-0">
 <span class="material-symbols-outlined text-ledger-green" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
 </div>
@@ -304,9 +391,9 @@
     <span x-show="lang === 'ur'">اپنی طے شدہ اور زیر التواء ادائیگیوں کو ٹریک کریں۔</span>
 </p>
 </div>
-</a>
+</div>
 
-<a class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group" href="#">
+<div @click="activeModal = 'transactions'" class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group cursor-pointer">
 <div class="p-3 bg-transaction-blue/15 rounded-2xl shrink-0">
 <span class="material-symbols-outlined text-transaction-blue" style="font-variation-settings: 'FILL' 1;">history</span>
 </div>
@@ -332,9 +419,9 @@
     <span x-show="lang === 'ur'">تمام فصلوں کی فروخت اور خریداری کی تاریخ۔</span>
 </p>
 </div>
-</a>
+</div>
 
-<a class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group" href="#">
+<div @click="activeModal = 'pass'" class="bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group cursor-pointer">
 <div class="p-3 bg-mandi-purple/15 rounded-2xl shrink-0">
 <span class="material-symbols-outlined text-mandi-purple" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
 </div>
@@ -360,114 +447,280 @@
     <span x-show="lang === 'ur'">پہلے سے تیار کردہ انٹری پاس تک رسائی حاصل کریں۔</span>
 </p>
 </div>
-</a>
-
-<a class="md:col-span-2 bg-white/85 backdrop-blur-md rounded-3xl p-6 border border-white/40 shadow-xl hover:scale-[1.02] transition-all duration-200 flex items-start gap-4 group" href="#">
-<div class="p-3 bg-weather-warm/20 rounded-2xl shrink-0">
-<span class="material-symbols-outlined text-kcc-amber" style="font-variation-settings: 'FILL' 1;">sunny</span>
 </div>
-<div>
-<h3 class="font-body text-base font-bold text-primary-container mb-1">
-    <span x-show="lang === 'en'">Weather & Advisory</span>
-    <span x-show="lang === 'pa'">ਮੌਸਮ ਅਤੇ ਸਲਾਹ</span>
-    <span x-show="lang === 'hi'">मौसम और सलाह</span>
-    <span x-show="lang === 'te'">వాతావరణం & సలహా</span>
-    <span x-show="lang === 'ta'">வானிலை & ஆலோசனை</span>
-    <span x-show="lang === 'ml'">കാലാവസ്ഥയും ഉപദേശവും</span>
-    <span x-show="lang === 'kn'">ಹವಾಮಾನ ಮತ್ತು ಸಲಹೆ</span>
-    <span x-show="lang === 'ur'">موسم اور مشورہ</span>
-</h3>
-<p class="font-label text-xs text-on-surface-variant">
-    <span x-show="lang === 'en'">Get hyper-local forecasts and expert crop advice.</span>
-    <span x-show="lang === 'pa'">ਸਥਾਨਕ ਮੌਸਮ ਦੀ ਭਵਿੱਖਬਾਣੀ ਅਤੇ ਮਾਹਰ ਫਸਲ ਸਲਾਹ ਪ੍ਰਾਪਤ ਕਰੋ।</span>
-    <span x-show="lang === 'hi'">स्थानीय मौसम पूर्वानुमान और विशेषज्ञ फसल सलाह प्राप्त करें।</span>
-    <span x-show="lang === 'te'">స్థానిక వాతావరణ అంచనాలు మరియు నిపుణుల సలహాలను పొందండి.</span>
-    <span x-show="lang === 'ta'">உள்ளூர் வானிலை முன்னறிவிப்பு மற்றும் நிபுணர் பயிர் ஆலோசனையைப் பெறுங்கள்.</span>
-    <span x-show="lang === 'ml'">പ്രാദേശിക കാലാവസ്ഥാ പ്രവചനങ്ങളും വിദഗ്ദ്ധ ഉപദേശങ്ങളും നേടുക.</span>
-    <span x-show="lang === 'kn'">ಸ್ಥಳೀಯ ಹವಾಮಾನ ಮುನ್ಸೂಚನೆ ಮತ್ತು ತಜ್ಞರ ಬೆಳೆ ಸಲಹೆಯನ್ನು ಪಡೆಯಿರಿ.</span>
-    <span x-show="lang === 'ur'">مقامی موسم کی پیشگوئی اور ماہرین کا فصل کا مشورہ حاصل کریں۔</span>
-</p>
-</div>
-</a>
 </div>
 </main>
 
-<!-- Full News & Updates Modal Overlay -->
-<div x-show="showAllNews" x-transition.opacity class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 md:p-8" style="display: none;">
-<div @click.outside="showAllNews = false" class="frosted-pearl w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-[2.5rem] p-6 md:p-10 flex flex-col gap-6 shadow-2xl relative bg-white/95 text-on-surface">
-<div class="flex justify-between items-center border-b border-black/10 pb-4">
-<h3 class="font-headline-lg text-2xl font-bold text-on-surface">
-    <span x-show="lang === 'en'">All Agricultural News & Weather Advisories</span>
-    <span x-show="lang === 'pa'">ਸਾਰੀਆਂ ਖੇਤੀਬਾੜੀ ਖ਼ਬਰਾਂ ਅਤੇ ਮੌਸਮ ਚੇਤਾਵਨੀਆਂ</span>
-    <span x-show="lang === 'hi'">सभी कृषि समाचार और मौसम सलाह</span>
-    <span x-show="lang === 'te'">అన్ని వ్యవసాయ వార్తలు మరియు వాతావరణ హెచ్చరికలు</span>
-    <span x-show="lang === 'ta'">அனைத்து வேளாண் செய்திகள் மற்றும் வானிலை எச்சரிக்கைகள்</span>
-    <span x-show="lang === 'ml'">എല്ലാ കാർഷിക വാർത്തകളും കാലാവസ്ഥാ മുന്നറിയിപ്പുകളും</span>
-    <span x-show="lang === 'kn'">ಎಲ್ಲಾ ಕೃಷಿ ಸುದ್ದಿ ಮತ್ತು ಹವಾಮಾನ ಎಚ್ಚರಿಕೆಗಳು</span>
-    <span x-show="lang === 'ur'">تمام زرعی خبریں اور موسمی انتباہات</span>
-</h3>
-<button @click="showAllNews = false" class="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center hover:bg-black/20 transition-colors cursor-pointer">
-<span class="material-symbols-outlined">close</span>
-</button>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div class="rounded-2xl bg-white/60 border border-black/5 overflow-hidden flex flex-col shadow-sm">
-<div class="h-40 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?q=80&w=800&auto=format&fit=crop')"></div>
-<div class="p-5 flex flex-col gap-2">
-<span class="text-xs font-bold uppercase text-secondary">Weather Advisory</span>
-<h4 class="font-title-md font-bold text-on-surface text-lg">Light Rain Expected Next Week</h4>
-<p class="text-sm text-on-surface-variant">Optimal time for sowing wheat is approaching. Ensure fields are well prepared and drainage channels are clear.</p>
-</div>
-</div>
-<div class="rounded-2xl bg-white/60 border border-black/5 overflow-hidden flex flex-col shadow-sm">
-<div class="h-40 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=800&auto=format&fit=crop')"></div>
-<div class="p-5 flex flex-col gap-2">
-<span class="text-xs font-bold uppercase text-secondary">Government Subsidy</span>
-<h4 class="font-title-md font-bold text-on-surface text-lg">New Subsidy for Drip Irrigation</h4>
-<p class="text-sm text-on-surface-variant">Govt announces 50% direct subsidy on solar-powered drip irrigation systems for registered farmers.</p>
-</div>
-</div>
-<!-- Updated Mandi Update card with working reliable image -->
-<div class="rounded-2xl bg-white/60 border border-black/5 overflow-hidden flex flex-col shadow-sm">
-<div class="h-40 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1586771107445-d3ca888129ff?q=80&w=800&auto=format&fit=crop')"></div>
-<div class="p-5 flex flex-col gap-2">
-<span class="text-xs font-bold uppercase text-secondary">Mandi Update</span>
-<h4 class="font-title-md font-bold text-on-surface text-lg">Expanded Slot Timings at Ludhiana Mandi</h4>
-<p class="text-sm text-on-surface-variant">Gate entry hours extended from 6:00 AM to 9:00 PM during peak harvest season to reduce congestion.</p>
-</div>
-</div>
-<div class="rounded-2xl bg-white/60 border border-black/5 overflow-hidden flex flex-col shadow-sm">
-<div class="h-40 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1574943320219-553eb213f72d?q=80&w=800&auto=format&fit=crop')"></div>
-<div class="p-5 flex flex-col gap-2">
-<span class="text-xs font-bold uppercase text-secondary">Crop Protection</span>
-<h4 class="font-title-md font-bold text-on-surface text-lg">Pest Control Advisory for Paddy</h4>
-<p class="text-sm text-on-surface-variant">Agricultural department issues guidelines for managing stem borer infestation using organic biopesticides.</p>
-</div>
-</div>
-</div>
+<!-- Dynamic Multilingual Interactive Modal Component -->
+<div x-show="activeModal" x-transition.opacity class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 md:p-8" style="display: none;">
+<div @click.outside="activeModal = null" class="w-full max-w-lg rounded-[2.5rem] p-6 md:p-8 flex flex-col gap-6 shadow-2xl relative bg-white text-on-surface">
+    <div class="flex justify-between items-center border-b border-black/10 pb-4">
+        <div>
+            <h3 class="font-headline text-xl font-bold text-primary-container" x-text="activeModal ? modals[activeModal][lang].title : ''"></h3>
+            <p class="text-xs text-outline font-medium mt-0.5" x-text="activeModal ? modals[activeModal][lang].subtitle : ''"></p>
+        </div>
+        <button @click="activeModal = null" class="w-9 h-9 rounded-full bg-black/5 flex items-center justify-center hover:bg-black/10 transition-colors cursor-pointer">
+            <span class="material-symbols-outlined text-sm">close</span>
+        </button>
+    </div>
+
+    <!-- Modal Dynamic Content Body -->
+    <div class="bg-surface-container-low p-4 rounded-2xl border border-black/5 flex flex-col gap-4">
+        
+        <!-- MSP & Procurement Rates Detailed View -->
+        <template x-if="activeModal === 'msp'">
+            <div class="flex flex-col gap-3">
+                <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-black/5 shadow-sm">
+                    <span class="text-xs font-bold text-primary-container">Wheat (कनक / ਕਣਕ)</span>
+                    <span class="text-sm font-extrabold text-ledger-green">₹ 2,425 / Quintal</span>
+                </div>
+                <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-black/5 shadow-sm">
+                    <span class="text-xs font-bold text-primary-container">Paddy Common (धान / ਝੋਨਾ)</span>
+                    <span class="text-sm font-extrabold text-ledger-green">₹ 2,300 / Quintal</span>
+                </div>
+                <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-black/5 shadow-sm">
+                    <span class="text-xs font-bold text-primary-container">Mustard (सरसों / ਸਰ੍ਹੋਂ)</span>
+                    <span class="text-sm font-extrabold text-ledger-green">₹ 5,650 / Quintal</span>
+                </div>
+                <p class="text-[11px] text-outline text-center mt-1">Procurement centers open daily 8 AM - 6 PM with zero waiting time via Kisan Saathi token.</p>
+            </div>
+        </template>
+
+        <!-- Interactive Calculator Component -->
+        <template x-if="activeModal === 'calculator'">
+            <div class="flex flex-col gap-4">
+                <label class="text-xs font-semibold text-primary-container flex justify-between">
+                    <span>Select Land Area (Acres):</span>
+                    <span class="font-bold text-ledger-green" x-text="calculatorInput + ' Acres'"></span>
+                </label>
+                <input type="range" min="1" max="25" x-model.number="calculatorInput" class="w-full accent-ledger-green cursor-pointer">
+                <div class="grid grid-cols-2 gap-3 mt-1">
+                    <div class="bg-white p-3.5 rounded-xl border border-black/5 shadow-sm flex flex-col">
+                        <span class="text-[10px] text-outline uppercase font-semibold">Estimated Yield</span>
+                        <p class="text-lg font-bold text-primary-container mt-1" x-text="calculatedYield() + ' Quintals'"></p>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-black/5 shadow-sm flex flex-col">
+                        <span class="text-[10px] text-outline uppercase font-semibold">Projected Income</span>
+                        <p class="text-lg font-bold text-ledger-green mt-1" x-text="'₹ ' + calculatedRevenue().toLocaleString()"></p>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Interactive Fertilizer Booking Component -->
+        <template x-if="activeModal === 'fertilizer'">
+            <div class="flex flex-col gap-3">
+                <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-black/5 shadow-sm">
+                    <div>
+                        <h4 class="text-xs font-bold text-primary-container">Urea (45kg Bag)</h4>
+                        <p class="text-[11px] text-outline">Subsidized Price: ₹266 / bag</p>
+                    </div>
+                    <span class="text-xs font-bold text-ledger-green px-2.5 py-1 rounded-lg bg-ledger-green/10">6 Bags Quota</span>
+                </div>
+                <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-black/5 shadow-sm">
+                    <div>
+                        <h4 class="text-xs font-bold text-primary-container">DAP (50kg Bag)</h4>
+                        <p class="text-[11px] text-outline">Subsidized Price: ₹1,350 / bag</p>
+                    </div>
+                    <span class="text-xs font-bold text-ledger-green px-2.5 py-1 rounded-lg bg-ledger-green/10">3 Bags Quota</span>
+                </div>
+                <button @click="fertilizerBooked = true" class="w-full py-3 bg-ledger-green text-white text-xs font-bold rounded-xl hover:opacity-90 transition-opacity cursor-pointer shadow-md flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-sm">check_circle</span>
+                    <span x-show="!fertilizerBooked">Confirm Quota Reservation</span>
+                    <span x-show="fertilizerBooked">Quota Reserved Successfully! Token #F-882</span>
+                </button>
+            </div>
+        </template>
+
+        <!-- Smart Irrigation Advisory Detailed View -->
+        <template x-if="activeModal === 'irrigation'">
+            <div class="flex flex-col gap-3">
+                <div class="bg-white p-4 rounded-xl border border-black/5 shadow-sm flex items-center justify-between">
+                    <div>
+                        <span class="text-[11px] text-outline uppercase font-bold">Soil Moisture Sensor</span>
+                        <h4 class="text-base font-bold text-primary-container">Optimal Level (64%)</h4>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-cyan-500/15 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-cyan-700">water_drop</span>
+                    </div>
+                </div>
+                <p class="text-xs font-body text-on-surface leading-relaxed bg-white p-3 rounded-xl border border-black/5">
+                    Light irrigation recommended in 3 days due to expected dry winds. Avoid watering tomorrow morning to prevent root water-logging and fungal stress.
+                </p>
+            </div>
+        </template>
+
+        <!-- Interactive Kisan Credit Card Actions -->
+        <template x-if="activeModal === 'kcc'">
+            <div class="flex flex-col gap-4">
+                <div class="bg-white p-4 rounded-xl border border-black/5 shadow-sm flex flex-col gap-2.5">
+                    <div class="flex justify-between text-xs font-bold text-outline">
+                        <span>Approved Limit: ₹3,00,000</span>
+                        <span>Drawing Power: ₹2,45,000</span>
+                    </div>
+                    <div class="w-full bg-surface-dim h-3 rounded-full overflow-hidden p-0.5">
+                        <div class="bg-kns-amber bg-kcc-amber h-full rounded-full" style="width: 81%;"></div>
+                    </div>
+                    <p class="text-xs text-on-surface-variant leading-snug">Interest Rate: 4% p.a. under interest subvention scheme. Annual renewal due on 15th March 2027.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button @click="kccRenewed = true" class="py-3 bg-kcc-amber text-white text-xs font-bold rounded-xl hover:opacity-90 transition-opacity cursor-pointer shadow-sm flex items-center justify-center gap-1.5">
+                        <span class="material-symbols-outlined text-sm">update</span>
+                        <span x-show="!kccRenewed">Apply Renewal</span>
+                        <span x-show="kccRenewed">Submitted!</span>
+                    </button>
+                    <button @click="alert('KCC Statement downloaded successfully as PDF.')" class="py-3 bg-primary-container text-white text-xs font-bold rounded-xl hover:opacity-90 transition-opacity cursor-pointer shadow-sm flex items-center justify-center gap-1.5">
+                        <span class="material-symbols-outlined text-sm">download</span>
+                        <span>Download PDF</span>
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Interactive Payments & Ledger Actions -->
+        <template x-if="activeModal === 'ledger'">
+            <div class="flex flex-col gap-4">
+                <div class="bg-white p-4 rounded-xl border border-black/5 shadow-sm flex flex-col gap-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-outline font-semibold">Settled Season Total</span>
+                        <span class="text-base font-bold text-ledger-green">₹ 1,42,000</span>
+                    </div>
+                    <div class="flex justify-between items-center border-t border-black/5 pt-2.5">
+                        <span class="text-xs text-outline font-semibold">Pending Direct Bank Transfer (DBT)</span>
+                        <span class="text-base font-bold text-kcc-amber">₹ 18,500</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button @click="paymentRequested = true" class="py-3 bg-ledger-green text-white text-xs font-bold rounded-xl hover:opacity-90 transition-opacity cursor-pointer shadow-sm flex items-center justify-center gap-1.5">
+                        <span class="material-symbols-outlined text-sm">account_balance</span>
+                        <span x-show="!paymentRequested">Request DBT Payout</span>
+                        <span x-show="paymentRequested">Requested</span>
+                    </button>
+                    <button @click="alert('Ledger statement exported to registered mobile number via WhatsApp PDF.')" class="py-3 bg-primary-container text-white text-xs font-bold rounded-xl hover:opacity-90 transition-opacity cursor-pointer shadow-sm flex items-center justify-center gap-1.5">
+                        <span class="material-symbols-outlined text-sm">share</span>
+                        <span>Export WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <!-- Past Transactions History Detailed View -->
+        <template x-if="activeModal === 'transactions'">
+            <div class="flex flex-col gap-2.5">
+                <div class="bg-white p-3 rounded-xl border border-black/5 shadow-sm flex justify-between items-center">
+                    <div>
+                        <h4 class="text-xs font-bold text-primary-container">Sold 25 Quintals Wheat</h4>
+                        <p class="text-[11px] text-outline">Ref: #TRX-8841 • Nashik Mandi</p>
+                    </div>
+                    <span class="text-xs font-extrabold text-ledger-green">+ ₹ 61,250</span>
+                </div>
+                <div class="bg-white p-3 rounded-xl border border-black/5 shadow-sm flex justify-between items-center">
+                    <div>
+                        <h4 class="text-xs font-bold text-primary-container">Purchased Urea (4 Bags)</h4>
+                        <p class="text-[11px] text-outline">Ref: #TRX-8720 • Coop Society</p>
+                    </div>
+                    <span class="text-xs font-extrabold text-error">- ₹ 1,064</span>
+                </div>
+                <div class="bg-white p-3 rounded-xl border border-black/5 shadow-sm flex justify-between items-center">
+                    <div>
+                        <h4 class="text-xs font-bold text-primary-container">Sold 12 Quintals Basmati Rice</h4>
+                        <p class="text-[11px] text-outline">Ref: #TRX-8502 • Ludhiana Mandi</p>
+                    </div>
+                    <span class="text-xs font-extrabold text-ledger-green">+ ₹ 46,200</span>
+                </div>
+            </div>
+        </template>
+
+        <!-- Mandi Gate Pass History Detailed View -->
+        <template x-if="activeModal === 'pass'">
+            <div class="flex flex-col gap-3">
+                <div class="bg-white p-4 rounded-xl border border-black/5 shadow-sm flex flex-col gap-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-primary-container">Pass #GP-2026-449</span>
+                        <span class="text-[10px] font-bold bg-ledger-green/15 text-ledger-green px-2 py-0.5 rounded-full uppercase">Completed</span>
+                    </div>
+                    <div class="text-xs text-on-surface-variant flex flex-col gap-1 border-t border-black/5 pt-2">
+                        <span>📍 Location: Nashik Mandi Weighbridge 3</span>
+                        <span>⚖️ Recorded Weight: 2,540 kg</span>
+                        <span>🚚 Vehicle No: PB-10-AX-9912</span>
+                        <span>📅 Issued Date: 28th August 2026</span>
+                    </div>
+                </div>
+                <button @click="alert('Gate Pass digital token downloaded as PDF.')" class="w-full py-2.5 bg-primary-container text-white text-xs font-bold rounded-xl hover:opacity-90 transition-opacity cursor-pointer">
+                    Download Gate Pass Slip
+                </button>
+            </div>
+        </template>
+
+    </div>
+
+    <button @click="activeModal = null; fertilizerBooked = false; kccRenewed = false; paymentRequested = false;" class="w-full py-3 bg-primary-container text-white font-semibold rounded-xl hover:opacity-90 transition-opacity cursor-pointer">
+        <span x-show="lang === 'en'">Close Details</span>
+        <span x-show="lang === 'pa'">ਵੇਰਵੇ ਬੰਦ ਕਰੋ</span>
+        <span x-show="lang === 'hi'">विवरण बंद करें</span>
+        <span x-show="lang === 'te'">వివరాలను మూసివేయి</span>
+        <span x-show="lang === 'ta'">விவரங்களை மூடு</span>
+        <span x-show="lang === 'ml'">വിവരങ്ങൾ അടയ്ക്കുക</span>
+        <span x-show="lang === 'kn'">ವಿವರಗಳನ್ನು ಮುಚ್ಚಿ</span>
+        <span x-show="lang === 'ur'">تفصیلات بند کریں</span>
+    </button>
 </div>
 </div>
 
-<!-- BottomNav Shell -->
-<nav class="fixed bottom-0 left-0 w-full z-50 rounded-t-xl bg-[#0d1745] shadow-lg md:hidden border-t border-white/10">
-<div class="flex justify-around items-center h-16 px-2 w-full text-white">
-<a class="flex flex-col items-center justify-center text-gray-300 hover:text-white transition-all group w-16 py-1 rounded-xl" href="index.html">
-<span class="material-symbols-outlined text-xl mb-0.5">home</span>
-<span class="text-[10px] font-medium">Home</span>
-</a>
-<a class="flex flex-col items-center justify-center text-gray-300 hover:text-white transition-all group w-16 py-1 rounded-xl" href="market.html">
-<span class="material-symbols-outlined text-xl mb-0.5">storefront</span>
-<span class="text-[10px] font-medium">Market</span>
-</a>
-<a class="flex flex-col items-center justify-center text-gray-300 hover:text-white transition-all group w-16 py-1 rounded-xl" href="queue.html">
-<span class="material-symbols-outlined text-xl mb-0.5">line_weight</span>
-<span class="text-[10px] font-medium">Queue</span>
-</a>
-<a class="flex flex-col items-center justify-center text-gray-300 hover:text-white transition-all group w-16 py-1 rounded-xl" href="profile.html">
-<span class="material-symbols-outlined text-xl mb-0.5" style="font-variation-settings: 'FILL' 1;">person</span>
-<span class="text-[10px] font-medium">Profile</span>
-</a>
-</div>
+<!-- Bottom Navigation Bar with Fully Functional Links -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden bg-[#e8f0e8] rounded-t-[2.5rem] shadow-[0_-8px_20px_rgba(0,0,0,0.06)]">
+    <a aria-label="Home" class="flex flex-col items-center justify-center text-[#3a4d3a] py-1 px-3 hover:opacity-80 transition-opacity" href="index.html">
+        <span class="material-symbols-outlined text-[24px]">home</span>
+        <span class="font-body text-[12px] font-medium mt-1">
+            <span x-show="lang === 'en'">Home</span>
+            <span x-show="lang === 'pa'">ਘਰ</span>
+            <span x-show="lang === 'hi'">होम</span>
+            <span x-show="lang === 'te'">హోమ్</span>
+            <span x-show="lang === 'ta'">முகப்பு</span>
+            <span x-show="lang === 'ml'">ഹോം</span>
+            <span x-show="lang === 'kn'">ಮುಖಪುಟ</span>
+            <span x-show="lang === 'ur'">ہوم</span>
+        </span>
+    </a>
+    <a aria-label="Mandi" class="flex flex-col items-center justify-center text-[#3a4d3a] py-1 px-3 hover:opacity-80 transition-opacity" href="market.html">
+        <span class="material-symbols-outlined text-[24px]">storefront</span>
+        <span class="font-body text-[12px] font-medium mt-1">
+            <span x-show="lang === 'en'">Mandi</span>
+            <span x-show="lang === 'pa'">ਮੰਡੀ</span>
+            <span x-show="lang === 'hi'">मंडी</span>
+            <span x-show="lang === 'te'">మండి</span>
+            <span x-show="lang === 'ta'">சந்தை</span>
+            <span x-show="lang === 'ml'">ചന്ത</span>
+            <span x-show="lang === 'kn'">ಮಂಡಿ</span>
+            <span x-show="lang === 'ur'">منڈی</span>
+        </span>
+    </a>
+    <a aria-label="Queue" class="flex flex-col items-center justify-center text-[#3a4d3a] py-1 px-3 hover:opacity-80 transition-opacity" href="queue.html">
+        <span class="material-symbols-outlined text-[24px]">confirmation_number</span>
+        <span class="font-body text-[12px] font-medium mt-1">
+            <span x-show="lang === 'en'">Book Slot</span>
+            <span x-show="lang === 'pa'">ਸਲਾਟ ਬੁੱਕ ਕਰੋ</span>
+            <span x-show="lang === 'hi'">स्लॉट बुक करें</span>
+            <span x-show="lang === 'te'">స్లాట్ బుక్ చేయండి</span>
+            <span x-show="lang === 'ta'">ஸ்லாட் பதிவு</span>
+            <span x-show="lang === 'ml'">സ്ലോട്ട് ബുക്ക് ചെയ്യുക</span>
+            <span x-show="lang === 'kn'">ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ</span>
+            <span x-show="lang === 'ur'">سلاٹ بک کریں</span>
+        </span>
+    </a>
+    <a aria-label="Profile" class="flex flex-col items-center justify-center text-[#3a4d3a] py-1 px-3 hover:opacity-80 transition-opacity" href="profile.html">
+        <span class="material-symbols-outlined text-[24px]">person</span>
+        <span class="font-body text-[12px] font-medium mt-1">
+            <span x-show="lang === 'en'">Profile</span>
+            <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
+            <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
+            <span x-show="lang === 'te'">ప్రొఫైల్</span>
+            <span x-show="lang === 'ta'">சுயவிவரம்</span>
+            <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
+            <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
+            <span x-show="lang === 'ur'">پروفائل</span>
+        </span>
+    </a>
 </nav>
 
 </body>

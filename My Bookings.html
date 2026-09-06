@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-    <title>My Bookings - Kisan Konnect</title>
+    <title>My Bookings - KIsan Saathi</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
@@ -33,7 +33,7 @@
                         "on-secondary-container": "#684000",
                         "background": "#f8f9ff",
                         "surface": "#f8f9ff",
-                        "surface-glass": "rgba(255, 255, 255, 0.8)",
+                        "surface-glass": "rgba(255, 255, 255, 0.85)",
                         "inverse-on-surface": "#eaf1ff",
                         "primary-container": "#0d1745",
                         "surface-container-high": "#dce9ff",
@@ -144,12 +144,10 @@
         }
     </style>
 </head>
-<body class="bg-background text-on-background font-body-md text-[16px] antialiased min-h-screen pb-[100px]" x-data="{ lang: 'en' }">
+<body class="bg-background text-on-background font-body-md text-[16px] antialiased min-h-screen pb-[100px]" x-data="bookingsApp()">
 
-<!-- Background Image with Overlay -->
 <div class="bg-agricultural-overlay" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDx6FsZMtBmh1HSue0IF2MqBQ8WMgHzLeHNUPgrSnGvQne1ziz3nFsMak4i4uKlr_VuNaXURlFRjYBAS_KZpMjbTxsiAxgZ8UQYdZmx8Q3pn7jOHa9sg8u7zfNsmgSnAsaXOhmNGq7ZKW-Wi1Vh3DzCzVUL4F1ALqURnPgAAzNeo1Q6a5O6sgfU-sPpxmC4i7hGXvwuc2DmccHYFCWeeL3mctHoon3LnEOJnxLbu9sN5FZiUI3I6DCY')"></div>
 
-<!-- TopAppBar -->
 <header class="bg-primary-container text-white shadow-md flex items-center justify-between px-4 w-full h-16 fixed top-0 z-50">
     <button class="flex items-center justify-center p-2 rounded-full hover:bg-white/10 active:scale-90 transition-transform text-white cursor-pointer" onclick="history.back()">
         <span class="material-symbols-outlined">arrow_back</span>
@@ -165,7 +163,6 @@
         <span x-show="lang === 'ur'">میری بکنگ</span>
     </h1>
     
-    <!-- Language Selector Dropdown -->
     <div class="flex items-center">
         <select x-model="lang" aria-label="Select Language" class="bg-white/10 text-white border border-white/20 rounded-lg px-2 py-1 text-[11px] font-bold focus:outline-none cursor-pointer">
             <option value="en" class="text-black">English</option>
@@ -180,22 +177,20 @@
     </div>
 </header>
 
-<!-- Main Content Canvas -->
 <main class="pt-[88px] px-4 md:px-8 max-w-[1200px] mx-auto relative z-10 flex flex-col gap-5">
     
-    <!-- Segmented Control -->
     <div class="flex p-1 bg-surface-container-low rounded-xl border border-border-subtle w-full max-w-sm mx-auto shadow-sm">
-        <button class="flex-1 py-2 text-center rounded-lg text-xs font-bold transition-colors duration-200 tab-active cursor-pointer" id="tab-upcoming" onclick="switchTab('upcoming')">
+        <button class="flex-1 py-2 text-center rounded-lg text-xs font-bold transition-colors duration-200 cursor-pointer" :class="activeTab === 'upcoming' ? 'tab-active' : 'tab-inactive'" @click="activeTab = 'upcoming'">
             <span x-show="lang === 'en'">Upcoming</span>
-            <span x-show="lang === 'pa'">आਉਣ ਵਾਲੇ</span>
+            <span x-show="lang === 'pa'">ਆਉਣ ਵਾਲੇ</span>
             <span x-show="lang === 'hi'">आगामी</span>
             <span x-show="lang === 'te'">రాబోయేవి</span>
             <span x-show="lang === 'ta'">வரவிருக்கும்</span>
-            <span x-show="lang === 'ml'"> വരാനിരിക്കുന്നവ</span>
+            <span x-show="lang === 'ml'">വരാനിരിക്കുന്നവ</span>
             <span x-show="lang === 'kn'">ಮುಂಬರುವ</span>
             <span x-show="lang === 'ur'">آنے والے</span>
         </button>
-        <button class="flex-1 py-2 text-center rounded-lg text-xs font-bold transition-colors duration-200 tab-inactive cursor-pointer" id="tab-past" onclick="switchTab('past')">
+        <button class="flex-1 py-2 text-center rounded-lg text-xs font-bold transition-colors duration-200 cursor-pointer" :class="activeTab === 'past' ? 'tab-active' : 'tab-inactive'" @click="activeTab = 'past'">
             <span x-show="lang === 'en'">Past</span>
             <span x-show="lang === 'pa'">ਪਿછਲੇ</span>
             <span x-show="lang === 'hi'">पिछले</span>
@@ -207,102 +202,71 @@
         </button>
     </div>
 
-    <!-- Bookings List (Upcoming) -->
-    <div class="flex flex-col gap-4" id="list-upcoming">
-        <!-- Booking Card 1 -->
-        <div class="bento-card frosted-glass flex flex-col gap-3 relative overflow-hidden group cursor-pointer">
-            <div class="absolute top-0 left-0 w-full h-1 bg-ledger-green opacity-85"></div>
-            <div class="flex justify-between items-start">
-                <div class="flex flex-col">
-                    <span class="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Wheat Procurement</span>
-                    <h3 class="text-[18px] font-semibold text-on-background mt-1">Ludhiana Mandi</h3>
-                </div>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#ecfdf5] text-ledger-green border border-[#d1fae5]">
-                    <span x-show="lang === 'en'">Confirmed</span>
-                    <span x-show="lang === 'pa'">ਪੁਸ਼ਟੀ ਕੀਤੀ</span>
-                    <span x-show="lang === 'hi'">पुष्टि की गई</span>
-                    <span x-show="lang === 'te'">నిధ్ధారించబడింది</span>
-                    <span x-show="lang === 'ta'">உறுதிப்படுத்தப்பட்டது</span>
-                    <span x-show="lang === 'ml'"> സ്ഥിരീകരിച്ചു</span>
-                    <span x-show="lang === 'kn'">ಖಚಿತಪಡಿಸಲಾಗಿದೆ</span>
-                    <span x-show="lang === 'ur'">تصدیق شدہ</span>
-                </span>
-            </div>
-            <div class="flex items-center gap-2 text-on-surface-variant mt-1">
-                <span class="material-symbols-outlined text-[18px]">calendar_today</span>
-                <span class="text-sm font-medium">25 Oct, 10:30 AM</span>
-            </div>
-            <div class="flex items-center gap-2 text-on-surface-variant">
-                <span class="material-symbols-outlined text-[18px]">scale</span>
-                <span class="text-sm font-medium">Expected Qty: 150 Quintals</span>
-            </div>
-            <div class="mt-2 pt-3 border-t border-border-subtle flex justify-end">
-                <button class="flex items-center gap-2 px-4 py-2 bg-primary-container text-white rounded-lg text-xs font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm cursor-pointer">
-                    <span class="material-symbols-outlined text-[16px]">qr_code_2</span>
-                    <span x-show="lang === 'en'">View Pass</span>
-                    <span x-show="lang === 'pa'">ਪਾਸ ਵੇਖੋ</span>
-                    <span x-show="lang === 'hi'">पास देखें</span>
-                    <span x-show="lang === 'te'">పాస్ వీక్షించండి</span>
-                    <span x-show="lang === 'ta'">பாஸைக் காண்க</span>
-                    <span x-show="lang === 'ml'">പാസ് കാണുക</span>
-                    <span x-show="lang === 'kn'">ಪಾಸ್ ವೀಕ್ಷಿಸಿ</span>
-                    <span x-show="lang === 'ur'">پاس دیکھیں</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Booking Card 2 -->
-        <div class="bento-card frosted-glass flex flex-col gap-3 relative overflow-hidden group cursor-pointer">
-            <div class="absolute top-0 left-0 w-full h-1 bg-kcc-amber opacity-85"></div>
-            <div class="flex justify-between items-start">
-                <div class="flex flex-col">
-                    <span class="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Paddy Storage</span>
-                    <h3 class="text-[18px] font-semibold text-on-background mt-1">Khanna Warehouse</h3>
-                </div>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#fffbeb] text-kcc-amber border border-[#fef3c7]">
-                    <span x-show="lang === 'en'">Pending</span>
-                    <span x-show="lang === 'pa'">ਬਕਾਇਆ</span>
-                    <span x-show="lang === 'hi'">लंबित</span>
-                    <span x-show="lang === 'te'">పెండింగ్‌లో ఉంది</span>
-                    <span x-show="lang === 'ta'">நிலுவையில் உள்ளது</span>
-                    <span x-show="lang === 'ml'">തീർപ്പുകൽപ്പിക്കാത്തത്</span>
-                    <span x-show="lang === 'kn'">ಬಾಕಿ ಉಳಿದಿದೆ</span>
-                    <span x-show="lang === 'ur'">زیر التواء</span>
-                </span>
-            </div>
-            <div class="flex items-center gap-2 text-on-surface-variant mt-1">
-                <span class="material-symbols-outlined text-[18px]">calendar_today</span>
-                <span class="text-sm font-medium">28 Oct, 02:00 PM</span>
-            </div>
-            <div class="flex items-center gap-2 text-on-surface-variant">
-                <span class="material-symbols-outlined text-[18px]">local_shipping</span>
-                <span class="text-sm font-medium">Vehicle: PB10 AB 1234</span>
-            </div>
-            <div class="mt-2 pt-3 border-t border-border-subtle flex justify-end">
-                <button class="flex items-center gap-2 px-4 py-2 border border-primary-container text-primary-container rounded-lg text-xs font-bold hover:bg-surface-container-low transition-all active:scale-95 cursor-pointer">
-                    <span class="material-symbols-outlined text-[16px]">edit_calendar</span>
-                    <span x-show="lang === 'en'">Reschedule</span>
-                    <span x-show="lang === 'pa'">ਦੁਬਾਰਾ ਸਮਾਂ ਤੈਅ ਕਰੋ</span>
-                    <span x-show="lang === 'hi'">पुनर्निर्धारित करें</span>
-                    <span x-show="lang === 'te'">పునర్నియమించండి</span>
-                    <span x-show="lang === 'ta'">மறுதுவக்கம்</span>
-                    <span x-show="lang === 'ml'">പുനഃക്രമീകരിക്കുക</span>
-                    <span x-show="lang === 'kn'">ಮರುನಿಗದಿಪಡಿಸಿ</span>
-                    <span x-show="lang === 'ur'">دوبارہ طے کریں</span>
-                </button>
-            </div>
-        </div>
+    <div x-show="successMessage" x-transition class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl relative text-xs font-semibold flex items-center justify-between" style="display: none;">
+        <span x-text="successMessage"></span>
+        <button @click="successMessage = ''" class="font-bold">&times;</button>
     </div>
 
-    <!-- Bookings List (Past) - Initially Hidden -->
-    <div class="hidden flex-col gap-4" id="list-past">
-        <!-- Booking Card Past 1 -->
+    <div class="flex flex-col gap-4" x-show="activeTab === 'upcoming'">
+        <template x-for="(booking, index) in bookings" :key="index">
+            <div class="bento-card frosted-glass flex flex-col gap-3 relative overflow-hidden group cursor-pointer">
+                <div class="absolute top-0 left-0 w-full h-1" :class="booking.status === 'Confirmed' ? 'bg-ledger-green' : 'bg-kcc-amber'" style="opacity: 0.85;"></div>
+                <div class="flex justify-between items-start">
+                    <div class="flex flex-col">
+                        <span class="text-xs text-on-surface-variant uppercase tracking-wider font-semibold" x-text="booking.type"></span>
+                        <h3 class="text-[18px] font-semibold text-on-background mt-1" x-text="booking.center"></h3>
+                    </div>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium" :class="booking.status === 'Confirmed' ? 'bg-[#ecfdf5] text-ledger-green border border-[#d1fae5]' : 'bg-[#fffbeb] text-kcc-amber border border-[#fef3c7]'">
+                        <span x-text="booking.status"></span>
+                    </span>
+                </div>
+                <div class="flex items-center gap-2 text-on-surface-variant mt-1">
+                    <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                    <span class="text-sm font-medium" x-text="booking.time"></span>
+                </div>
+                <div class="flex items-center gap-2 text-on-surface-variant">
+                    <span class="material-symbols-outlined text-[18px]" x-text="booking.isVehicle ? 'local_shipping' : 'scale'"></span>
+                    <span class="text-sm font-medium" x-text="booking.detail"></span>
+                </div>
+                <div class="mt-2 pt-3 border-t border-border-subtle flex justify-end gap-2">
+                    <template x-if="booking.status === 'Confirmed'">
+                        <button @click="openPassModal(booking)" class="flex items-center gap-2 px-4 py-2 bg-primary-container text-white rounded-lg text-xs font-bold hover:opacity-90 transition-all active:scale-95 shadow-sm cursor-pointer">
+                            <span class="material-symbols-outlined text-[16px]">qr_code_2</span>
+                            <span x-show="lang === 'en'">View Pass</span>
+                            <span x-show="lang === 'pa'">ਪਾਸ ਵੇਖੋ</span>
+                            <span x-show="lang === 'hi'">पास देखें</span>
+                            <span x-show="lang === 'te'">పాస్ వీక్షించండి</span>
+                            <span x-show="lang === 'ta'">பாஸைக் காண்க</span>
+                            <span x-show="lang === 'ml'">പാസ് കാണുക</span>
+                            <span x-show="lang === 'kn'">ಪಾಸ್ ವೀಕ್ಷಿಸಿ</span>
+                            <span x-show="lang === 'ur'">پاس دیکھیں</span>
+                        </button>
+                    </template>
+                    <template x-if="booking.status === 'Pending'">
+                        <button @click="openRescheduleModal(index)" class="flex items-center gap-2 px-4 py-2 border border-primary-container text-primary-container rounded-lg text-xs font-bold hover:bg-surface-container-low transition-all active:scale-95 cursor-pointer">
+                            <span class="material-symbols-outlined text-[16px]">edit_calendar</span>
+                            <span x-show="lang === 'en'">Reschedule</span>
+                            <span x-show="lang === 'pa'">ਦੁਬਾਰਾ ਸਮਾਂ ਤੈਅ ਕਰੋ</span>
+                            <span x-show="lang === 'hi'">पुनर्निर्धारित करें</span>
+                            <span x-show="lang === 'te'">పునర్నియమించండి</span>
+                            <span x-show="lang === 'ta'">மறுதுவக்கம்</span>
+                            <span x-show="lang === 'ml'">പുനഃക്രമീകരിക്കുക</span>
+                            <span x-show="lang === 'kn'">ಮರುನಿಗದಿಪಡಿಸಿ</span>
+                            <span x-show="lang === 'ur'">دوبارہ طے کریں</span>
+                        </button>
+                    </template>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <div class="flex flex-col gap-4" x-show="activeTab === 'past'" x-cloak>
         <div class="bento-card frosted-glass flex flex-col gap-3 relative overflow-hidden opacity-85">
             <div class="absolute top-0 left-0 w-full h-1 bg-outline opacity-50"></div>
             <div class="flex justify-between items-start">
                 <div class="flex flex-col">
                     <span class="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Mustard Procurement</span>
-                    <h3 class="text-[18px] font-semibold text-on-background mt-1">Moga Mandi</h3>
+                    <h3 class="text-[18px] font-semibold text-on-background mt-1">Jaipur Main Mandi</h3>
                 </div>
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-surface-container-low text-on-surface-variant border border-border-subtle">
                     <span x-show="lang === 'en'">Completed</span>
@@ -324,7 +288,7 @@
                 <span class="text-sm font-medium">Receipt: #RC-9982</span>
             </div>
             <div class="mt-2 pt-3 border-t border-border-subtle flex justify-end">
-                <button class="flex items-center gap-2 px-4 py-2 text-transaction-blue text-xs font-bold hover:underline active:opacity-80 cursor-pointer">
+                <button @click="openDetailsModal('Jaipur Main Mandi', 'Mustard Procurement', '12 Oct, 09:15 AM', 'Receipt: #RC-9982', '₹45,200 Credited', 'Completed')" class="flex items-center gap-2 px-4 py-2 text-transaction-blue text-xs font-bold hover:underline active:opacity-80 cursor-pointer">
                     <span x-show="lang === 'en'">View Details</span>
                     <span x-show="lang === 'pa'">ਵੇਰਵੇ ਵੇਖੋ</span>
                     <span x-show="lang === 'hi'">विवरण देखें</span>
@@ -339,7 +303,73 @@
     </div>
 </main>
 
-<!-- BottomNavBar with Pointer Events Fully Enabled -->
+<div x-show="showPassModal" x-transition.opacity class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4" style="display: none;">
+    <div @click.outside="showPassModal = false" class="frosted-glass w-full max-w-md rounded-[24px] p-6 flex flex-col gap-4 shadow-2xl relative bg-white">
+        <div class="flex justify-between items-center border-b border-border-subtle pb-3">
+            <h3 class="font-headline text-lg font-bold text-primary-container" x-text="modalData.title"></h3>
+            <button @click="showPassModal = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 cursor-pointer">
+                <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+        </div>
+        <div class="flex flex-col items-center gap-3 py-2">
+            <div class="bg-primary-container text-white px-4 py-1.5 rounded-full text-xs font-bold" x-text="modalData.token"></div>
+            <div class="w-32 h-32 bg-slate-100 rounded-xl flex items-center justify-center border border-dashed border-slate-300">
+                <span class="material-symbols-outlined text-[64px] text-primary-container">qr_code_2</span>
+            </div>
+            <p class="text-xs text-on-surface-variant text-center font-medium">Scan this digital gate pass QR code upon arrival at the procurement center entrance.</p>
+        </div>
+        <div class="bg-surface-container-low rounded-xl p-3 flex flex-col gap-1.5 text-xs text-on-surface">
+            <div class="flex justify-between"><span class="text-outline">Category:</span> <span class="font-semibold" x-text="modalData.category"></span></div>
+            <div class="flex justify-between"><span class="text-outline">Scheduled Time:</span> <span class="font-semibold" x-text="modalData.time"></span></div>
+            <div class="flex justify-between"><span class="text-outline">Details:</span> <span class="font-semibold" x-text="modalData.info"></span></div>
+        </div>
+        <button @click="showPassModal = false" class="w-full bg-primary-container text-white py-3 rounded-xl font-bold text-sm shadow-md cursor-pointer">Close Pass</button>
+    </div>
+</div>
+
+<div x-show="showDetailsModal" x-transition.opacity class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4" style="display: none;">
+    <div @click.outside="showDetailsModal = false" class="frosted-glass w-full max-w-md rounded-[24px] p-6 flex flex-col gap-4 shadow-2xl relative bg-white">
+        <div class="flex justify-between items-center border-b border-border-subtle pb-3">
+            <h3 class="font-headline text-lg font-bold text-primary-container" x-text="detailsData.title"></h3>
+            <button @click="showDetailsModal = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 cursor-pointer">
+                <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+        </div>
+        <div class="flex flex-col gap-3 py-2">
+            <div class="flex justify-between items-center bg-green-50 border border-green-200 p-3 rounded-xl">
+                <span class="text-xs font-bold text-ledger-green uppercase">Status: Completed</span>
+                <span class="text-sm font-bold text-green-700" x-text="detailsData.amount"></span>
+            </div>
+            <div class="bg-surface-container-low rounded-xl p-3.5 flex flex-col gap-2 text-xs text-on-surface">
+                <div class="flex justify-between"><span class="text-outline">Crop Category:</span> <span class="font-semibold" x-text="detailsData.category"></span></div>
+                <div class="flex justify-between"><span class="text-outline">Procurement Date:</span> <span class="font-semibold" x-text="detailsData.time"></span></div>
+                <div class="flex justify-between"><span class="text-outline">Reference Number:</span> <span class="font-semibold" x-text="detailsData.receipt"></span></div>
+                <div class="flex justify-between"><span class="text-outline">Farmer ID Linked:</span> <span class="font-semibold">PB-9842 (Harjinder Singh)</span></div>
+            </div>
+        </div>
+        <button @click="showDetailsModal = false" class="w-full bg-primary-container text-white py-3 rounded-xl font-bold text-sm shadow-md cursor-pointer">Done</button>
+    </div>
+</div>
+
+<div x-show="showRescheduleModal" x-transition.opacity class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4" style="display: none;">
+    <div @click.outside="showRescheduleModal = false" class="frosted-glass w-full max-w-md rounded-[24px] p-6 flex flex-col gap-4 shadow-2xl relative bg-white">
+        <div class="flex justify-between items-center border-b border-border-subtle pb-3">
+            <h3 class="font-headline text-lg font-bold text-primary-container">Reschedule Booking Slot</h3>
+            <button @click="showRescheduleModal = false" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 cursor-pointer">
+                <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+        </div>
+        <div class="flex flex-col gap-3 py-2">
+            <label class="text-xs font-bold text-on-surface-variant">Select New Date & Time Slot:</label>
+            <input type="datetime-local" x-model="newDateTime" class="w-full p-3 rounded-xl border border-border-subtle bg-surface-container-low text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-primary-container"/>
+        </div>
+        <div class="flex gap-3 mt-2">
+            <button @click="showRescheduleModal = false" class="flex-1 bg-slate-100 text-slate-700 py-3 rounded-xl font-bold text-sm cursor-pointer">Cancel</button>
+            <button @click="confirmReschedule()" class="flex-1 bg-primary-container text-white py-3 rounded-xl font-bold text-sm shadow-md cursor-pointer">Confirm New Slot</button>
+        </div>
+    </div>
+</div>
+
 <nav class="bg-white/95 backdrop-blur-md border-t border-slate-200 fixed bottom-0 left-0 w-full z-[9999] flex justify-around items-center px-4 py-2 shadow-lg rounded-t-xl pointer-events-auto">
     <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors cursor-pointer" href="index.html">
         <span class="material-symbols-outlined text-[24px] mb-1">home</span>
@@ -396,32 +426,76 @@
 </nav>
 
 <script>
-    function switchTab(tab) {
-        const upBtn = document.getElementById('tab-upcoming');
-        const pastBtn = document.getElementById('tab-past');
-        const upList = document.getElementById('list-upcoming');
-        const pastList = document.getElementById('list-past');
+    function bookingsApp() {
+        return {
+            lang: 'en',
+            activeTab: 'upcoming',
+            showPassModal: false,
+            showDetailsModal: false,
+            showRescheduleModal: false,
+            selectedBookingIndex: null,
+            newDateTime: '',
+            successMessage: '',
+            modalData: { title: '', category: '', time: '', info: '', token: '', status: '' },
+            detailsData: { title: '', category: '', time: '', receipt: '', amount: '', status: '' },
+            bookings: [
+                {
+                    center: 'Bagru Mandi Center',
+                    type: 'Wheat Procurement',
+                    time: '25 Oct, 10:30 AM',
+                    detail: 'Expected Qty: 150 Quintals',
+                    status: 'Confirmed',
+                    token: 'Token #04',
+                    isVehicle: false
+                },
+                {
+                    center: 'Bhakrota Center',
+                    type: 'Paddy Storage',
+                    time: '28 Oct, 02:00 PM',
+                    detail: 'Vehicle: RJ14 AB 1234',
+                    status: 'Pending',
+                    token: 'Token #12',
+                    isVehicle: true
+                }
+            ],
+            openPassModal(booking) {
+                this.modalData = {
+                    title: booking.center,
+                    category: booking.type,
+                    time: booking.time,
+                    info: booking.detail,
+                    token: booking.token,
+                    status: booking.status
+                };
+                this.showPassModal = true;
+            },
+            openDetailsModal(title, category, time, receipt, amount, status) {
+                this.detailsData = { title, category, time, receipt, amount, status };
+                this.showDetailsModal = true;
+            },
+            openRescheduleModal(index) {
+                this.selectedBookingIndex = index;
+                this.newDateTime = '';
+                this.showRescheduleModal = true;
+            },
+            confirmReschedule() {
+                if (!this.newDateTime) {
+                    alert('Please select a valid date and time slot.');
+                    return;
+                }
+                // Format datetime string nicely
+                const d = new Date(this.newDateTime);
+                const options = { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
+                const formattedDate = d.toLocaleString('en-US', options);
 
-        if (tab === 'upcoming') {
-            upBtn.classList.add('tab-active');
-            upBtn.classList.remove('tab-inactive');
-            pastBtn.classList.add('tab-inactive');
-            pastBtn.classList.remove('tab-active');
-            
-            upList.classList.remove('hidden');
-            upList.classList.add('flex');
-            pastList.classList.add('hidden');
-            pastList.classList.remove('flex');
-        } else {
-            pastBtn.classList.add('tab-active');
-            pastBtn.classList.remove('tab-inactive');
-            upBtn.classList.add('tab-inactive');
-            upBtn.classList.remove('tab-active');
-            
-            pastList.classList.remove('hidden');
-            pastList.classList.add('flex');
-            upList.classList.add('hidden');
-            upList.classList.remove('flex');
+                // Update booking
+                this.bookings[this.selectedBookingIndex].time = formattedDate;
+                this.bookings[this.selectedBookingIndex].status = 'Confirmed';
+
+                this.showRescheduleModal = false;
+                this.successMessage = 'Booking slot successfully rescheduled and confirmed!';
+                setTimeout(() => { this.successMessage = ''; }, 4000);
+            }
         }
     }
 </script>

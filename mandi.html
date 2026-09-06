@@ -1,12 +1,53 @@
 <!DOCTYPE html>
-<html class="light" lang="en" x-data="{ lang: 'en' }">
+<html class="light" lang="en" x-data="{ 
+    lang: 'en', 
+    searchQuery: '', 
+    selectedCategory: 'all',
+    selectedCropForAnalysis: null,
+    crops: [
+        { name: 'Wheat (Lokwan)', category: 'grains', mandi: 'Nashik Mandi', price: '₹2,450', unit: '/ quintal', change: '+2.4% today', isUp: true, image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=150&auto=format&fit=crop&q=80' },
+        { name: 'Tomato (Hybrid)', category: 'vegetables', mandi: 'Pune APMC', price: '₹1,200', unit: '/ quintal', change: '-5.1% today', isUp: false, image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=150&auto=format&fit=crop&q=80' },
+        { name: 'Toor Dal', category: 'pulses', mandi: 'Latur Market', price: '₹11,850', unit: '/ quintal', change: '+1.2% today', isUp: true, image: 'Toor Dal.jpeg' },
+        { name: 'Basmati Rice', category: 'grains', mandi: 'Karnal Mandi', price: '₹3,850', unit: '/ quintal', change: '+1.8% today', isUp: true, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=150&auto=format&fit=crop&q=80' },
+        { name: 'Yellow Maize', category: 'grains', mandi: 'Davangere Mandi', price: '₹2,150', unit: '/ quintal', change: '-0.8% today', isUp: false, image: 'Yellow Maize.jpeg' },
+        { name: 'Moong Dal', category: 'pulses', mandi: 'Indore Mandi', price: '₹8,900', unit: '/ quintal', change: '+3.1% today', isUp: true, image: 'Moon Dal.jpeg' },
+        { name: 'Chana (Gram)', category: 'pulses', mandi: 'Delhi Mandi', price: '₹5,400', unit: '/ quintal', change: '+0.5% today', isUp: true, image: 'Chana.jpeg' },
+        { name: 'Onion (Red)', category: 'vegetables', mandi: 'Lasalgaon Mandi', price: '₹1,800', unit: '/ quintal', change: '-3.2% today', isUp: false, image: 'Onion (Red).jpeg' },
+        { name: 'Potato (Jyoti)', category: 'vegetables', mandi: 'Agra Mandi', price: '₹1,350', unit: '/ quintal', change: '+1.0% today', isUp: true, image: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=150&auto=format&fit=crop&q=80' },
+        { name: 'Mustard Seeds', category: 'grains', mandi: 'Jaipur Mandi', price: '₹5,650', unit: '/ quintal', change: '+1.5% today', isUp: true, image: 'MustardSeeds.webp' },
+        { name: 'Green Chilli', category: 'vegetables', mandi: 'Guntur APMC', price: '₹4,200', unit: '/ quintal', change: '-2.0% today', isUp: false, image: 'Green Chilli.webp' },
+        { name: 'Urad Dal', category: 'pulses', mandi: 'Chennai Market', price: '₹9,400', unit: '/ quintal', change: '+0.9% today', isUp: true, image: 'Urad Dal.webp' }
+    ],
+    get filteredCrops() {
+        return this.crops.filter(crop => {
+            const matchesCategory = this.selectedCategory === 'all' || crop.category === this.selectedCategory;
+            const matchesSearch = crop.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || crop.mandi.toLowerCase().includes(this.searchQuery.toLowerCase());
+            return matchesCategory && matchesSearch;
+        });
+    },
+    openAnalysis(crop) {
+        this.selectedCropForAnalysis = crop;
+    },
+    analysisText(key) {
+        const dict = {
+            en: { analysis: 'Analysis', current: 'Current Price:', location: 'Mandi Location:', trend: '7-Day Trend:', up: 'Upward (+3.2%)', down: 'Downward (-1.8%)', desc: 'Market demand for this crop remains steady. Recommended selling window is within 3-5 days to maximize profit.', close: 'Close Analysis' },
+            pa: { analysis: 'ਵਿਸ਼ਲੇਸ਼ਣ', current: 'ਮੌਜੂਦਾ ਕੀਮਤ:', location: 'ਮੰਡੀ ਸਥਾਨ:', trend: '7-ਦਿਨ ਦਾ ਰੁਝਾਨ:', up: 'ਉੱਪਰ ਵੱਲ (+3.2%)', down: 'ਹੇਠਾਂ ਵੱਲ (-1.8%)', desc: 'ਇਸ ਫਸਲ ਦੀ ਮੰਗ ਸਥਿਰ ਹੈ। ਵੱਧ ਤੋਂ ਵੱਧ ਮੁਨਾਫ਼ਾ ਕਮਾਉਣ ਲਈ 3-5 ਦਿਨਾਂ ਦੇ ਅੰਦਰ ਵੇਚਣ ਦੀ ਸਿਫਾਰਸ਼ ਕੀਤੀ ਜਾਂਦੀ ਹੈ।', close: 'ਵਿਸ਼ਲੇਸ਼ਣ ਬੰਦ ਕਰੋ' },
+            hi: { analysis: 'विश्लेषण', current: 'वर्तमान मूल्य:', location: 'मंडी स्थान:', trend: '7-दिवसीय रुझान:', up: 'ऊपर की ओर (+3.2%)', down: 'नीचे की ओर (-1.8%)', desc: 'इस फसल की बाजार मांग स्थिर है। अधिकतम लाभ के लिए 3-5 दिनों के भीतर बेचने की सिफारिश की जाती है।', close: 'विश्लेषण बंद करें' },
+            te: { analysis: 'విశ్లేషణ', current: 'ప్రస్తుత ధర:', location: 'మండి ప్రాంతం:', trend: '7-రోజుల ధోరణి:', up: 'పెరుగుదల (+3.2%)', down: 'తగ్గుదల (-1.8%)', desc: 'ఈ పంటకు మార్కెట్ డిమాండ్ స్థిరంగా ఉంది. లాభం పెంచుకోవడానికి 3-5 రోజుల్లో విక్రయించడం మంచిది.', close: 'విశ్లేషణ మూసివేయి' },
+            ta: { analysis: 'பகுப்பாய்வு', current: 'தற்போதைய விலை:', location: 'சந்தை இடம்:', trend: '7-நாள் போக்கு:', up: 'ஏறுமுகம் (+3.2%)', down: 'இறங்குமுகம் (-1.8%)', desc: 'இந்த பயிருக்கான சந்தை தேவை சீராக உள்ளது. லாபத்தை அதிகரிக்க 3-5 நாட்களுக்குள் விற்க பரிந்துரைக்கப்படுகிறது.', close: 'பகுப்பாய்வை மூடு' },
+            ml: { analysis: 'വിശകലനം', current: 'നിലവിലെ വില:', location: 'ചന്തയുടെ സ്ഥലം:', trend: '7-ദിവസത്തെ ട്രെൻഡ്:', up: 'കൂടുതൽ (+3.2%)', down: 'കുറവ് (-1.8%)', desc: 'ഈ വിളയ്ക്കുള്ള വിപണി ആവശ്യം സ്ഥിരമാണ്. പരമാവധി ലാഭം നേടാൻ 3-5 ദിവസത്തിനുള്ളിൽ വിൽക്കുക.', close: 'വിശകലനം അടയ്ക്കുക' },
+            kn: { analysis: 'ವಿಶ್ಲೇಷಣೆ', current: 'ಪ್ರಸ್ತುತ ಬೆಲೆ:', location: 'ಮಂಡಿ ಸ್ಥಳ:', trend: '7-ದಿನಗಳ ಪ್ರವೃತ್ತಿ:', up: 'ಏರಿಕೆ (+3.2%)', down: 'ಇಳಿಕೆ (-1.8%)', desc: 'ಈ ಬೆಳೆಯ ಮಾರುಕಟ್ಟೆ ಬೇಡಿಕೆ ಸ್ಥಿರವಾಗಿದೆ. ಗರಿಷ್ಠ ಲಾಭಕ್ಕಾಗಿ 3-5 ದಿನಗಳಲ್ಲಿ ಮಾರಾಟ ಮಾಡಲು ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.', close: 'ವಿಶ್ಲೇಷಣೆ ಮುಚ್ಚಿ' },
+            ur: { analysis: 'تجزیہ', current: 'موجودہ قیمت:', location: 'منڈی کا مقام:', trend: '7 دن کا رجحان:', up: 'اوپر (+3.2%)', down: 'نیچے (-1.8%)', desc: 'اس فصل کی مارکیٹ کی طلب مستحکم ہے۔ منافع بڑھانے کے لیے 3-5 دن کے اندر فروخت کرنے کا مشورہ دیا جاتا ہے۔', close: 'تجزیہ بند کریں' }
+        };
+        return dict[this.lang]?.[key] || dict['en'][key];
+    }
+}">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Kisan Konnect - Market</title>
+<title>Kisan Saathi - Market</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-    // Initialize Supabase & Protect Route
     const supabaseUrl = 'https://lwexxnbwtltigadhzasa.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3ZXh4bmJ3dGx0aWdhZGh6YXNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTEyOTIsImV4cCI6MjEwMzQyNzI5Mn0.iZzB-KI5_dAamTdROz06knj57jgahVhXkHeSvaBNiaI';
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -48,9 +89,9 @@
 <nav class="fixed top-0 w-full z-50 shadow-md bg-[#0d1745] flex justify-between items-center px-4 h-16">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm overflow-hidden border border-white/20">
-<img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Konnect Logo">
+<img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Saathi Logo">
 </div>
-<h1 class="font-headline text-[20px] font-bold tracking-tight text-white uppercase">KISAN KONNECT</h1>
+<h1 class="font-headline text-[18px] font-bold tracking-tight text-white uppercase">Kisan Saathi</h1>
 </div>
 
 <nav class="hidden xl:flex gap-6 items-center h-full pt-1">
@@ -107,9 +148,9 @@
         <option value="kn" class="text-black">ಕನ್ನಡ</option>
         <option value="ur" class="text-black">اردو</option>
     </select>
-    <button class="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden border border-white/20">
-    <img alt="User profile avatar" class="w-full h-full object-cover" src="kisan.jpg"/>
-    </button>
+    <a href="profile.html" aria-label="Profile" class="flex items-center justify-center w-8 h-8 rounded-full overflow-hidden border border-white/20 cursor-pointer">
+        <img alt="User profile avatar" class="w-full h-full object-cover" src="kisan.jpg"/>
+    </a>
 </div>
 </nav>
 
@@ -137,12 +178,12 @@
 </p>
 <div class="relative">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
-<input class="w-full pl-12 pr-4 py-3 rounded-lg bg-surface-container-lowest border-none shadow-[0_4px_12px_rgba(0,0,0,0.04)] text-on-surface font-body text-[16px] focus:ring-2 focus:ring-secondary focus:outline-none" :placeholder="lang === 'en' ? 'Search crops, mandis...' : (lang === 'pa' ? 'ਫਸਲਾਂ, ਮੰਡੀਆਂ ਖੋਜੋ...' : (lang === 'hi' ? 'फसलें, मंडियां खोजें...' : (lang === 'te' ? 'పంటలు, మండిలను వెతకండి...' : (lang === 'ta' ? 'பயிர்கள், சந்தைகளைத் தேடுங்கள்...' : (lang === 'ml' ? 'വിളകളും ചന്തകളും തിരയുക...' : (lang === 'kn' ? 'ಬೆಳೆಗಳು, ಮಂಡಿಗಳನ್ನು ಹುಡುಕಿ...' : 'فصلیں، منڈیاں تلاش کریں...'))))))" type="text"/>
+<input x-model="searchQuery" class="w-full pl-12 pr-4 py-3 rounded-lg bg-surface-container-lowest border-none shadow-[0_4px_12px_rgba(0,0,0,0.04)] text-on-surface font-body text-[16px] focus:ring-2 focus:ring-secondary focus:outline-none" :placeholder="lang === 'en' ? 'Search crops, mandis...' : (lang === 'pa' ? 'ਫਸਲਾਂ, ਮੰਡੀਆਂ ਖੋਜੋ...' : (lang === 'hi' ? 'फसलें, मंडियां खोजें...' : (lang === 'te' ? 'పంటలు, మండిలను వెతకండి...' : (lang === 'ta' ? 'பயிர்கள், சந்தைகளைத் தேடுங்கள்...' : (lang === 'ml' ? 'വിളകളും ചന്തകളും തിരയുക...' : (lang === 'kn' ? 'ಬೆಳೆಗಳು, ಮಂಡಿಗಳನ್ನು ಹುಡುಕಿ...' : 'فصلیں، منڈیاں تلاش کریں...'))))))" type="text"/>
 </div>
 </div>
 
 <div class="flex gap-3 overflow-x-auto no-scrollbar -mx-4 px-4 mb-6">
-<button class="px-5 py-2 rounded-full bg-secondary-container text-on-secondary-container font-label text-[14px] font-semibold whitespace-nowrap shadow-sm">
+<button @click="selectedCategory = 'all'" :class="selectedCategory === 'all' ? 'bg-secondary-container text-on-secondary-container font-semibold shadow-sm' : 'bg-surface-container-lowest text-on-surface-variant font-medium border border-outline-variant/30 shadow-sm'" class="px-5 py-2 rounded-full font-label text-[14px] whitespace-nowrap transition-all">
     <span x-show="lang === 'en'">All Crops</span>
     <span x-show="lang === 'pa'">ਸਾਰੀਆਂ ਫਸਲਾਂ</span>
     <span x-show="lang === 'hi'">सभी फसलें</span>
@@ -152,7 +193,7 @@
     <span x-show="lang === 'kn'">ಎಲ್ಲಾ ಬೆಳೆಗಳು</span>
     <span x-show="lang === 'ur'">تمام فصلیں</span>
 </button>
-<button class="px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label text-[14px] font-medium whitespace-nowrap border border-outline-variant/30 shadow-sm">
+<button @click="selectedCategory = 'grains'" :class="selectedCategory === 'grains' ? 'bg-secondary-container text-on-secondary-container font-semibold shadow-sm' : 'bg-surface-container-lowest text-on-surface-variant font-medium border border-outline-variant/30 shadow-sm'" class="px-5 py-2 rounded-full font-label text-[14px] whitespace-nowrap transition-all">
     <span x-show="lang === 'en'">Grains</span>
     <span x-show="lang === 'pa'">ਅਨਾਜ</span>
     <span x-show="lang === 'hi'">अनाज</span>
@@ -162,7 +203,7 @@
     <span x-show="lang === 'kn'">ಧಾನ್ಯಗಳು</span>
     <span x-show="lang === 'ur'">اناج</span>
 </button>
-<button class="px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label text-[14px] font-medium whitespace-nowrap border border-outline-variant/30 shadow-sm">
+<button @click="selectedCategory = 'pulses'" :class="selectedCategory === 'pulses' ? 'bg-secondary-container text-on-secondary-container font-semibold shadow-sm' : 'bg-surface-container-lowest text-on-surface-variant font-medium border border-outline-variant/30 shadow-sm'" class="px-5 py-2 rounded-full font-label text-[14px] whitespace-nowrap transition-all">
     <span x-show="lang === 'en'">Pulses</span>
     <span x-show="lang === 'pa'">ਦਾਲਾਂ</span>
     <span x-show="lang === 'hi'">दालें</span>
@@ -172,7 +213,7 @@
     <span x-show="lang === 'kn'">ಕಾಳುಗಳು</span>
     <span x-show="lang === 'ur'">دالیں</span>
 </button>
-<button class="px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-label text-[14px] font-medium whitespace-nowrap border border-outline-variant/30 shadow-sm">
+<button @click="selectedCategory = 'vegetables'" :class="selectedCategory === 'vegetables' ? 'bg-secondary-container text-on-secondary-container font-semibold shadow-sm' : 'bg-surface-container-lowest text-on-surface-variant font-medium border border-outline-variant/30 shadow-sm'" class="px-5 py-2 rounded-full font-label text-[14px] whitespace-nowrap transition-all">
     <span x-show="lang === 'en'">Vegetables</span>
     <span x-show="lang === 'pa'">ਸਬਜ਼ੀਆਂ</span>
     <span x-show="lang === 'hi'">सब्जियां</span>
@@ -185,38 +226,42 @@
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<template x-for="crop in filteredCrops" :key="crop.name">
 <div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-4 flex flex-col gap-4">
 <div class="flex justify-between items-start">
 <div class="flex gap-4 items-center">
-<div class="w-14 h-14 rounded-lg overflow-hidden bg-surface-variant shrink-0"><img class="w-full h-full object-cover" src="wheat.jpg"/></div>
+<div class="w-14 h-14 rounded-lg overflow-hidden bg-surface-variant shrink-0">
+    <img class="w-full h-full object-cover" :src="crop.image" :alt="crop.name"/>
+</div>
 <div>
-<h3 class="font-headline text-[18px] font-semibold text-primary">Wheat (Lokwan)</h3>
-<div class="flex items-center gap-1 mt-0.5"><span class="material-symbols-outlined text-[14px] text-outline">location_on</span><span class="font-body text-[14px] text-outline">Nashik Mandi</span></div>
+<h3 class="font-headline text-[18px] font-semibold text-primary" x-text="crop.name"></h3>
+<div class="flex items-center gap-1 mt-0.5">
+    <span class="material-symbols-outlined text-[14px] text-outline">location_on</span>
+    <span class="font-body text-[14px] text-outline" x-text="crop.mandi"></span>
 </div>
 </div>
-<div class="text-right shrink-0"><p class="font-headline text-[20px] font-bold text-secondary">₹2,450</p><p class="font-label text-[12px] text-outline">
-    <span x-show="lang === 'en'">/ quintal</span>
-    <span x-show="lang === 'pa'">/ ਕੁਇੰਟਲ</span>
-    <span x-show="lang === 'hi'">/ क्विंटल</span>
-    <span x-show="lang === 'te'">/ క్వింటాల్</span>
-    <span x-show="lang === 'ta'">/ குவிண்டால்</span>
-    <span x-show="lang === 'ml'">/ ക്വിന്റൽ</span>
-    <span x-show="lang === 'kn'">/ ಕ್ವಿಂಟಾಲ್</span>
-    <span x-show="lang === 'ur'">/ کوئنٹل</span>
-</p></div>
+</div>
+<div class="text-right shrink-0">
+    <p class="font-headline text-[20px] font-bold" :class="crop.isUp ? 'text-secondary' : 'text-error'" x-text="crop.price"></p>
+    <p class="font-label text-[12px] text-outline">
+        <span x-show="lang === 'en'">/ quintal</span>
+        <span x-show="lang === 'pa'">/ ਕੁਇੰਟਲ</span>
+        <span x-show="lang === 'hi'">/ क्विंटल</span>
+        <span x-show="lang === 'te'">/ క్వింటాల్</span>
+        <span x-show="lang === 'ta'">/ குவிண்டால்</span>
+        <span x-show="lang === 'ml'">/ ക്വിന്റൽ</span>
+        <span x-show="lang === 'kn'">/ ಕ್ವಿಂಟಾಲ್</span>
+        <span x-show="lang === 'ur'">/ کوئنٹل</span>
+    </p>
+</div>
 </div>
 <div class="flex justify-between items-center pt-3 border-t border-surface-variant/50">
-<div class="flex items-center gap-1 text-secondary bg-secondary-container/30 px-2 py-1 rounded"><span class="material-symbols-outlined text-[16px]">trending_up</span><span class="font-label text-[14px] font-semibold">
-    <span x-show="lang === 'en'">+2.4% today</span>
-    <span x-show="lang === 'pa'">+2.4% ਅੱਜ</span>
-    <span x-show="lang === 'hi'">+2.4% आज</span>
-    <span x-show="lang === 'te'">+2.4% ఈరోజు</span>
-    <span x-show="lang === 'ta'">+2.4% இன்று</span>
-    <span x-show="lang === 'ml'">+2.4% ഇന്ന്</span>
-    <span x-show="lang === 'kn'">+2.4% ಇಂದು</span>
-    <span x-show="lang === 'ur'">+2.4% آج</span>
-</span></div>
-<button class="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-label text-[14px] font-semibold">
+<div class="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" :class="crop.isUp ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' : 'text-rose-700 bg-rose-50 border border-rose-200'">
+    <span class="material-symbols-outlined text-[15px]" x-text="crop.isUp ? 'trending_up' : 'trending_down'"></span>
+    <span class="font-label text-[13px] tracking-wide" x-text="crop.change"></span>
+</div>
+<button @click="openAnalysis(crop)" class="px-5 py-2.5 rounded-xl bg-primary-container text-white font-label text-[14px] font-bold tracking-wide shadow-md hover:bg-[#15235c] active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer">
+    <span class="material-symbols-outlined text-[16px]">analytics</span>
     <span x-show="lang === 'en'">View Analysis</span>
     <span x-show="lang === 'pa'">ਵਿਸ਼ਲੇਸ਼ਣ ਵੇਖੋ</span>
     <span x-show="lang === 'hi'">विश्लेषण देखें</span>
@@ -228,153 +273,104 @@
 </button>
 </div>
 </div>
-
-<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-4 flex flex-col gap-4">
-<div class="flex justify-between items-start">
-<div class="flex gap-4 items-center">
-<div class="w-14 h-14 rounded-lg overflow-hidden bg-surface-variant shrink-0"><img class="w-full h-full object-cover" src="Tomato(Hybrid).avif"/></div>
-<div>
-<h3 class="font-headline text-[18px] font-semibold text-primary">Tomato (Hybrid)</h3>
-<div class="flex items-center gap-1 mt-0.5"><span class="material-symbols-outlined text-[14px] text-outline">location_on</span><span class="font-body text-[14px] text-outline">Pune APMC</span></div>
-</div>
-</div>
-<div class="text-right shrink-0"><p class="font-headline text-[20px] font-bold text-error">₹1,200</p><p class="font-label text-[12px] text-outline">
-    <span x-show="lang === 'en'">/ quintal</span>
-    <span x-show="lang === 'pa'">/ ਕੁਇੰਟਲ</span>
-    <span x-show="lang === 'hi'">/ क्विंटल</span>
-    <span x-show="lang === 'te'">/ క్వింటాల్</span>
-    <span x-show="lang === 'ta'">/ குவிண்டால்</span>
-    <span x-show="lang === 'ml'">/ ക്വിന്റൽ</span>
-    <span x-show="lang === 'kn'">/ ಕ್ವಿಂಟಾಲ್</span>
-    <span x-show="lang === 'ur'">/ کوئنٹل</span>
-</p></div>
-</div>
-<div class="flex justify-between items-center pt-3 border-t border-surface-variant/50">
-<div class="flex items-center gap-1 text-error bg-error-container/30 px-2 py-1 rounded"><span class="material-symbols-outlined text-[16px]">trending_down</span><span class="font-label text-[14px] font-semibold">
-    <span x-show="lang === 'en'">-5.1% today</span>
-    <span x-show="lang === 'pa'">-5.1% ਅੱਜ</span>
-    <span x-show="lang === 'hi'">-5.1% आज</span>
-    <span x-show="lang === 'te'">-5.1% ఈరోజు</span>
-    <span x-show="lang === 'ta'">-5.1% இன்று</span>
-    <span x-show="lang === 'ml'">-5.1% ഇന്ന്</span>
-    <span x-show="lang === 'kn'">-5.1% ಇಂದು</span>
-    <span x-show="lang === 'ur'">-5.1% آج</span>
-</span></div>
-<button class="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-label text-[14px] font-semibold">
-    <span x-show="lang === 'en'">View Analysis</span>
-    <span x-show="lang === 'pa'">ਵਿਸ਼ਲੇਸ਼ਣ ਵੇਖੋ</span>
-    <span x-show="lang === 'hi'">विश्लेषण देखें</span>
-    <span x-show="lang === 'te'">విశ్లేషణను వీక్షించండి</span>
-    <span x-show="lang === 'ta'">பகுப்பாய்வைக் காண்க</span>
-    <span x-show="lang === 'ml'">വിശകലനം കാണുക</span>
-    <span x-show="lang === 'kn'">ವಿಶ್ಲೇಷಣೆಯನ್ನು ವೀಕ್ಷಿಸಿ</span>
-    <span x-show="lang === 'ur'">تجزیہ دیکھیں</span>
-</button>
-</div>
-</div>
-
-<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.04)] p-4 flex flex-col gap-4">
-<div class="flex justify-between items-start">
-<div class="flex gap-4 items-center">
-<div class="w-14 h-14 rounded-lg overflow-hidden bg-surface-variant shrink-0"><img class="w-full h-full object-cover" src="Toor Dal.webp"/></div>
-<div>
-<h3 class="font-headline text-[18px] font-semibold text-primary">Toor Dal</h3>
-<div class="flex items-center gap-1 mt-0.5"><span class="material-symbols-outlined text-[14px] text-outline">location_on</span><span class="font-body text-[14px] text-outline">Latur Market</span></div>
-</div>
-</div>
-<div class="text-right shrink-0"><p class="font-headline text-[20px] font-bold text-secondary">₹11,850</p><p class="font-label text-[12px] text-outline">
-    <span x-show="lang === 'en'">/ quintal</span>
-    <span x-show="lang === 'pa'">/ ਕੁਇੰਟਲ</span>
-    <span x-show="lang === 'hi'">/ क्विंटल</span>
-    <span x-show="lang === 'te'">/ క్వింటాల్</span>
-    <span x-show="lang === 'ta'">/ குவிண்டால்</span>
-    <span x-show="lang === 'ml'">/ ക്വിന്റൽ</span>
-    <span x-show="lang === 'kn'">/ ಕ್ವಿಂಟಾಲ್</span>
-    <span x-show="lang === 'ur'">/ کوئنٹل</span>
-</p></div>
-</div>
-<div class="flex justify-between items-center pt-3 border-t border-surface-variant/50">
-<div class="flex items-center gap-1 text-secondary bg-secondary-container/30 px-2 py-1 rounded"><span class="material-symbols-outlined text-[16px]">trending_up</span><span class="font-label text-[14px] font-semibold">
-    <span x-show="lang === 'en'">+1.2% today</span>
-    <span x-show="lang === 'pa'">+1.2% ਅੱਜ</span>
-    <span x-show="lang === 'hi'">+1.2% आज</span>
-    <span x-show="lang === 'te'">+1.2% ఈరోజు</span>
-    <span x-show="lang === 'ta'">+1.2% இன்று</span>
-    <span x-show="lang === 'ml'">+1.2% ഇന്ന്</span>
-    <span x-show="lang === 'kn'">+1.2% ಇಂದು</span>
-    <span x-show="lang === 'ur'">+1.2% آج</span>
-</span></div>
-<button class="px-4 py-2 rounded-lg bg-primary-container text-on-primary-container font-label text-[14px] font-semibold">
-    <span x-show="lang === 'en'">View Analysis</span>
-    <span x-show="lang === 'pa'">ਵਿਸ਼ਲੇਸ਼ਣ ਵੇਖੋ</span>
-    <span x-show="lang === 'hi'">विश्लेषण देखें</span>
-    <span x-show="lang === 'te'">విశ్లేషణను వీక్షించండి</span>
-    <span x-show="lang === 'ta'">பகுப்பாய்வைக் காண்க</span>
-    <span x-show="lang === 'ml'">വിശകലനം കാണുക</span>
-    <span x-show="lang === 'kn'">ವಿಶ್ಲೇಷಣೆಯನ್ನು ವೀಕ್ಷಿಸಿ</span>
-    <span x-show="lang === 'ur'">تجزیہ دیکھیں</span>
-</button>
-</div>
-</div>
+</template>
 </div>
 </main>
 
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden bg-white/85 backdrop-blur-xl rounded-t-lg border-t border-white/40 shadow-2xl">
-<a aria-label="Home" class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="index.html">
-<span class="material-symbols-outlined">home</span>
-<span class="font-label text-[12px] font-medium mt-1">
-    <span x-show="lang === 'en'">Home</span>
-    <span x-show="lang === 'pa'">ਘਰ</span>
-    <span x-show="lang === 'hi'">होम</span>
-    <span x-show="lang === 'te'">హోమ్</span>
-    <span x-show="lang === 'ta'">முகப்பு</span>
-    <span x-show="lang === 'ml'">ഹോം</span>
-    <span x-show="lang === 'kn'">ಮುಖಪುಟ</span>
-    <span x-show="lang === 'ur'">ہوم</span>
-</span>
-</a>
+<!-- Dynamic Multilingual Modal for View Analysis -->
+<div x-show="selectedCropForAnalysis" x-transition.opacity class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" style="display: none;">
+    <div @click.outside="selectedCropForAnalysis = null" class="bg-white w-full max-w-md rounded-[2.5rem] p-6 md:p-8 flex flex-col gap-5 shadow-2xl relative">
+        <div class="flex justify-between items-center border-b border-black/10 pb-4">
+            <div>
+                <h3 class="font-headline text-lg font-bold text-primary" x-text="selectedCropForAnalysis ? selectedCropForAnalysis.name + ' - ' + analysisText('analysis') : ''"></h3>
+                <p class="text-xs text-outline font-medium mt-0.5">Market Performance Report</p>
+            </div>
+            <button @click="selectedCropForAnalysis = null" class="w-9 h-9 rounded-full bg-black/5 flex items-center justify-center hover:bg-black/10 transition-colors cursor-pointer">
+                <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+        </div>
+        <div class="flex flex-col gap-3.5 bg-surface-container-low p-4 rounded-2xl border border-black/5">
+            <div class="flex justify-between items-center bg-white p-3.5 rounded-xl border border-black/5 shadow-sm">
+                <span class="text-xs font-semibold text-outline" x-text="analysisText('current')"></span>
+                <span class="text-base font-extrabold text-secondary" x-text="selectedCropForAnalysis ? selectedCropForAnalysis.price : ''"></span>
+            </div>
+            <div class="flex justify-between items-center bg-white p-3.5 rounded-xl border border-black/5 shadow-sm">
+                <span class="text-xs font-semibold text-outline" x-text="analysisText('location')"></span>
+                <span class="text-sm font-bold text-primary" x-text="selectedCropForAnalysis ? selectedCropForAnalysis.mandi : ''"></span>
+            </div>
+            <div class="flex justify-between items-center bg-white p-3.5 rounded-xl border border-black/5 shadow-sm">
+                <span class="text-xs font-semibold text-outline" x-text="analysisText('trend')"></span>
+                <span class="text-xs font-bold px-2 py-1 rounded-lg" :class="selectedCropForAnalysis && selectedCropForAnalysis.isUp ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50'" x-text="selectedCropForAnalysis && selectedCropForAnalysis.isUp ? analysisText('up') : analysisText('down')"></span>
+            </div>
+            <p class="text-xs text-on-surface-variant leading-relaxed bg-white p-3.5 rounded-xl border border-black/5 mt-1" x-text="analysisText('desc')">
+            </p>
+        </div>
+        <button @click="selectedCropForAnalysis = null" class="w-full py-3.5 bg-primary-container text-white font-bold rounded-xl hover:opacity-95 transition-opacity shadow-lg cursor-pointer" x-text="analysisText('close')">
+        </button>
+    </div>
+</div>
 
-<a aria-label="Mandi" class="flex flex-col items-center justify-center bg-black text-white rounded-full px-7 py-2 -mt-4 shadow-md" href="mandi.html">
-    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">storefront</span>
-<span class="font-label text-[10px] font-medium mt-0.5">
-    <span x-show="lang === 'en'">Mandi</span>
-    <span x-show="lang === 'pa'">ਮੰਡੀ</span>
-    <span x-show="lang === 'hi'">मंडी</span>
-    <span x-show="lang === 'te'">మండి</span>
-    <span x-show="lang === 'ta'">சந்தை</span>
-    <span x-show="lang === 'ml'">ചന്ത</span>
-    <span x-show="lang === 'kn'">ಮಂಡಿ</span>
-    <span x-show="lang === 'ur'">منڈی</span>
-</span>
-</a>
+<!-- Bottom Navigation Bar with Mandi Active -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden bg-[#e8f0e8] rounded-t-[2.5rem] shadow-[0_-8px_20px_rgba(0,0,0,0.06)]">
+    <!-- Home -->
+    <a aria-label="Home" class="flex flex-col items-center justify-center text-[#3a4d3a] py-1 px-3 hover:opacity-80 transition-opacity" href="index.html">
+        <span class="material-symbols-outlined text-[24px]">home</span>
+        <span class="font-body text-[12px] font-medium mt-1">
+            <span x-show="lang === 'en'">Home</span>
+            <span x-show="lang === 'pa'">ਘਰ</span>
+            <span x-show="lang === 'hi'">होम</span>
+            <span x-show="lang === 'te'">హోమ్</span>
+            <span x-show="lang === 'ta'">முகப்பு</span>
+            <span x-show="lang === 'ml'">ഹോം</span>
+            <span x-show="lang === 'kn'">ಮುಖಪುಟ</span>
+            <span x-show="lang === 'ur'">ہوم</span>
+        </span>
+    </a>
 
-<a aria-label="Queue" class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="queue.html">
-<span class="material-symbols-outlined">confirmation_number</span>
-<span class="font-label text-[12px] font-medium mt-1">
-    <span x-show="lang === 'en'">Queue</span>
-    <span x-show="lang === 'pa'">ਕਤਾਰ</span>
-    <span x-show="lang === 'hi'">कतार</span>
-    <span x-show="lang === 'te'">క్యూ</span>
-    <span x-show="lang === 'ta'">வரிசை</span>
-    <span x-show="lang === 'ml'">ക്യൂ</span>
-    <span x-show="lang === 'kn'">ಕ್ಯೂ</span>
-    <span x-show="lang === 'ur'">قطار</span>
-</span>
-</a>
+    <!-- Active Tab: Mandi -->
+    <a aria-label="Mandi" class="flex flex-col items-center justify-center bg-black text-white px-6 py-2.5 rounded-[2rem] shadow-md transition-all" href="mandi.html">
+        <span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">storefront</span>
+        <span class="font-body text-[12px] font-medium mt-0.5">
+            <span x-show="lang === 'en'">Mandi</span>
+            <span x-show="lang === 'pa'">ਮੰਡੀ</span>
+            <span x-show="lang === 'hi'">मंडी</span>
+            <span x-show="lang === 'te'">మండి</span>
+            <span x-show="lang === 'ta'">சந்தை</span>
+            <span x-show="lang === 'ml'">ചന്ത</span>
+            <span x-show="lang === 'kn'">ಮಂಡಿ</span>
+            <span x-show="lang === 'ur'">منڈی</span>
+        </span>
+    </a>
 
-<a aria-label="Profile" class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="profile.html">
-<span class="material-symbols-outlined">person</span>
-<span class="font-label text-[12px] font-medium mt-1">
-    <span x-show="lang === 'en'">Profile</span>
-    <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
-    <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
-    <span x-show="lang === 'te'">ప్రొఫైల్</span>
-    <span x-show="lang === 'ta'">சுயவிவரம்</span>
-    <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
-    <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
-    <span x-show="lang === 'ur'">پروفائل</span>
-</span>
-</a>
+    <!-- Book Slot -->
+    <a aria-label="Book Slot" class="flex flex-col items-center justify-center text-[#3a4d3a] py-1 px-3 hover:opacity-80 transition-opacity" href="queue.html">
+        <span class="material-symbols-outlined text-[24px]">confirmation_number</span>
+        <span class="font-body text-[12px] font-medium mt-1">
+            <span x-show="lang === 'en'">Book Slot</span>
+            <span x-show="lang === 'pa'">ਸਲਾਟ ਬੁੱਕ ਕਰੋ</span>
+            <span x-show="lang === 'hi'">स्लॉट बुक करें</span>
+            <span x-show="lang === 'te'">స్లాట్ బుక్ చేయండి</span>
+            <span x-show="lang === 'ta'">ஸ்லாட் பதிவு</span>
+            <span x-show="lang === 'ml'">സ്ലോട്ട് ബുക്ക് ചെയ്യുക</span>
+            <span x-show="lang === 'kn'">ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ</span>
+            <span x-show="lang === 'ur'">سلاٹ بک کریں</span>
+        </span>
+    </a>
+
+    <!-- Profile -->
+    <a aria-label="Profile" class="flex flex-col items-center justify-center text-[#3a4d3a] py-1 px-3 hover:opacity-80 transition-opacity" href="profile.html">
+        <span class="material-symbols-outlined text-[24px]">person</span>
+        <span class="font-body text-[12px] font-medium mt-1">
+            <span x-show="lang === 'en'">Profile</span>
+            <span x-show="lang === 'pa'">ਪ੍ਰੋਫਾਈਲ</span>
+            <span x-show="lang === 'hi'">प्रोफ़ाइल</span>
+            <span x-show="lang === 'te'">ప్రొఫైల్</span>
+            <span x-show="lang === 'ta'">சுயவிவரம்</span>
+            <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
+            <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
+            <span x-show="lang === 'ur'">پروفائل</span>
+        </span>
+    </a>
 </nav>
 
 </body>
