@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html class="light" lang="en" x-data="{ 
+    showAllNews: false, 
+    selectedNews: null,
+    activeSection: 'home', 
+    showNotifications: false, 
+    hasUnread: true, 
+    lang: 'en', 
+    timeOfDay: 'morning', 
+    hasBooked: false, 
+    bookedData: null,
+    translations: {
+        en: {
+            appTitle: 'KISAN SAATHI',
+            navHome: 'Home',
+            navMandi: 'Mandi',
+            navBookSlot: 'Book Slot',
+            navProfile: 'Profile',
+            greetingMorning: 'Good Morning, Harjinder Singh!',
+            greetingAfternoon: 'Good Afternoon, Harjinder Singh!',
+            greetingEvening: 'Good Evening, Harjinder Singh!',
+            subGreeting: 'Here is your agricultural overview for today.',
+            recMandiTag: 'Recommended Mandi (Lowest Queue)',
+            fastEntryBadge: 'Fast Entry Available',
+            mandiCenterName: 'Dahmi Kalan Sub-Center',
+            capQueueStatus: 'Capacity & Queue Status',
+            trucksWaiting: '(2 trucks waiting)',
+            estWaitTime: 'Estimated Waiting Time',
+            minsWait: '~ 2 Mins',
+            occupancyLevel: 'Occupancy Level',
+            slotsCount: '15 / 100 Slots',
+            btnBookSlotNow: 'Book Slot Now',
+            activeSlotConfirmed: 'Active Slot & Token Confirmed',
+            cropQtyLabel: 'Crop & Quantity:',
+            defaultCropQty: 'Wheat Procurement (100 Qtl)',
+            queuePosLabel: 'Queue Position:',
+            defaultQueuePos: '2 farmers ahead',
+            timeSlotLabel: 'Time Slot:',
+            defaultTimeSlot: '09:00 AM - 11:00 AM',
+            actSellCrop: 'Sell Crop',
+            actMandiPrices: 'Mandi Prices',
+            actLiveQueue: 'Live Queue',
+            actAgriSupport: 'Agri Support',
+            btnViewAllServices: 'View All Services & Records',
+            secAgriNews: 'Agri News',
+            btnViewAllNews: 'View All News & Updates',
+            news1Tag: 'Weather Alert',
+            news1Title: 'Light Rain Expected',
+            news1Desc: 'Optimal time for sowing wheat is approaching next week. Ensure fields are prepared.',
+            news2Tag: 'Agri News',
+            news2Title: 'Govt Subsidy Scheme',
+            news2Desc: 'Govt announces new subsidy scheme for drip irrigation systems.',
+            news3Tag: 'Market Trends',
+            news3Title: 'Wheat MSP Increase',
+            news3Desc: 'Wheat MSP rises by 7% for the upcoming procurement season.',
+            secHelpInfoCenter: 'Help & Information Center',
+            accContactTitle: 'Contact Us',
+            accContactDesc: 'Have questions or need technical assistance with your mandi pass? Get in touch with our 24/7 farmer support helpline.',
+            lblHelpline: 'Helpline',
+            lblSupportEmail: 'Support Email',
+            lblHeadOffice: 'Head Office',
+            accFaqTitle: 'Frequently Asked Questions (FAQ)',
+            faqQ1: '1. How do I book a mandi slot for selling my crops?',
+            faqA1: 'Navigate to the \'Book Slot\' or \'Sell Crop\' section from dashboard actions, select your preferred mandi, enter crop details, and generate your token.',
+            faqQ2: '2. How are mandi market prices updated?',
+            faqA2: 'Market prices are synced directly in real-time with regional government agricultural boards.',
+            faqQ3: '3. Is my Kisan Credit Card (KCC) limit viewable online?',
+            faqA3: 'Yes, you can view your active KCC credit limits under the \'View All Services\' records section.',
+            accAboutTitle: 'About Us',
+            accAboutDesc: 'Kisan Saathi is a next-generation agricultural intelligence and mandi procurement platform designed to empower farmers with real-time market transparency, slot booking, and digital ledger tracking.',
+            aboutFeat1Title: 'Transparent Pricing',
+            aboutFeat1Desc: 'Live mandi updates and MSP tracking to maximize crop yield revenue.',
+            aboutFeat2Title: 'Smart Queue Booking',
+            aboutFeat2Desc: 'Pre-book mandi entry slots to skip wait times and manage drop-offs.',
+            aboutFeat3Title: 'Digital Records',
+            aboutFeat3Desc: 'Secure access to KCC limits, past sale receipts, and direct payment ledgers.',
+            modalNewsTitle: 'All Agricultural News & Weather Advisories',
+            readMore: 'Read Full Report & Details',
+            closeModal: 'Close',
+            news1Full: 'Meteorological forecasts indicate a welcoming spell of light showers across northern and western grain belts. This precipitation is ideal for pre-sowing moisture retention in wheat fields. Agricultural experts advise farmers to inspect their drainage channels, ensure high-yield certified seed stocks are secured, and finalize land leveling operations before sowing peaks next week.',
+            news2Full: 'The Ministry of Agriculture has rolled out an enhanced 50% direct capital subsidy for solar-powered micro-irrigation and automated drip systems. Registered farmers can apply directly through regional agriculture facilitation kiosks or via authorized digital portals to conserve groundwater resources and optimize fertilizer delivery.',
+            news3Full: 'In response to rising input costs and inflation metrics, the federal cabinet has approved a robust 7% upward revision in the Minimum Support Price (MSP) for wheat. Procurement centers across state mandis are gearing up with upgraded digital weighing and instant direct-to-bank payment systems to streamline the upcoming harvest season.',
+            news4Tag: 'Crop Acreage',
+            news4Title: 'Kharif Sowing Progress',
+            news4Desc: 'India crosses 1,000 lakh hectares in Kharif sowing with increased acreage in pulses and sesame.',
+            news4Full: 'Ministry data shows cumulative Kharif sowing has crossed 1,016 lakh hectares, with noticeable shifts in the crop mix toward pulses like urad and oilseeds like sesame as farmers optimize regional water availability and market returns.',
+            news5Tag: 'Digital Initiative',
+            news5Title: 'PM Dhan-Dhaanya Review',
+            news5Desc: 'Union Agriculture Ministry reviews progress across 100 focus districts for outcome-based growth.',
+            news5Full: 'The Union Agriculture Ministry conducted a comprehensive review of the 100 focus districts under the Prime Minister Dhan-Dhaanya Krishi Yojana, emphasizing outcome-oriented monitoring, direct farmer beneficiary tracking, and administrative convergence of 36 separate rural schemes.'
+        },
+        pa: {
+            appTitle: 'ਕਿਸਾਨ ਸਾਥੀ',
+            navHome: 'ਘਰ',
+            navMandi: 'ਮੰਡੀ',
+            navBookSlot: 'ਸਲਾਟ ਬੁੱਕ ਕਰੋ',
+            navProfile: 'ਪ੍ਰੋਫਾਈਲ',
+            greetingMorning: 'ਸਤਿ ਸ਼੍ਰੀ ਅਕਾਲ, ਹਰਜਿੰਦਰ ਸਿੰਘ!',
+            greetingAfternoon: 'ਸਤਿ ਸ਼੍ਰੀ ਅਕਾਲ (ਦੁਪਹਿਰ), ਹਰਜਿੰਦਰ ਸਿੰਘ!',
+            greetingEvening: 'ਸ਼ਾਮ ਦੀ ਸਤਿ ਸ਼੍ਰੀ ਅਕਾਲ, ਹਰਜਿੰਦਰ ਸਿੰਘ!',
+            subGreeting: 'ਅੱਜ ਲਈ ਤੁਹਾਡੀ ਖੇਤੀਬਾੜੀ ਜਾਣਕਾਰੀ ਇੱਥੇ ਹੈ।',
+            recMandiTag: 'ਸਿਫਾਰਸ਼ੀ ਮੰਡੀ (ਘੱਟੋ-ਘੱਟ ਕਤਾਰ)',
+            fastEntryBadge: 'ਤੇਜ਼ ਐਂਟਰੀ ਉਪਲਬਧ',
+            mandiCenterName: 'ਦਹਮੀ ਕਲਾਂ ਸਬ-ਸੈਂਟਰ',
+            capQueueStatus: 'ਸਮਰੱਥਾ ਅਤੇ ਕਤਾਰ ਦੀ ਸਥਿਤੀ',
+            trucksWaiting: '(2 ਟਰੱਕ ਉਡੀਕ ਵਿੱਚ)',
+            estWaitTime: 'ਅਨੁਮਾਨਿਤ ਇੰਤਜ਼ਾਰ ਦਾ ਸਮਾਂ',
+            minsWait: '~ 2 ਮਿੰਟ',
+            occupancyLevel: 'ਭਰਨ ਦਾ ਪੱਧਰ',
+            slotsCount: '15 / 100 ਸਲਾਟ',
+            btnBookSlotNow: 'ਹੁਣੇ ਸਲਾਟ ਬੁੱਕ ਕਰੋ',
+            activeSlotConfirmed: 'ਐਕਟਿਵ ਸਲਾਟ ਅਤੇ ਟੋਕਨ ਦੀ ਪੁਸ਼ਟੀ ਹੋਈ',
+            cropQtyLabel: 'ਫਸਲ ਅਤੇ ਮਾਤਰਾ:',
+            defaultCropQty: 'ਕਣਕ ਦੀ ਖਰੀਦ (100 ਕੁਇੰਟਲ)',
+            queuePosLabel: 'ਕਤਾਰ ਵਿੱਚ ਸਥਿਤੀ:',
+            defaultQueuePos: 'ਤੁਹਾਡੇ ਤੋਂ ਅੱਗੇ 2 ਕਿਸਾਨ',
+            timeSlotLabel: 'ਸਮਾਂ ਸਲਾਟ:',
+            defaultTimeSlot: '09:00 ਸਵੇਰੇ - 11:00 ਸਵੇਰੇ',
+            actSellCrop: 'ਫਸਲ ਵੇਚੋ',
+            actMandiPrices: 'ਮੰਡੀ ਭਾਅ',
+            actLiveQueue: 'ਲਾਈਵ ਕਤਾਰ',
+            actAgriSupport: 'ਖੇਤੀ ਸਹਾਇਤਾ',
+            btnViewAllServices: 'ਸਾਰੀਆਂ ਸੇਵਾਵਾਂ ਅਤੇ ਰਿਕਾਰਡ ਵੇਖੋ',
+            secAgriNews: 'ਖੇਤੀਬਾੜੀ ਖ਼ਬਰਾਂ',
+            btnViewAllNews: 'ਸਾਰੀਆਂ ਖ਼ਬਰਾਂ ਅਤੇ ਅੱਪਡੇਟ ਵੇਖੋ',
+            news1Tag: 'ਮੌਸਮ ਅਲਰਟ',
+            news1Title: 'ਹਲਕੀ ਬਾਰਿਸ਼ ਦੀ ਸੰਭਾਵਨਾ',
+            news1Desc: 'ਅਗਲੇ ਹਫ਼ਤੇ ਕਣਕ ਦੀ ਬਿਜਾਈ ਦਾ ਢੁਕਵਾਂ ਸਮਾਂ ਆ ਰਿਹਾ ਹੈ। ਖੇਤਾਂ ਦੀ ਤਿਆਰੀ ਯਕੀਨੀ ਬਣਾਓ।',
+            news2Tag: 'ਖੇਤੀ ਖ਼ਬਰਾਂ',
+            news2Title: 'ਸਰਕਾਰੀ ਸਬਸਿਡੀ ਸਕੀਮ',
+            news2Desc: 'ਸਰਕਾਰ ਨੇ ਡ੍ਰਿਪ ਸਿੰਚਾਈ ਪ੍ਰਣਾਲੀਆਂ ਲਈ ਨਵੀਂ ਸਬਸਿਡੀ ਸਕੀਮ ਦਾ ਐਲਾਨ ਕੀਤਾ ਹੈ।',
+            news3Tag: 'ਮੰਡੀ ਦੇ ਰੁਝਾਨ',
+            news3Title: 'ਕਣਕ ਦੇ ਐਮ.ਐਸ.ਪੀ. ਵਿੱਚ ਵਾਧਾ',
+            news3Desc: 'ਆਉਣ ਵਾਲੇ ਖਰੀਦ ਸੀਜ਼ਨ ਲਈ ਕਣਕ ਦੇ ਐਮ.ਐਸ.ਪੀ. ਵਿੱਚ 7% ਵਾਧਾ।',
+            secHelpInfoCenter: 'ਸਹਾਇਤਾ ਅਤੇ ਜਾਣਕਾਰੀ ਕੇਂਦਰ',
+            accContactTitle: 'ਸਾਡੇ ਨਾਲ ਸੰਪਰਕ ਕਰੋ',
+            accContactDesc: 'ਕੀ ਤੁਹਾਡੇ ਕੋਈ ਸਵਾਲ ਹਨ ਜਾਂ ਮੰਡੀ ਪਾਸ ਲਈ ਤਕਨੀਕੀ ਸਹਾਇਤਾ ਦੀ ਲੋੜ ਹੈ? ਸਾਡੀ 24/7 ਕਿਸਾਨ ਸਹਾਇਤਾ ਹੈਲਪਲਾਈਨ ਨਾਲ ਸੰਪਰਕ ਕਰੋ।',
+            lblHelpline: 'ਹੈਲਪਲਾਈਨ',
+            lblSupportEmail: 'ਸਹਾਇਤਾ ਈਮੇਲ',
+            lblHeadOffice: 'ਮੁੱਖ ਦਫਤਰ',
+            accFaqTitle: 'ਅਕਸਰ ਪੁੱਛੇ ਜਾਣ ਵਾਲੇ ਸਵਾਲ (FAQ)',
+            faqQ1: '1. ਆਪਣੀ ਫਸਲ ਵੇਚਣ ਲਈ ਮੰਡੀ ਦਾ ਸਲਾਟ ਕਿਵੇਂ ਬੁੱਕ ਕਰਨਾ ਹੈ?',
+            faqA1: 'ਸਲਾਟ ਬੁੱਕ ਕਰੋ ਜਾਂ ਫਸਲ ਵੇਚੋ ਸੈਕਸ਼ਨ ਤੇ ਜਾਓ, ਆਪਣੀ ਪਸੰਦੀਦਾ ਮੰਡੀ ਚੁਣੋ, ਫਸਲ ਦੇ ਵੇਰਵੇ ਦਰਜ ਕਰੋ ਅਤੇ ਟੋਕਨ ਬਣਾਓ।',
+            faqQ2: '2. ਮੰਡੀ ਦੀਆਂ ਬਾਜ਼ਾਰੀ ਕੀਮਤਾਂ ਕਿਵੇਂ ਅੱਪਡੇਟ ਕੀਤੀਆਂ ਜਾਂਦੀਆਂ ਹਨ?',
+            faqA2: 'ਬਾਜ਼ਾਰੀ ਕੀਮਤਾਂ ਖੇਤਰੀ ਸਰਕਾਰੀ ਖੇਤੀਬਾੜੀ ਬੋਰਡਾਂ ਨਾਲ ਰੀਅਲ-ਟਾਈਮ ਵਿੱਚ ਅੱਪਡੇਟ ਹੁੰਦੀਆਂ ਹਨ।',
+            faqQ3: '3. ਕੀ ਮੇਰੀ ਕਿਸਾਨ ਕ੍ਰੈਡਿਟ ਕਾਰਡ (KCC) ਲਿਮਟ ਆਨਲਾਈਨ ਵੇਖੀ ਜਾ ਸਕਦੀ ਹੈ?',
+            faqA3: 'ਹਾਂ, ਤੁਸੀਂ ਸਾਰੀਆਂ ਸੇਵਾਵਾਂ ਵਿੱਚ ਆਪਣੀ ਐਕਟਿਵ KCC ਲਿਮਟ ਵੇਖ ਸਕਦੇ ਹੋ।',
+            accAboutTitle: 'ਸਾਡੇ ਬਾਰੇ',
+            accAboutDesc: 'ਕਿਸਾਨ ਸਾਥੀ ਇੱਕ ਅਗਲੀ ਪੀੜ੍ਹੀ ਦਾ ਖੇਤੀਬਾੜੀ ਪਲੇਟਫਾਰਮ ਹੈ ਜੋ ਕਿਸਾਨਾਂ ਨੂੰ ਮੰਡੀ ਦੀ ਪਾਰਦਰਸ਼ਤਾ ਅਤੇ ਸਲਾਟ ਬੁਕਿੰਗ ਦੀ ਸੁਵਿਧਾ ਦਿੰਦਾ ਹੈ।',
+            aboutFeat1Title: 'ਪਾਰਦਰਸ਼ੀ ਕੀਮਤਾਂ',
+            aboutFeat1Desc: 'ਲਾਈਵ ਮੰਡੀ ਅੱਪਡੇਟ ਅਤੇ ਐਮ.ਐਸ.ਪੀ. ਟ੍ਰੈਕਿੰਗ।',
+            aboutFeat2Title: 'ਸਮਾਰਟ ਕਤਾਰ ਬੁਕਿੰਗ',
+            aboutFeat2Desc: 'ਇੰਤਜ਼ਾਰ ਦਾ ਸਮਾਂ ਘਟਾਉਣ ਲਈ ਪਹਿਲਾਂ ਹੀ ਮੰਡੀ ਸਲਾਟ ਬੁੱਕ ਕਰੋ।',
+            aboutFeat3Title: 'ਡਿਜੀਟਲ ਰਿਕਾਰਡ',
+            aboutFeat3Desc: 'KCC ਲਿਮਟ ਅਤੇ ਪੁਰਾਣੀਆਂ ਰਸੀਦਾਂ ਤੱਕ ਸੁਰੱਖਿਅਤ ਪਹੁੰਚ।',
+            modalNewsTitle: 'ਸਾਰੀਆਂ ਖੇਤੀਬਾੜੀ ਖ਼ਬਰਾਂ ਅਤੇ ਮੌਸਮ ਸੰਬੰਧੀ ਸਲਾਹਾਂ',
+            readMore: 'ਪੂਰੀ ਰਿਪੋਰਟ ਵੇਖੋ',
+            closeModal: 'ਬੰਦ ਕਰੋ',
+            news1Full: 'ਮੌਸਮ ਵਿਭਾਗ ਮੁਤਾਬਕ ਆਉਣ ਵਾਲੇ ਦਿਨਾਂ ਵਿੱਚ ਹਲਕੀ ਬਾਰਿਸ਼ ਦੀ ਸੰਭਾਵਨਾ ਹੈ। ਇਹ ਕਣਕ ਦੀ ਬਿਜਾਈ ਲਈ ਬਹੁਤ ਫਾਇਦੇਮੰਦ ਹੈ।',
+            news2Full: 'ਸਰਕਾਰ ਨੇ ਡ੍ਰਿਪ ਸਿੰਚਾਈ ਅਤੇ ਸੋਲਰ ਪੰਪਾਂ ਲਈ 50% ਸਬਸਿਡੀ ਦਾ ਐਲਾਨ ਕੀਤਾ ਹੈ। ਕਿਸਾਨ ਆਸਾਨੀ ਨਾਲ ਇਸਦਾ ਲਾਭ ਲੈ ਸਕਦੇ ਹਨ।',
+            news3Full: 'ਆਉਣ ਵਾਲੇ ਸੀਜ਼ਨ ਲਈ ਕਣਕ ਦੇ ਘੱਟੋ-ਘੱਟ ਸਮਰਥਨ ਮੁੱਲ (MSP) ਵਿੱਚ 7% ਦਾ ਵਾਧਾ ਕੀਤਾ ਗਿਆ ਹੈ।'
+        },
+        hi: {
+            appTitle: 'किसान साथी',
+            navHome: 'होम',
+            navMandi: 'मंडी',
+            navBookSlot: 'स्लॉट बुक करें',
+            navProfile: 'प्रोफ़ाइल',
+            greetingMorning: 'सुप्रभात, हरजिंदर सिंह!',
+            greetingAfternoon: 'नमस्कार, हरजिंदर सिंह!',
+            greetingEvening: 'शुभ संध्या, हरजिंदर सिंह!',
+            subGreeting: 'आज के लिए आपकी कृषि रिपोर्ट यहाँ है।',
+            recMandiTag: 'अनुशंसित मंडी (सबसे कम कतार)',
+            fastEntryBadge: 'तेज़ प्रवेश उपलब्ध',
+            mandiCenterName: 'दहमी कलां उप-केंद्र',
+            capQueueStatus: 'क्षमता और कतार की स्थिति',
+            trucksWaiting: '(2 ट्रक प्रतीक्षा में)',
+            estWaitTime: 'अनुमानित प्रतीक्षा समय',
+            minsWait: '~ 2 मिनट',
+            occupancyLevel: 'भरने का स्तर',
+            slotsCount: '15 / 100 स्लॉट',
+            btnBookSlotNow: 'अभी स्लॉट बुक करें',
+            activeSlotConfirmed: 'सक्रिय स्लॉट और टोकन की पुष्टि हुई',
+            cropQtyLabel: 'फसल और मात्रा:',
+            defaultCropQty: 'गेहूं खरीद (100 क्विंटल)',
+            queuePosLabel: 'कतार में स्थिति:',
+            defaultQueuePos: 'आपसे आगे 2 किसान',
+            timeSlotLabel: 'समय स्लॉट:',
+            defaultTimeSlot: '09:00 सुबह - 11:00 सुबह',
+            actSellCrop: 'फसल बेचें',
+            actMandiPrices: 'मंडी भाव',
+            actLiveQueue: 'लाइव कतार',
+            actAgriSupport: 'कृषि सहायता',
+            btnViewAllServices: 'सभी सेवाएं और रिकॉर्ड देखें',
+            secAgriNews: 'कृषि समाचार',
+            btnViewAllNews: 'सभी समाचार और अपडेट देखें',
+            news1Tag: 'मौसम अलर्ट',
+            news1Title: 'हल्की बारिश की संभावना',
+            news1Desc: 'अगले सप्ताह गेहूं की बुवाई का सही समय आ रहा है। खेतों की तैयारी सुनिश्चित करें।',
+            news2Tag: 'कृषि समाचार',
+            news2Title: 'सरकारी सब्सिडी योजना',
+            news2Desc: 'सरकार ने ड्रिप सिंचाई प्रणालियों के लिए नई सब्सिडी योजना की घोषणा की है।',
+            news3Tag: 'बाजार के रुझान',
+            news3Title: 'गेहूं के एमएसपी में वृद्धि',
+            news3Desc: 'आगामी खरीद सीजन के लिए गेहूं के एमएसपी में 7% की वृद्धि।',
+            secHelpInfoCenter: 'सहायता और जानकारी केंद्र',
+            accContactTitle: 'हमसे संपर्क करें',
+            accContactDesc: 'क्या आपके पास कोई प्रश्न हैं या मंडी पास के लिए तकनीकी सहायता की आवश्यकता है? हमारी 24/7 किसान सहायता हेल्पलाइन से संपर्क करें।',
+            lblHelpline: 'हेल्पलाइन',
+            lblSupportEmail: 'सहायता ईमेल',
+            lblHeadOffice: 'मुख्य कार्यालय',
+            accFaqTitle: 'अक्सर पूछे जाने वाले प्रश्न (FAQ)',
+            faqQ1: '1. अपनी फसल बेचने के लिए मंडी स्लॉट कैसे बुक करें?',
+            faqA1: 'स्लॉट बुक करें या फसल बेचें अनुभाग पर जाएं, अपनी पसंदीदा मंडी चुनें, फसल विवरण दर्ज करें और टोकन उत्पन्न करें।',
+            faqQ2: '2. मंडी की बाजार कीमतें कैसे अपडेट की जाती हैं?',
+            faqA2: 'बाजार की कीमतें क्षेत्रीय सरकारी कृषि बोर्डों के साथ वास्तविक समय में अपडेट की जाती हैं।',
+            faqQ3: '3. क्या मेरी किसान क्रेडिट कार्ड (KCC) सीमा ऑनलाइन देखी जा सकती है?',
+            faqA3: 'हां, आप सभी सेवाएं में अपनी सक्रिय KCC सीमा देख सकते हैं।',
+            accAboutTitle: 'हमारे बारे में',
+            accAboutDesc: 'किसान साथी एक अगली पीढ़ी का कृषि प्लेटफॉर्म है जो किसानों को पारदर्शिता और स्लॉट बुकिंग की सुविधा प्रदान करता है।',
+            aboutFeat1Title: 'पारदर्शी मूल्य निर्धारण',
+            aboutFeat1Desc: 'लाइव मंडी अपडेट और एमएसपी ट्रैकिंग।',
+            aboutFeat2Title: 'स्मार्ट कतार बुकिंग',
+            aboutFeat2Desc: 'प्रतीक्षा समय से बचने के लिए पहले से मंडी स्लॉट बुक करें।',
+            aboutFeat3Title: 'डिजिटल रिकॉर्ड',
+            aboutFeat3Desc: 'KCC सीमा और बिक्री रसीदों तक सुरक्षित पहुंच।',
+            modalNewsTitle: 'सभी कृषि समाचार और मौसम सलाह',
+            readMore: 'पूर्ण रिपोर्ट और विवरण देखें',
+            closeModal: 'बंद करें',
+            news1Full: 'मौसम विभाग के अनुसार उत्तर और पश्चिम भारत के कृषि क्षेत्रों में हल्की बारिश की संभावना है। यह गेहूं की बुवाई से पहले नमी बनाए रखने के लिए बहुत उपयुक्त है।',
+            news2Full: 'कृषि मंत्रालय ने सौर ऊर्जा से चलने वाले ड्रिप सिंचाई सिस्टम के लिए 50% प्रत्यक्ष पूंजी सब्सिडी की घोषणा की है।',
+            news3Full: 'बढ़ती लागत को ध्यान में रखते हुए केंद्र सरकार ने गेहूं के न्यूनतम समर्थन मूल्य (MSP) में 7% की वृद्धि को मंजूरी दी है।'
+        },
+        te: {
+            appTitle: 'కిసాన్ సాథీ',
+            navHome: 'హోమ్',
+            navMandi: 'మండి',
+            navBookSlot: 'స్లాట్ బుక్ చేయండి',
+            navProfile: 'ప్రొఫైల్',
+            greetingMorning: 'శుభోదయం, హర్జిందర్ సింగ్!',
+            greetingAfternoon: 'శుభ మధ్యాహ్నం, హర్జిందర్ సింగ్!',
+            greetingEvening: 'శుభ సాయంత్రం, హర్జిందర్ సింగ్!',
+            subGreeting: 'ఈరోజు మీ వ్యవసాయ సమాచారం ఇక్కడ ఉంది.',
+            recMandiTag: 'సిఫార్సు చేయబడిన మండి (తక్కువ క్యూ)',
+            fastEntryBadge: 'వేగవంతమైన ప్రవేశం లభ్యం',
+            mandiCenterName: 'దహ్మి కలాన్ సబ్-సెంటర్',
+            capQueueStatus: 'సామర్థ్యం & క్యూ స్థితి',
+            trucksWaiting: '(2 ట్రక్కులు వేచి ఉన్నాయి)',
+            estWaitTime: 'అంచనా వేచి ఉండే సమయం',
+            minsWait: '~ 2 నిమిషాలు',
+            occupancyLevel: 'ఆక్యుపెన్సీ స్థాయి',
+            slotsCount: '15 / 100 స్లాట్‌లు',
+            btnBookSlotNow: 'ఇప్పుడే స్లాట్ బుక్ చేయండి',
+            activeSlotConfirmed: 'యాక్టివ్ స్లాట్ & టోకెన్ ధృవీకరించబడింది',
+            cropQtyLabel: 'పంట & పరిమాణం:',
+            defaultCropQty: 'గోధుమ కొనుగోలు (100 క్వింటాళ్లు)',
+            queuePosLabel: 'క్యూ స్థానం:',
+            defaultQueuePos: 'మీ కంటే ముందు 2 రైతులు ఉన్నారు',
+            timeSlotLabel: 'సమయ స్లాట్:',
+            defaultTimeSlot: '09:00 ఉదయం - 11:00 ఉదయం',
+            actSellCrop: 'పంట అమ్మండి',
+            actMandiPrices: 'మండి ధరలు',
+            actLiveQueue: 'లైవ్ క్యూ',
+            actAgriSupport: 'వ్యవసాయ మద్దతు',
+            btnViewAllServices: 'అన్ని సేవలు మరియు రికార్డులను వీక్షించండి',
+            secAgriNews: 'వ్యవసాయ వార్తలు',
+            btnViewAllNews: 'అన్ని వార్తలు మరియు అప్‌డేట్‌లను వీక్షించండి',
+            news1Tag: 'వాతావరణ హెచ్చరిక',
+            news1Title: 'తేలికపాటి వర్షం సూచన',
+            news1Desc: 'వచ్చే వారం గోధుమ విత్తడానికి అనుకూలమైన సమయం రాబోతోంది.',
+            news2Tag: 'వ్యవసాయ వార్తలు',
+            news2Title: 'ప్రభుత్వ సబ్సిడీ పథకం',
+            news2Desc: 'బిందు సేద్యం పరికరాల కోసం కొత్త సబ్సిడీ పథకం ప్రకటించబడింది.',
+            news3Tag: 'మార్కెట్ ట్రెండ్స్',
+            news3Title: 'గోధుమ మద్దతు ధర పెంపు',
+            news3Desc: 'గోధుమల కనీస మద్దతు ధర 7% పెరిగింది.',
+            secHelpInfoCenter: 'సహాయం & సమాచార కేంద్రం',
+            accContactTitle: 'మమ్మల్ని సంప్రదించండి',
+            accContactDesc: 'మండి పాస్ సంబంధిత సమస్యల కోసం మా 24/7 రైతు హెల్ప్‌లైన్‌ను సంప్రదించండి.',
+            lblHelpline: 'హెల్ప్‌లైన్',
+            lblSupportEmail: 'మద్దతు ఇమెయిల్',
+            lblHeadOffice: 'ప్రధాన కార్యాలయం',
+            accFaqTitle: 'తరచుగా అడిగే ప్రశ్నలు (FAQ)',
+            faqQ1: '1. పంట విక్రయానికి మండి స్లాట్ ఎలా బుక్ చేయాలి?',
+            faqA1: 'స్లాట్ బుక్ చేయండి విభాగంలో మీ మండిని ఎంచుకుని వివరాలు నమోదు చేయండి.',
+            faqQ2: '2. మండి ధరలు ఎలా అప్‌డేట్ అవుతాయి?',
+            faqA2: 'ధరలు రియల్-టైమ్‌లో ప్రభుత్వ వ్యవసాయ బోర్డుల ద్వారా అప్‌డేట్ అవుతాయి.',
+            faqQ3: '3. నా KCC పరిమితిని ఆన్‌లైన్‌లో చూడవచ్చా?',
+            faqA3: 'అవును, అన్ని సేవలు విభాగంలో మీ KCC పరిమితి చూడవచ్చు.',
+            accAboutTitle: 'మా గురించి',
+            accAboutDesc: 'కిసాన్ సాథీ రైతులకు పారదర్శకత మరియు స్లాట్ బుకింగ్ సౌకర్యం కల్పించే డిజిటల్ ప్లాట్‌ఫారమ్.',
+            aboutFeat1Title: 'పారదర్శక ధరలు',
+            aboutFeat1Desc: 'లైవ్ మండి ధరల సమాచారం.',
+            aboutFeat2Title: 'స్మార్ట్ క్యూ బుకింగ్',
+            aboutFeat2Desc: 'వేచి ఉండే సమయాన్ని తగ్గించుకోవడానికి ముందుగానే స్లాట్ బుక్ చేయండి.',
+            aboutFeat3Title: 'డిజిటల్ రికార్డులు',
+            aboutFeat3Desc: 'మీ విక్రయ రసీదులు మరియు KCC వివరాలు పొందండి.',
+            modalNewsTitle: 'అన్ని వ్యవసాయ వార్తలు & వాతావరణ సమాచారం',
+            readMore: 'పూర్తి వివరాలు చూడండి',
+            closeModal: 'మూసివేయి',
+            news1Full: 'వాతావరణ శాఖ సూచనల ప్రకారం తేలికపాటి వర్షాలు కురిసే అవకాశం ఉంది.',
+            news2Full: 'బిందు సేద్యం పరికరాలపై 50% సబ్సిడీ ప్రకటించబడింది.',
+            news3Full: 'గోధుమల కనీస మద్దతు ధర 7% పెరిగింది.'
+        },
+        ta: {
+            appTitle: 'கிசான் சாதி',
+            navHome: 'முகப்பு',
+            navMandi: 'சந்தை',
+            navBookSlot: 'ஸ்லாட் பதிவு',
+            navProfile: 'சுயவிவரம்',
+            greetingMorning: 'காலை வணக்கம், ஹர்ஜிந்தர் சிங்!',
+            greetingAfternoon: 'மதிய வணக்கம், ஹர்ஜிந்தர் சிங்!',
+            greetingEvening: 'மாலை வணக்கம், ஹர்ஜிந்தர் சிங்!',
+            subGreeting: 'இன்றைய உங்கள் விவசாய கண்ணோட்டம் இதோ.',
+            recMandiTag: 'பரிந்துரைக்கப்பட்ட சந்தை (குறைந்த வரிசை)',
+            fastEntryBadge: 'వేగవంతమైన ప్రవేశం ಲಭ್ಯම්',
+            mandiCenterName: 'தஹ்மி கலான் துணை மையம்',
+            capQueueStatus: 'கொள்ளளவு & வரிசை நிலை',
+            trucksWaiting: '(2 லாரிகள் காத்திருக்கின்றன)',
+            estWaitTime: 'எதிர்பார்க்கப்படும் காத்திருப்பு நேரம்',
+            minsWait: '~ 2 நிமிடங்கள்',
+            occupancyLevel: 'நிரப்பப்பட்ட அளவு',
+            slotsCount: '15 / 100 ஸ்லாட்டுகள்',
+            btnBookSlotNow: 'இப்போது ஸ்லாட் பதிவு செய்',
+            activeSlotConfirmed: 'செயலில் உள்ள ஸ்லாட் & டோக்கன் உறுதி செய்யப்பட்டது',
+            cropQtyLabel: 'பயிர் & அளவு:',
+            defaultCropQty: 'கோதுமை கொள்முதல் (100 குவிண்டால்)',
+            queuePosLabel: 'வரிசை நிலை:',
+            defaultQueuePos: 'உங்களுக்கு முன்னால் 2 விவசாயிகள்',
+            timeSlotLabel: 'நேர இடைவெளி:',
+            defaultTimeSlot: '09:00 காலை - 11:00 காலை',
+            actSellCrop: 'பயிர் விற்பனை',
+            actMandiPrices: 'சந்தை விலைகள்',
+            actLiveQueue: 'நேரலை வரிசை',
+            actAgriSupport: 'விவசாய ஆதரவு',
+            btnViewAllServices: 'அனைத்து சேவைகள் மற்றும் பதிவுகளைக் காண்க',
+            secAgriNews: 'வேளாண்மைச் செய்திகள்',
+            btnViewAllNews: 'அனைத்து செய்திகள் மற்றும் புதுப்பிப்புகளைக் காண்க',
+            news1Tag: 'வானிலை எச்சரிக்கை',
+            news1Title: 'லேசான மழை வாய்ப்பு',
+            news1Desc: 'அடுத்த வாரம் கோதுமை விதைப்புக்கு ஏற்ற நேரம் வரவுள்ளது.',
+            news2Tag: 'வேளாண் செய்திகள்',
+            news2Title: 'அரசு மானியத் திட்டம்',
+            news2Desc: 'சொட்டு நீர் பாசன முறைகளுக்கான புதிய மானிய திட்டம் அறிவிப்பு.',
+            news3Tag: 'சந்தை போக்குகள்',
+            news3Title: 'கோதுமை குறைந்தபட்ச ஆதரவு விலை உயர்வு',
+            news3Desc: 'கோதுமை ஆதரவு விலை 7% உயர்த்தப்பட்டுள்ளது.',
+            secHelpInfoCenter: 'உதவி & தகவல் மையம்',
+            accContactTitle: 'எங்களை தொடர்பு கொள்ள',
+            accContactDesc: 'சந்தை அனுமதிச் சீட்டு தொடர்பான உதவிகளுக்கு எங்களின் 24/7 உதவி எண்களைத் தொடர்பு கொள்ளவும்.',
+            lblHelpline: 'உதவி எண்',
+            lblSupportEmail: 'ஆதரவு மின்னஞ்சல்',
+            lblHeadOffice: 'தலைமை அலுவலகம்',
+            accFaqTitle: 'அடிக்கடி கேட்கப்படும் கேள்விகள் (FAQ)',
+            faqQ1: '1. பயிர் விற்பனைக்கான ஸ்லாட்டை எவ்வாறு பதிவு செய்வது?',
+            faqA1: 'ஸ்லாட் பதிவு பகுதிக்குச் சென்று உங்கள் விபரங்களை உள்ளிட்டு டோக்கனைப் பெறவும்.',
+            faqQ2: '2. சந்தை விலைகள் எவ்வாறு புதுப்பிக்கப்படுகின்றன?',
+            faqA2: 'அரசு விவசாய வாரியங்களின் மூலம் நேரலையாக விலைகள் புதுப்பிக்கப்படுகின்றன.',
+            faqQ3: '3. எனது KCC வரம்பை ஆன்லைனில் பார்க்க முடியுமா?',
+            faqA3: 'ஆம், அனைத்து சேவைகள் பகுதியில் உங்கள் KCC வரம்பைப் பார்க்கலாம்.',
+            accAboutTitle: 'எங்களைப் பற்றி',
+            accAboutDesc: 'கிசான் சாதி விவசாயிகளுக்கு நேரடி சந்தை விலைகள் மற்றும் ஸ்லாட் முன்பதிவு சேவைகளை வழங்கும் தளம்.',
+            aboutFeat1Title: 'வெளிப்படையான விலை',
+            aboutFeat1Desc: 'நேரலை சந்தை விலை நிலவரங்கள்.',
+            aboutFeat2Title: 'ஸ்மார்ட் வரிசை பதிவு',
+            aboutFeat2Desc: 'காத்திருப்பு நேரத்தைக் குறைக்க முன்கூட்டியே பதிவு செய்யுங்கள்.',
+            aboutFeat3Title: 'டிஜிட்டல் பதிவுகள்',
+            aboutFeat3Desc: 'உங்கள் விற்பனை ரசீதுகள் மற்றும் KCC விபரங்களை அணுகலாம்.',
+            modalNewsTitle: 'அனைத்து வேளாண் செய்திகள் & வானிலை தகவல்கள்',
+            readMore: 'முழு விவரங்களைக் காண்க',
+            closeModal: 'மூடு',
+            news1Full: 'வானிலை முன்னறிவிப்பு லேசான மழையைக் குறிக்கிறது.',
+            news2Full: 'சொட்டு நீர் பாசன கருவிகளுக்கு 50% மானியம் அறிவிக்கப்பட்டுள்ளது.',
+            news3Full: 'கோதுமை குறைந்தபட்ச ஆதரவு விலை 7% உயர்த்தப்பட்டுள்ளது.'
+        },
+        ml: {
+            appTitle: 'കിസാൻ സാഥി',
+            navHome: 'ഹോം',
+            navMandi: 'ചന്ത',
+            navBookSlot: 'സ്ലോട്ട് ബുക്ക് ചെയ്യുക',
+            navProfile: 'പ്രൊഫൈൽ',
+            greetingMorning: 'സുപ്രഭാതം, ഹർജിന്ദർ സിംഗ്!',
+            greetingAfternoon: 'ഉച്ചയ്ക്ക് വന്ദനം, ഹർജിന്ദർ സിംഗ്!',
+            greetingEvening: 'സന്ധ്യാ വന്ദനം, ഹർജിന്ദർ സിംഗ്!',
+            subGreeting: 'ഇന്നത്തെ നിങ്ങളുടെ കാർഷിക വിവരങ്ങൾ ഇവിടെ നൽകിയിരിക്കുന്നു.',
+            recMandiTag: 'ശുപാർശ ചെയ്യുന്ന ചന്ത (കുറഞ്ഞ ക്യൂ)',
+            fastEntryBadge: 'വേഗത്തിലുള്ള പ്രവേശനം ലഭ്യമാണ്',
+            mandiCenterName: 'ദഹ്മി കലാൻ സബ്-സെന്റർ',
+            capQueueStatus: 'ശേഷിയും ക്യൂ സ്ഥിതിയും',
+            trucksWaiting: '(2 ട്രക്കുകൾ കാത്തിരിക്കുന്നു)',
+            estWaitTime: 'പ്രതീക്ഷിക്കുന്ന കാത്തിരിപ്പ് സമയം',
+            minsWait: '~ 2 മിനിറ്റ്',
+            occupancyLevel: 'ഒക്യുപ്പൻസി ലെവൽ',
+            slotsCount: '15 / 100 സ്ലോട്ടുകൾ',
+            btnBookSlotNow: 'ഇപ്പോൾ സ്ലോട്ട് ബുക്ക് ചെയ്യുക',
+            activeSlotConfirmed: 'ആക്ടീവ് സ്ലോട്ടും ടോക്കണും സ്ഥിരീകരിച്ചു',
+            cropQtyLabel: 'വിളവും അളവും:',
+            defaultCropQty: 'ഗോതമ്പ് സംഭരണം (100 ക്വിന്റൽ)',
+            queuePosLabel: 'ക്യൂ സ്ഥാനം:',
+            defaultQueuePos: 'നിങ്ങൾക്ക് മുൻപിൽ 2 കർഷകർ',
+            timeSlotLabel: 'സമയ സ്ലോട്ട്:',
+            defaultTimeSlot: '09:00 രാവിലെ - 11:00 രാവിലെ',
+            actSellCrop: 'വിള വിൽക്കുക',
+            actMandiPrices: 'ചന്ത വിലകൾ',
+            actLiveQueue: 'ലൈവ് ക്യൂ',
+            actAgriSupport: 'കാർഷിക പിന്തുണ',
+            btnViewAllServices: 'എല്ലാ സേവനങ്ങളും രേഖകളും കാണുക',
+            secAgriNews: 'കാർഷിക വാർത്തകൾ',
+            btnViewAllNews: 'എല്ലാ വാർത്തകളും അപ്ഡേറ്റുകളും കാണുക',
+            news1Tag: 'കാലാവസ്ഥ മുന്നറിയിപ്പ്',
+            news1Title: 'ലഘുവായ മഴയ്ക്ക് സാധ്യത',
+            news1Desc: 'അടുത്ത ആഴ്ച ഗോതമ്പ് വിതയ്ക്കാൻ അനുയോജ്യമായ സമയമാണ്.',
+            news2Tag: 'കാർഷിക വാർത്തകൾ',
+            news2Title: 'സർക്കാർ സബ്‌സിഡി പദ്ധതി',
+            news2Desc: 'തുള്ളിനന സംവിധാനങ്ങൾക്കായി പുതിയ സബ്‌സിഡി പദ്ധതി പ്രഖ്യാപിച്ചു.',
+            news3Tag: 'വിപണി പ്രവണതകൾ',
+            news3Title: 'ഗോതമ്പ് താങ്ങുവില വർദ്ധനവ്',
+            news3Desc: 'ഗോതമ്പിന്റെ താങ്ങുവിലയിൽ 7% വർദ്ധനവ്.',
+            secHelpInfoCenter: 'സഹായവും വിവര കേന്ദ്രവും',
+            accContactTitle: 'ഞങ്ങളെ ബന്ധപ്പെടുക',
+            accContactDesc: 'മണ്ഡി പാസുമായി ബന്ധപ്പെട്ട സംശയങ്ങൾക്ക് ഞങ്ങളുടെ 24/7 കർഷക സഹായ നമ്പറിൽ ബന്ധപ്പെടുക.',
+            lblHelpline: 'ഹെൽപ്പ് ലൈൻ',
+            lblSupportEmail: 'സപ്പോർട്ട് ഇമെയിൽ',
+            lblHeadOffice: 'ഹെഡ് ഓഫീസ്',
+            accFaqTitle: 'പതിവായി ചോദിക്കുന്ന ചോദ്യങ്ങൾ (FAQ)',
+            faqQ1: '1. വിള വിൽക്കുന്നതിനായി മണ്ഡി സ്ലോട്ട് എങ്ങനെ ബുക്ക് ചെയ്യാം?',
+            faqA1: 'സ്ലോട്ട് ബുക്ക് ചെയ്യുക എന്ന വിഭാഗത്തിൽ വിവരങ്ങൾ നൽകി ടോക്കൺ നേടുക.',
+            faqQ2: '2. മണ്ഡി വിലകൾ എങ്ങനെയാണ് അപ്ഡേറ്റ് ചെയ്യുന്നത്?',
+            faqA2: 'സർക്കാർ കാർഷിക ബോർഡുകൾ വഴി തത്സമയം വിലകൾ അപ്ഡേറ്റ് ചെയ്യുന്നു.',
+            faqQ3: '3. എൻ്റെ KCC പരിധി ഓൺലൈനിൽ കാണാൻ കഴിയുമോ?',
+            faqA3: 'അതെ, എല്ലാ സേവനങ്ങളും വിഭാഗത്തിൽ KCC വിവരങ്ങൾ ലഭ്യമാണ്.',
+            accAboutTitle: 'ഞങ്ങളെ കുറിച്ച്',
+            accAboutDesc: 'കർഷകർക്ക് തത്സമയ വിപണി വില വിവരങ്ങളും സ്ലോട്ട് ബുക്കിംഗും നൽകുന്ന ഡിജിറ്റൽ പ്ലാറ്റ്‌ഫോം.',
+            aboutFeat1Title: 'സുതാര്യമായ വിലകൾ',
+            aboutFeat1Desc: 'തത്സമയ വിപണി വില വിവരങ്ങൾ.',
+            aboutFeat2Title: 'സ്മാർട്ട് ക്യൂ ബുക്കിംഗ്',
+            aboutFeat2Desc: 'കാത്തിരിപ്പ് സമയം ഒഴിവാക്കാൻ മുൻകൂട്ടി ബുക്ക് ചെയ്യുക.',
+            aboutFeat3Title: 'ഡിജിറ്റൽ രേഖകൾ',
+            aboutFeat3Desc: 'വില്പന രസീതുകളും KCC വിവരങ്ങളും ലഭ്യമാണ്.',
+            modalNewsTitle: 'എല്ലാ കാർഷിക വാർത്തകളും കാലാവസ്ഥാ വിവരങ്ങളും',
+            readMore: 'മുഴുവൻ വിവരങ്ങളും കാണുക',
+            closeModal: 'അടയ്ക്കുക',
+            news1Full: 'കാലാവസ്ഥാ നിരീക്ഷകർ ചെറിയ മഴയ്ക്ക് സാധ്യത പ്രവചിക്കുന്നു.',
+            news2Full: 'തുള്ളിനന ഉപകരണങ്ങൾക്ക് 50% സബ്‌സിഡി പ്രഖ്യാപിച്ചു.',
+            news3Full: 'ഗോതമ്പിന്റെ താങ്ങുവിലയിൽ 7% വർദ്ധനവ് ഉണ്ടായിട്ടുണ്ട്.'
+        },
+        kn: {
+            appTitle: 'ಕಿಸಾನ್ ಸಾಥಿ',
+            navHome: 'ಮುಖಪುಟ',
+            navMandi: 'ಮಂಡಿ',
+            navBookSlot: 'ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ',
+            navProfile: 'ಪ್ರೊಫೈಲ್',
+            greetingMorning: 'ಶುಭೋದಯ, ಹರ್ಜಿಂದರ್ ಸಿಂಗ್!',
+            greetingAfternoon: 'ಶುಭ ಮಧ್ಯಾಹ್ನ, ಹರ್ಜಿಂದರ್ ಸಿಂಗ್!',
+            greetingEvening: 'ಶುಭ ಸಂಜೆ, ಹರ್ಜಿಂದರ್ ಸಿಂಗ್!',
+            subGreeting: 'ಇಂದಿನ ನಿಮ್ಮ ಕೃಷಿ ಅವಲೋಕನ ಇಲ್ಲಿದೆ.',
+            recMandiTag: 'ಶಿಫಾರಸು ಮಾಡಿದ ಮಂಡಿ (ಕಡಿಮೆ ಕ್ಯೂ)',
+            fastEntryBadge: 'ವೇಗದ ಪ್ರವೇಶ ಲಭ್ಯವಿದೆ',
+            mandiCenterName: 'ದಹ್ಮಿ ಕಲಾನ್ ಉಪ-ಕೇಂದ್ರ',
+            capQueueStatus: 'ಸಾಮರ್ಥ್ಯ ಮತ್ತು ಕ್ಯೂ ಸ್ಥಿತಿ',
+            trucksWaiting: '(2 ಟ್ರಕ್‌ಗಳು ಕಾಯುತ್ತಿವೆ)',
+            estWaitTime: 'ಅಂದಾಜು ಕಾಯುವ ಸಮಯ',
+            minsWait: '~ 2 ನಿಮಿಷಗಳು',
+            occupancyLevel: 'ಆಕ್ಯುಪೆನ್ಸಿ ಮಟ್ಟ',
+            slotsCount: '15 / 100 ಸ್ಲಾಟ್‌ಗಳು',
+            btnBookSlotNow: 'ಈಗಲೇ ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ',
+            activeSlotConfirmed: 'ಸಕ್ರಿಯ ಸ್ಲಾಟ್ ಮತ್ತು ಟೋಕನ್ ಖಚಿತವಾಗಿದೆ',
+            cropQtyLabel: 'ಬೆಳೆ ಮತ್ತು ಪ್ರಮಾಣ:',
+            defaultCropQty: 'ಗೋಧಿ ಖರೀದಿ (100 ಕ್ವಿಂಟಾಲ್)',
+            queuePosLabel: 'ಕ್ಯೂ ಸ್ಥಾನ:',
+            defaultQueuePos: 'ನಿಮಗಿಂತ ಮುಂದೆ 2 ರೈತರು',
+            timeSlotLabel: 'ಸಮಯದ ಸ್ಲಾಟ್:',
+            defaultTimeSlot: '09:00 ಬೆಳಿಗ್ಗೆ - 11:00 ಬೆಳಿಗ್ಗೆ',
+            actSellCrop: 'ಬೆಳೆ ಮಾರಾಟ',
+            actMandiPrices: 'ಮಂಡಿ ಬೆಲೆಗಳು',
+            actLiveQueue: 'ಲೈವ್ ಕ್ಯೂ',
+            actAgriSupport: 'ಕೃಷಿ ಬೆಂಬಲ',
+            btnViewAllServices: 'ಎಲ್ಲಾ ಸೇವೆಗಳು ಮತ್ತು ದಾಖಲೆಗಳನ್ನು ವೀಕ್ಷಿಸಿ',
+            secAgriNews: 'ಕೃಷಿ ಸುದ್ದಿ',
+            btnViewAllNews: 'ಎಲ್ಲಾ ಸುದ್ದಿ ಮತ್ತು ನವೀಕರಣಗಳನ್ನು ವೀಕ್ಷಿಸಿ',
+            news1Tag: 'ಹವಾಮಾನ ಎಚ್ಚರಿಕೆ',
+            news1Title: 'ಸಾಧಾರಣ ಮಳೆ ಸಾಧ್ಯತೆ',
+            news1Desc: 'ಮುಂದಿನ ವಾರ ಗೋಧಿ ಬಿತ್ತನೆಗೆ ಸೂಕ್ತ ಸಮಯ ಬರಲಿದೆ.',
+            news2Tag: 'ಕೃಷಿ ಸುದ್ದಿ',
+            news2Title: 'ಸರ್ಕಾರಿ ಸಬ್ಸಿಡಿ ಯೋಜನೆ',
+            news2Desc: 'ಹನಿ ನೀರಾವರಿ ವ್ಯವಸ್ಥೆಗಳಿಗೆ ಹೊಸ ಸಬ್ಸಿಡಿ ಯೋಜನೆ ಘೋಷಣೆ.',
+            news3Tag: 'ಮಾರುಕಟ್ಟೆ ಪ್ರವೃತ್ತಿಗಳು',
+            news3Title: 'ಗೋಧಿ ಬೆಂಬಲ ಬೆಲೆ ಏರಿಕೆ',
+            news3Desc: 'ಗೋಧಿ ಕನಿಷ್ಠ ಬೆಂಬಲ ಬೆಲೆಯಲ್ಲಿ 7% ಏರಿಕೆ.',
+            secHelpInfoCenter: 'ಸಹಾಯ ಮತ್ತು ಮಾಹಿತಿ ಕೇಂದ್ರ',
+            accContactTitle: 'ನಮ್ಮನ್ನು ಸಂಪರ್ಕಿಸಿ',
+            accContactDesc: 'ಮಂಡಿ ಪಾಸ್ ಕುರಿತು ಸಹಾಯಕ್ಕಾಗಿ ನಮ್ಮ 24/7 ರೈತ ಸಹಾಯವಾಣಿಯನ್ನು ಸಂಪರ್ಕಿಸಿ.',
+            lblHelpline: 'ಸಹಾಯವಾಣಿ',
+            lblSupportEmail: 'ಬೆಂಬಲ ಇಮೇಲ್',
+            lblHeadOffice: 'ಮುಖ್ಯ ಕಚೇರಿ',
+            accFaqTitle: 'ಪದೇ ಪದೇ ಕೇಳಲಾಗುವ ಪ್ರಶ್ನೆಗಳು (FAQ)',
+            faqQ1: '1. ಬೆಳೆ ಮಾರಾಟಕ್ಕೆ ಮಂಡಿ ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡುವುದು ಹೇಗೆ?',
+            faqA1: 'ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ ವಿಭಾಗಕ್ಕೆ ಹೋಗಿ ನಿಮ್ಮ ವಿವರಗಳನ್ನು ನಮೂದಿಸಿ ಟೋಕನ್ ಪಡೆಯಿರಿ.',
+            faqQ2: '2. ಮಂಡಿ ಬೆಲೆಗಳನ್ನು ಹೇಗೆ ನವೀಕರಿಸಲಾಗುತ್ತದೆ?',
+            faqA2: 'ಸರ್ಕಾರಿ ಕೃಷಿ ಮಂಡಳಿಗಳ ಮೂಲಕ ರಿಯಲ್-ಟೈಮ್‌ನಲ್ಲಿ ಬೆಲೆಗಳು ನವೀಕರಣಗೊಳ್ಳುತ್ತವೆ.',
+            faqQ3: '3. ನನ್ನ KCC ಮಿತಿಯನ್ನು ಆನ್‌ಲೈನ್‌ನಲ್ಲಿ ವೀಕ್ಷಿಸಬಹುದೇ?',
+            faqA3: 'ಹೌದು, ಎಲ್ಲಾ ಸೇವೆಗಳು ವಿಭಾಗದಲ್ಲಿ ನಿಮ್ಮ KCC ವಿವರಗಳನ್ನು ಕಾಣಬಹುದು.',
+            accAboutTitle: 'ನಮ್ಮ ಬಗ್ಗೆ',
+            accAboutDesc: 'ಕಿಸಾನ್ ಸಾಥಿ ರೈತರಿಗೆ ಮಾರುಕಟ್ಟೆ ಪಾರದರ್ಶಕತೆ ಮತ್ತು ಸ್ಲಾಟ್ ಬುಕಿಂಗ್ ಸೌಲಭ್ಯ ನೀಡುವ ವೇದಿಕೆ.',
+            aboutFeat1Title: 'ಪಾರದರ್ಶಕ ಬೆಲೆ',
+            aboutFeat1Desc: 'ಲೈವ್ ಮಂಡಿ ಬೆಲೆ ನವೀಕರಣಗಳು.',
+            aboutFeat2Title: 'ಸ್ಮಾರ್ಟ್ ಕ್ಯೂ ಬುಕಿಂಗ್',
+            aboutFeat2Desc: 'ಕಾಯುವ ಸಮಯವನ್ನು ತಪ್ಪಿಸಲು ಮುಂಚಿತವಾಗಿ ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ.',
+            aboutFeat3Title: 'ಡಿಜಿಟಲ್ ದಾಖಲೆಗಳು',
+            aboutFeat3Desc: 'ನಿಮ್ಮ ಮಾರಾಟ ರಸೀದಿಗಳು ಮತ್ತು KCC ವಿವರಗಳನ್ನು ಪಡೆಯಿರಿ.',
+            modalNewsTitle: 'ಎಲ್ಲಾ ಕೃಷಿ ಸುದ್ದಿ ಮತ್ತು ಹವಾಮಾನ ವರದಿಗಳು',
+            readMore: 'ಪೂರ್ಣ ವರದಿಯನ್ನು ವೀಕ್ಷಿಸಿ',
+            closeModal: 'ಮುಚ್ಚಿ',
+            news1Full: 'ಹವಾಮಾನ ಮುನ್ಸೂಚನೆಯು ಸಾಧಾರಣ ಮಳೆಯಾಗುವ ಸಾಧ್ಯತೆಯನ್ನು ಸೂಚಿಸುತ್ತದೆ.',
+            news2Full: 'ಹನಿ ನೀರಾವರಿ ಉಪಕರಣಗಳಿಗೆ 50% ಸಬ್ಸಿಡಿ ಘೋಷಿಸಲಾಗಿದೆ.',
+            news3Full: 'ಗೋಧಿ ಕನಿಷ್ಠ ಬೆಂಬಲ ಬೆಲೆಯಲ್ಲಿ 7% ಏರಿಕೆ ಮಾಡಲಾಗಿದೆ.'
+        },
+        ur: {
+            appTitle: 'کسان ساتھی',
+            navHome: 'ہوم',
+            navMandi: 'منڈی',
+            navBookSlot: 'سلاٹ بک کریں',
+            navProfile: 'پروفائل',
+            greetingMorning: 'صبح بخیر، ہرجندر سنگھ!',
+            greetingAfternoon: 'سہ پہر بخیر، ہرجندر سنگھ!',
+            greetingEvening: 'شام بخیر، ہرجندر سنگھ!',
+            subGreeting: 'آج کا آپ کا زرعی جائزہ یہاں ہے۔',
+            recMandiTag: 'تجویز کردہ منڈی (کم ترین قطار)',
+            fastEntryBadge: 'تیز رفتار انٹری دستیاب ہے',
+            mandiCenterName: 'دہمی کلاں سب سنٹر',
+            capQueueStatus: 'گنجائش اور قطار کی صورتحال',
+            trucksWaiting: '(2 ٹرک انتظار میں)',
+            estWaitTime: 'متوقع انتظار کا وقت',
+            minsWait: '~ 2 منٹ',
+            occupancyLevel: 'گنجائش کی سطح',
+            slotsCount: '15 / 100 سلاٹس',
+            btnBookSlotNow: 'ابھی سلاٹ بک کریں',
+            activeSlotConfirmed: 'فعال سلاٹ اور ٹوکن کی تصدیق ہو گئی',
+            cropQtyLabel: 'فصل اور مقدار:',
+            defaultCropQty: 'گندم کی خریداری (100 کوئنٹل)',
+            queuePosLabel: 'قطار میں نمبر:',
+            defaultQueuePos: 'آپ سے آگے 2 کسان',
+            timeSlotLabel: 'وقت کا سلاٹ:',
+            defaultTimeSlot: '09:00 صبح - 11:00 صبح',
+            actSellCrop: 'فصل فروخت کریں',
+            actMandiPrices: 'منڈی کی قیمتیں',
+            actLiveQueue: 'لائیو قطار',
+            actAgriSupport: 'زرعی معاونت',
+            btnViewAllServices: 'تمام خدمات اور ریکارڈ دیکھیں',
+            secAgriNews: 'زرعی خبریں',
+            btnViewAllNews: 'تمام خبریں اور اپ ڈیٹس دیکھیں',
+            news1Tag: 'موسمی الرٹ',
+            news1Title: 'ہلکی بارش کا امکان',
+            news1Desc: 'اگلے ہفتے گندم کی بوائی کا بہترین وقت آ رہا ہے۔',
+            news2Tag: 'زرعی خبریں',
+            news2Title: 'سرکاری سبسڈی اسکیم',
+            news2Desc: 'ڈپ آبپاشی کے نظام کے لیے نئی سبسڈی اسکیم کا اعلان۔',
+            news3Tag: 'مارکیٹ کے رجحانات',
+            news3Title: 'گندم کی ایم ایس پی میں اضافہ',
+            news3Desc: 'گندم کی سرکاری قیمت میں 7 فیصد اضافہ۔',
+            secHelpInfoCenter: 'مدد اور معلومات کا مرکز',
+            accContactTitle: 'ہم سے رابطہ کریں',
+            accContactDesc: 'منڈی پاس کے بارے میں رہنمائی کے لیے ہماری 24/7 کسان ہیلپ لائن سے رابطہ کریں۔',
+            lblHelpline: 'ہیلپ لائن',
+            lblSupportEmail: 'سپورٹ ای میل',
+            lblHeadOffice: 'ہیڈ آفس',
+            accFaqTitle: 'بار بار پوچھے گئے سوالات (FAQ)',
+            faqQ1: '1. فصل فروخت کرنے کے لیے منڈی کا سلاٹ کیسے بک کریں؟',
+            faqA1: 'سلاٹ بک کریں کے سیکشن میں جا کر معلومات درج کریں اور ٹوکن حاصل کریں۔',
+            faqQ2: '2. منڈی کی قیمتیں کیسے اپ ڈیٹ ہوتی ہیں؟',
+            faqA2: 'قیمتیں براہ راست سرکاری زرعی بورڈز کے ذریعے اپ ڈیٹ کی جاتی ہیں۔',
+            faqQ3: '3. کیا میں اپنا KCC لمیٹ آن لائن دیکھ سکتا ہوں؟',
+            faqA3: 'جی ہاں، آپ تمام خدمات میں اپنی KCC لمیٹ دیکھ سکتے ہیں۔',
+            accAboutTitle: 'ہمارے بارے میں',
+            accAboutDesc: 'کسان ساتھی کسانوں کی سہولت کے لیے بنایا گیا ایک جدید زرعی پلیٹ فارم ہے۔',
+            aboutFeat1Title: 'شفاف قیمتیں',
+            aboutFeat1Desc: 'منڈی کی لائیو قیمتوں کی معلومات۔',
+            aboutFeat2Title: 'سمارٹ قطار بکنگ',
+            aboutFeat2Desc: 'انتظار سے بچنے کے لیے پہلے سے سلاٹ بک کریں۔',
+            aboutFeat3Title: 'ڈیجیٹل ریکارڈز',
+            aboutFeat3Desc: 'اپنے KCC اور سیلز کے تمام ریکارڈز تک رسائی حاصل کریں۔',
+            modalNewsTitle: 'تمام زرعی خبریں اور موسمی ہدایات',
+            readMore: 'مکمل تفصیلات دیکھیں',
+            closeModal: 'بند کریں',
+            news1Full: 'محکمہ موسمیات نے ہلکی بارش کا امکان ظاہر کیا ہے۔',
+            news2Full: 'ڈرپ آبپاشی کے نظام پر 50 فیصد سبسڈی کا اعلان کیا گیا ہے۔',
+            news3Full: 'گندم کی سرکاری قیمت (MSP) میں 7 فیصد اضافہ کیا گیا ہے۔'
+        }
+    },
+    t(key) {
+        return (this.translations[this.lang] && this.translations[this.lang][key]) || this.translations['en'][key] || key;
+    }
+}">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kisan Saathi - Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const supabaseUrl = 'https://lwexxnbwtltigadhzasa.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3ZXh4bmJ3dGx0aWdhZGh6YXNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTEyOTIsImV4cCI6MjEwMzQyNzI5Mn0.iZzB-KI5_dAamTdROz06knj57jgahVhXkHeSvaBNiaI';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function enforceLogin() {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+            window.location.href = 'login.html';
+        }
+    }
+    enforceLogin();
+</script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Mukta:wght@400;500;600;700&amp;family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .frosted-pearl {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 25px 50px -12px rgba(13, 23, 69, 0.25);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+</style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#000000",
+                        "on-primary-container": "#7881b4",
+                        "background": "#f7f9fb",
+                        "error": "#ba1a1a",
+                        "tertiary": "#010100",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface": "#f7f9fb",
+                        "on-error": "#ffffff",
+                        "outline": "#767680",
+                        "primary-fixed-dim": "#bbc3fb",
+                        "tertiary-fixed": "#ffdf9e",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#88d982",
+                        "on-surface": "#191c1e",
+                        "secondary": "#1b6d24",
+                        "on-tertiary-fixed-variant": "#5b4300",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#002204",
+                        "outline-variant": "#c6c5d0",
+                        "error-container": "#ffdad6",
+                        "on-surface-variant": "#46464f",
+                        "primary-container": "#0d1745",
+                        "primary-fixed": "#dee1ff",
+                        "surface-dim": "#d8dadc",
+                        "surface-container": "#eceef0",
+                        "on-secondary-fixed-variant": "#005312",
+                        "on-tertiary-fixed": "#261a00",
+                        "surface-container-low": "#f2f4f6",
+                        "inverse-primary": "#bbc3fb",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-variant": "#e0e3e5",
+                        "on-tertiary-container": "#a77e00",
+                        "on-secondary-container": "#217128",
+                        "on-background": "#191c1e",
+                        "secondary-fixed": "#a3f69c",
+                        "surface-tint": "#525b8c",
+                        "tertiary-container": "#261a00",
+                        "tertiary-fixed-dim": "#fabd00",
+                        "inverse-surface": "#2d3133",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e6e8ea",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#0d1745",
+                        "surface-bright": "#f7f9fb",
+                        "secondary-container": "#a0f399",
+                        "on-primary-fixed-variant": "#3b4473"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "card-padding": "32px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "20px",
+                        "container-max": "1440px",
+                        "stack-gap": "16px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Poppins", "sans-serif"],
+                        "display": ["Poppins", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Mukta", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+                        "title-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-primary-container text-on-surface antialiased min-h-screen flex flex-col relative overflow-x-hidden pb-20" x-init="
+    const hour = new Date().getHours();
+    if (hour < 12) timeOfDay = 'morning';
+    else if (hour < 17) timeOfDay = 'afternoon';
+    else timeOfDay = 'evening';
+
+    const savedBooking = localStorage.getItem('activeKisanBooking');
+    if (savedBooking) {
+        hasBooked = true;
+        bookedData = JSON.parse(savedBooking);
+    }
+">
+
+<div class="fixed inset-0 z-[-2] bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=2000&auto=format&fit=crop');"></div>
+<div class="fixed inset-0 w-full h-full bg-black/55 z-[-1]"></div>
+
+<nav class="fixed top-0 w-full z-50 shadow-md bg-[#0d1745] flex justify-between items-center px-4 h-16 border-b border-white/10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm overflow-hidden border border-white/20">
+<img class="w-full h-full object-cover" src="Logo.png" alt="Kisan Saathi Logo">
+</div>
+<h1 class="font-headline text-[18px] font-bold tracking-tight text-white uppercase" x-text="t('appTitle')">KISAN SAATHI</h1>
+</div>
+
+<nav class="hidden xl:flex gap-6 items-center h-full pt-1">
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary border-on-primary font-semibold" href="#home-top" @click="activeSection = 'home'" x-text="t('navHome')">Home</a>
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="mandi.html" @click="activeSection = 'prices'" x-text="t('navMandi')">Mandi</a>
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="queue.html" @click="activeSection = 'queue'" x-text="t('navBookSlot')">Book Slot</a>
+<a class="font-label text-sm pb-1 transition-all border-b-2 text-on-primary-container opacity-80 hover:opacity-100 hover:text-white border-transparent" href="profile.html" x-text="t('navProfile')">Profile</a>
+</nav>
+
+<div class="flex items-center gap-3 relative">
+<select x-model="lang" aria-label="Select Language" class="bg-white/10 hover:bg-white/20 text-white text-xs rounded-none px-3 py-2 focus:outline-none cursor-pointer font-bold border border-white/25 shadow-[0_4px_12px_rgba(0,0,0,0.04)]">
+    <option value="en" class="text-black">English</option>
+    <option value="pa" class="text-black">ਪੰਜਾਬੀ</option>
+    <option value="hi" class="text-black">हिन्दी</option>
+    <option value="te" class="text-black">తెలుగు</option>
+    <option value="ta" class="text-black">தமிழ்</option>
+    <option value="ml" class="text-black">മലയാളം</option>
+    <option value="kn" class="text-black">ಕನ್ನಡ</option>
+    <option value="ur" class="text-black">اردو</option>
+</select>
+
+<a href="profile.html" aria-label="Profile" class="w-10 h-10 rounded-full overflow-hidden border border-white/20 shadow-sm cursor-pointer hover:border-white/50 transition-colors aspect-square flex-shrink-0 inline-block">
+<img alt="Harjinder Singh Profile" class="w-full h-full object-cover aspect-square" src="kisan.jpg">
+</a>
+</div>
+</nav>
+
+<main id="home-top" class="flex-grow w-full max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop py-8 md:py-12 pt-24 pb-32 z-10 flex flex-col gap-10">
+<section class="flex flex-col gap-2 animate-fade-in-up">
+<h2 class="font-display-lg text-display-lg text-white" x-text="timeOfDay === 'morning' ? t('greetingMorning') : (timeOfDay === 'afternoon' ? t('greetingAfternoon') : t('greetingEvening'))">
+    Good Morning, Harjinder Singh!
+</h2>
+<p class="font-body-lg text-body-lg text-inverse-on-surface/80" x-text="t('subGreeting')">
+    Here is your agricultural overview for today.
+</p>
+</section>
+
+<!-- Main Dashboard Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+    
+    <!-- IF NOT BOOKED: Show Least Crowded Mandi -->
+    <div x-show="!hasBooked" class="lg:col-span-8 frosted-pearl rounded-[2.5rem] p-6 md:p-8 flex flex-col justify-between min-h-[340px] shadow-xl relative overflow-hidden border border-white/60">
+        
+        <!-- Top Row: Mandi Information & Availability Badge -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-black/5">
+            <div class="flex items-start gap-3.5">
+                <div class="w-12 h-12 rounded-2xl bg-secondary/10 text-secondary flex items-center justify-center shrink-0 border border-secondary/20 shadow-sm mt-0.5">
+                    <span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">warehouse</span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 mb-1 text-on-surface-variant">
+                        <span class="font-label-caps text-[11px] uppercase tracking-wider font-bold text-secondary" x-text="t('recMandiTag')">Recommended Mandi (Lowest Queue)</span>
+                    </div>
+                    <h3 class="font-headline-lg text-2xl md:text-3xl font-extrabold text-on-surface tracking-tight" x-text="t('mandiCenterName')">Dahmi Kalan Sub-Center</h3>
+                </div>
+            </div>
+
+            <div class="self-start sm:self-center flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200/80 px-3.5 py-1.5 rounded-full shadow-sm">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-600"></span>
+                </span>
+                <span class="font-label-sm text-xs font-bold tracking-wide uppercase" x-text="t('fastEntryBadge')">Fast Entry Available</span>
+            </div>
+        </div>
+
+        <!-- Center Content: Metrics Grid -->
+        <div class="my-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Capacity Stat Box -->
+            <div class="bg-white/70 backdrop-blur-sm p-4 rounded-2xl border border-black/5 flex flex-col justify-between shadow-sm">
+                <span class="font-body-sm text-xs text-on-surface-variant font-medium" x-text="t('capQueueStatus')">Capacity & Queue Status</span>
+                <div class="flex items-baseline gap-2 mt-1">
+                    <span class="font-display-lg text-3xl md:text-4xl font-extrabold text-secondary">15%</span>
+                    <span class="text-sm font-semibold text-on-surface-variant/80" x-text="t('trucksWaiting')">(2 trucks waiting)</span>
+                </div>
+            </div>
+
+            <!-- Estimated Time Box -->
+            <div class="bg-white/70 backdrop-blur-sm p-4 rounded-2xl border border-black/5 flex flex-col justify-between shadow-sm">
+                <span class="font-body-sm text-xs text-on-surface-variant font-medium" x-text="t('estWaitTime')">Estimated Waiting Time</span>
+                <div class="flex items-center gap-2 mt-1">
+                    <span class="material-symbols-outlined text-secondary text-2xl">schedule</span>
+                    <span class="font-display-lg text-2xl md:text-3xl font-extrabold text-on-surface" x-text="t('minsWait')">~ 2 Mins</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Section: Visual Capacity Bar & Action Button -->
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 pt-2">
+            <div class="flex-grow flex flex-col gap-1.5">
+                <div class="flex justify-between items-center text-xs font-semibold text-on-surface-variant px-0.5">
+                    <span x-text="t('occupancyLevel')">Occupancy Level</span>
+                    <span class="text-secondary font-bold" x-text="t('slotsCount')">15 / 100 Slots</span>
+                </div>
+                <div class="w-full h-3.5 bg-black/10 rounded-full overflow-hidden p-0.5 border border-white/50">
+                    <div class="h-full bg-gradient-to-r from-emerald-500 to-secondary rounded-full transition-all duration-500 shadow-sm" style="width: 15%;"></div>
+                </div>
+            </div>
+
+            <a href="queue.html" class="bg-secondary hover:bg-secondary/90 text-white font-semibold px-6 py-3 rounded-2xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 text-sm shrink-0 active:scale-95">
+                <span x-text="t('btnBookSlotNow')">Book Slot Now</span>
+                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- IF BOOKED: Show Active Booking & Queue Status -->
+    <div x-show="hasBooked" class="lg:col-span-8 frosted-pearl rounded-[2rem] p-card-padding flex flex-col justify-between min-h-[300px] border-2 border-secondary" style="display: none;">
+        <div class="flex justify-between items-start mb-4">
+            <div>
+                <div class="flex items-center gap-2 mb-1 text-secondary font-bold">
+                    <span class="material-symbols-outlined text-[20px]">confirmation_number</span>
+                    <span class="uppercase tracking-wider text-xs" x-text="t('activeSlotConfirmed')">Active Slot & Token Confirmed</span>
+                </div>
+                <h3 class="font-headline-lg text-2xl md:text-3xl font-bold text-on-surface" x-text="bookedData ? bookedData.center : 'Bagru Mandi'"></h3>
+            </div>
+            <span class="bg-secondary text-white px-3 py-1 rounded-xl text-xs font-black shadow-sm" x-text="bookedData ? bookedData.token : 'Token #04'"></span>
+        </div>
+        <div class="mt-auto flex flex-col gap-3 bg-white/70 p-4 rounded-2xl border border-black/5">
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-outline font-medium" x-text="t('cropQtyLabel')">Crop & Quantity:</span>
+                <span class="font-bold text-on-surface" x-text="bookedData ? (bookedData.category + ' (' + bookedData.qty + ' Qtl)') : t('defaultCropQty')"></span>
+            </div>
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-outline font-medium" x-text="t('queuePosLabel')">Queue Position:</span>
+                <span class="font-bold text-secondary" x-text="bookedData ? (bookedData.queuePosition + ' farmers ahead of you') : t('defaultQueuePos')"></span>
+            </div>
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-outline font-medium" x-text="t('timeSlotLabel')">Time Slot:</span>
+                <span class="font-bold text-on-surface" x-text="bookedData ? bookedData.timeSlot : t('defaultTimeSlot')"></span>
+            </div>
+        </div>
+    </div>
+
+<div class="lg:col-span-4 flex flex-col gap-4">
+<div class="grid grid-cols-2 gap-4">
+<a href="queue.html" class="frosted-pearl rounded-[1.5rem] p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/95 transition-all group hover:scale-[1.02] shadow-sm text-center">
+<div class="w-14 h-14 rounded-xl bg-primary-container text-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+</div>
+<span class="font-title-md text-[16px] text-on-surface font-semibold leading-tight" x-text="t('actSellCrop')">Sell Crop</span>
+</a>
+<a href="mandi.html" class="frosted-pearl rounded-[1.5rem] p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/95 transition-all group hover:scale-[1.02] shadow-sm text-center">
+<div class="w-14 h-14 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center group-hover:scale-110 transition-transform shadow-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<span class="font-title-md text-[16px] text-on-surface font-semibold leading-tight" x-text="t('actMandiPrices')">Mandi Prices</span>
+</a>
+<a href="queue.html" class="frosted-pearl rounded-[1.5rem] p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/95 transition-all group hover:scale-[1.02] shadow-sm text-center">
+<div class="w-14 h-14 rounded-xl bg-tertiary-fixed-dim text-on-tertiary-fixed flex items-center justify-center group-hover:scale-110 transition-transform shadow-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+</div>
+<span class="font-title-md text-[16px] text-on-surface font-semibold leading-tight" x-text="t('actLiveQueue')">Live Queue</span>
+</a>
+<a href="support.html" class="frosted-pearl rounded-[1.5rem] p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/95 transition-all group hover:scale-[1.02] shadow-sm text-center">
+<div class="w-14 h-14 rounded-xl bg-primary-fixed text-on-primary-fixed flex items-center justify-center group-hover:scale-110 transition-transform shadow-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+</div>
+<span class="font-title-md text-[16px] text-on-surface font-semibold leading-tight" x-text="t('actAgriSupport')">Agri Support</span>
+</a>
+</div>
+<a href="viewall.html" class="frosted-pearl rounded-2xl py-3.5 px-6 flex items-center justify-center gap-2 hover:bg-white/95 transition-all text-on-surface font-semibold shadow-sm text-sm">
+<span x-text="t('btnViewAllServices')">View All Services & Records</span> 
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</section>
+
+<!-- Agri News Section -->
+<section id="recommended-section" class="flex flex-col gap-6 mt-4 scroll-mt-28">
+<div class="flex justify-between items-end w-full">
+<h3 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-white" x-text="t('secAgriNews')">Agri News</h3>
+<button @click="showAllNews = true" class="font-body-sm text-body-sm text-secondary-fixed hover:text-white transition-colors font-semibold flex items-center gap-1 bg-black/30 px-4 py-2 rounded-xl border border-white/20 backdrop-blur-sm cursor-pointer">
+<span x-text="t('btnViewAllNews')">View All News & Updates</span> 
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- News Item 1 -->
+<div @click="selectedNews = { tag: t('news1Tag'), title: t('news1Title'), desc: t('news1Full'), img: 'https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?q=80&w=800&auto=format&fit=crop' }" class="rounded-[1.5rem] p-6 flex flex-col gap-4 bg-black/25 backdrop-blur-md border border-white/15 shadow-xl cursor-pointer hover:bg-black/40 transition-all group">
+<div class="flex justify-between items-center text-white/85">
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary-fixed" x-text="t('news1Tag')">Weather Alert</span>
+<span class="material-symbols-outlined text-white group-hover:scale-110 transition-transform">rainy</span>
+</div>
+<div class="w-full h-32 rounded-xl overflow-hidden relative shadow-inner">
+<div class="bg-cover bg-center w-full h-full absolute inset-0 group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?q=80&w=800&auto=format&fit=crop')"></div>
+</div>
+<h4 class="font-title-md text-title-md text-white font-semibold group-hover:text-secondary-fixed transition-colors" x-text="t('news1Title')">Light Rain Expected</h4>
+<p class="font-body-sm text-body-sm text-white/90 line-clamp-2" x-text="t('news1Desc')">Optimal time for sowing wheat is approaching next week. Ensure fields are prepared.</p>
+<span class="text-xs font-bold text-secondary-fixed flex items-center gap-1 mt-auto pt-2" x-text="t('readMore')">Read Full Report <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+</div>
+
+<!-- News Item 2 -->
+<div @click="selectedNews = { tag: t('news2Tag'), title: t('news2Title'), desc: t('news2Full'), img: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=800&auto=format&fit=crop' }" class="rounded-[1.5rem] p-6 flex flex-col gap-4 bg-black/25 backdrop-blur-md border border-white/15 shadow-xl cursor-pointer hover:bg-black/40 transition-all group">
+<div class="flex justify-between items-center text-white/85">
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary-fixed" x-text="t('news2Tag')">Agri News</span>
+<span class="material-symbols-outlined text-white group-hover:scale-110 transition-transform">article</span>
+</div>
+<div class="w-full h-32 rounded-xl overflow-hidden relative shadow-inner">
+<div class="bg-cover bg-center w-full h-full absolute inset-0 group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=800&auto=format&fit=crop')"></div>
+</div>
+<h4 class="font-title-md text-title-md text-white font-semibold group-hover:text-secondary-fixed transition-colors" x-text="t('news2Title')">Govt Subsidy Scheme</h4>
+<p class="font-body-sm text-body-sm text-white/90 line-clamp-2" x-text="t('news2Desc')">Govt announces new subsidy scheme for drip irrigation systems.</p>
+<span class="text-xs font-bold text-secondary-fixed flex items-center gap-1 mt-auto pt-2" x-text="t('readMore')">Read Full Report <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+</div>
+
+<!-- News Item 3 -->
+<div @click="selectedNews = { tag: t('news3Tag'), title: t('news3Title'), desc: t('news3Full'), img: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?q=80&w=800&auto=format&fit=crop' }" class="rounded-[1.5rem] p-6 flex flex-col gap-4 bg-black/25 backdrop-blur-md border border-white/15 shadow-xl cursor-pointer hover:bg-black/40 transition-all group">
+<div class="flex justify-between items-center text-white/85">
+<span class="font-label-caps text-label-caps uppercase tracking-wider text-secondary-fixed" x-text="t('news3Tag')">Market Trends</span>
+<span class="material-symbols-outlined text-white group-hover:scale-110 transition-transform">trending_up</span>
+</div>
+<div class="w-full h-32 rounded-xl overflow-hidden relative shadow-inner">
+<div class="bg-cover bg-center w-full h-full absolute inset-0 group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://images.unsplash.com/photo-1586771107445-d3ca888129ff?q=80&w=800&auto=format&fit=crop')"></div>
+</div>
+<h4 class="font-title-md text-title-md text-white font-semibold group-hover:text-secondary-fixed transition-colors" x-text="t('news3Title')">Wheat MSP Increase</h4>
+<p class="font-body-sm text-body-sm text-white/90 line-clamp-2" x-text="t('news3Desc')">Wheat MSP rises by 7% for the upcoming procurement season.</p>
+<span class="text-xs font-bold text-secondary-fixed flex items-center gap-1 mt-auto pt-2" x-text="t('readMore')">Read Full Report <span class="material-symbols-outlined text-sm">arrow_right_alt</span></span>
+</div>
+</div>
+</section>
+
+<!-- Bottom Slide-Down Sections -->
+<section id="info-section" class="flex flex-col gap-4 mt-6 scroll-mt-24">
+<h3 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:font-headline-lg text-white mb-2" x-text="t('secHelpInfoCenter')">Help & Information Center</h3>
+
+<!-- 1. Contact Us Accordion -->
+<div id="contact-section" x-data="{ open: false }" class="frosted-pearl rounded-[2rem] overflow-hidden transition-all duration-300 scroll-mt-24">
+<button @click="open = !open" class="w-full p-6 md:p-8 flex justify-between items-center text-left focus:outline-none cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+</div>
+<h4 class="font-headline-lg text-lg md:text-xl font-bold text-on-surface" x-text="t('accContactTitle')">Contact Us</h4>
+</div>
+<span class="material-symbols-outlined transition-transform duration-300" :class="{ 'rotate-180': open }">expand_more</span>
+</button>
+<div x-show="open" x-collapse class="px-6 pb-8 md:px-8 flex flex-col gap-4 text-on-surface-variant border-t border-black/5 pt-4">
+<p class="font-body-lg" x-text="t('accContactDesc')">Have questions or need technical assistance with your mandi pass? Get in touch with our 24/7 farmer support helpline.</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="p-4 rounded-xl bg-white/50 border border-black/5 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">call</span>
+<div>
+<p class="font-label-sm text-xs text-outline uppercase font-bold" x-text="t('lblHelpline')">Helpline</p>
+<p class="font-semibold text-on-surface">+91 1800-KISAN-KON</p>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-white/50 border border-black/5 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">mail</span>
+<div>
+<p class="font-label-sm text-xs text-outline uppercase font-bold" x-text="t('lblSupportEmail')">Support Email</p>
+<p class="font-semibold text-on-surface">support@kisansaathi.in</p>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-white/50 border border-black/5 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">location_on</span>
+<div>
+<p class="font-label-sm text-xs text-outline uppercase font-bold" x-text="t('lblHeadOffice')">Head Office</p>
+<p class="font-semibold text-on-surface">Dahmi Kalan, Rajasthan</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 2. FAQ Accordion -->
+<div id="faq-section" x-data="{ open: false }" class="frosted-pearl rounded-[2rem] overflow-hidden transition-all duration-300 scroll-mt-24">
+<button @click="open = !open" class="w-full p-6 md:p-8 flex justify-between items-center text-left focus:outline-none cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-secondary text-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">help</span>
+</div>
+<h4 class="font-headline-lg text-lg md:text-xl font-bold text-on-surface" x-text="t('accFaqTitle')">Frequently Asked Questions (FAQ)</h4>
+</div>
+<span class="material-symbols-outlined transition-transform duration-300" :class="{ 'rotate-180': open }">expand_more</span>
+</button>
+<div x-show="open" x-collapse class="px-6 pb-8 md:px-8 flex flex-col gap-5 text-on-surface-variant border-t border-black/5 pt-4">
+<div class="flex flex-col gap-1">
+<p class="font-semibold text-on-surface" x-text="t('faqQ1')">1. How do I book a mandi slot for selling my crops?</p>
+<p class="font-body-sm" x-text="t('faqA1')">Navigate to the 'Book Slot' or 'Sell Crop' section from dashboard actions, select your preferred mandi, enter crop details, and generate your token.</p>
+</div>
+<div class="flex flex-col gap-1">
+<p class="font-semibold text-on-surface" x-text="t('faqQ2')">2. How are mandi market prices updated?</p>
+<p class="font-body-sm" x-text="t('faqA2')">Market prices are synced directly in real-time with regional government agricultural boards.</p>
+</div>
+<div class="flex flex-col gap-1">
+<p class="font-semibold text-on-surface" x-text="t('faqQ3')">3. Is my Kisan Credit Card (KCC) limit viewable online?</p>
+<p class="font-body-sm" x-text="t('faqA3')">Yes, you can view your active KCC credit limits under the 'View All Services' records section.</p>
+</div>
+</div>
+</div>
+
+<!-- 3. About Us Accordion -->
+<div id="about-section" x-data="{ open: false }" class="frosted-pearl rounded-[2rem] overflow-hidden transition-all duration-300 scroll-mt-24">
+<button @click="open = !open" class="w-full p-6 md:p-8 flex justify-between items-center text-left focus:outline-none cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary-container text-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">info</span>
+</div>
+<h4 class="font-headline-lg text-lg md:text-xl font-bold text-on-surface" x-text="t('accAboutTitle')">About Us</h4>
+</div>
+<span class="material-symbols-outlined transition-transform duration-300" :class="{ 'rotate-180': open }">expand_more</span>
+</button>
+<div x-show="open" x-collapse class="px-6 pb-8 md:px-8 flex flex-col gap-4 text-on-surface-variant border-t border-black/5 pt-4">
+<p class="font-body-lg leading-relaxed" x-text="t('accAboutDesc')">Kisan Saathi is a next-generation agricultural intelligence and mandi procurement platform designed to empower farmers with real-time market transparency, slot booking, and digital ledger tracking.</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+<div class="p-4 rounded-xl bg-white/50 border border-black/5 flex flex-col gap-1">
+<span class="font-title-md text-on-surface font-bold text-base" x-text="t('aboutFeat1Title')">Transparent Pricing</span>
+<span class="font-body-sm text-on-surface-variant" x-text="t('aboutFeat1Desc')">Live mandi updates and MSP tracking to maximize crop yield revenue.</span>
+</div>
+<div class="p-4 rounded-xl bg-white/50 border border-black/5 flex flex-col gap-1">
+<span class="font-title-md text-on-surface font-bold text-base" x-text="t('aboutFeat2Title')">Smart Queue Booking</span>
+<span class="font-body-sm text-on-surface-variant" x-text="t('aboutFeat2Desc')">Pre-book mandi entry slots to skip wait times and manage drop-offs.</span>
+</div>
+<div class="p-4 rounded-xl bg-white/50 border border-black/5 flex flex-col gap-1">
+<span class="font-title-md text-on-surface font-bold text-base" x-text="t('aboutFeat3Title')">Digital Records</span>
+<span class="font-body-sm text-on-surface-variant" x-text="t('aboutFeat3Desc')">Secure access to KCC limits, past sale receipts, and direct payment ledgers.</span>
+</div>
+</div>
+</div>
+</div>
+
+</section>
+</main>
+
+<!-- Modal for All News & Updates (Expanded with 5 comprehensive items) -->
+<div x-show="showAllNews" x-transition.opacity class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 md:p-8" style="display: none;">
+<div @click.outside="showAllNews = false" class="frosted-pearl w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-[2.5rem] p-6 md:p-10 flex flex-col gap-6 shadow-2xl relative">
+<div class="flex justify-between items-center border-b border-black/10 pb-4">
+<div>
+<h3 class="font-headline-lg text-2xl font-bold text-on-surface" x-text="t('modalNewsTitle')">All Agricultural News & Weather Advisories</h3>
+<p class="text-xs text-outline mt-0.5">Comprehensive national updates, government schemes, and market intelligence reports.</p>
+</div>
+<button @click="showAllNews = false" class="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center hover:bg-black/25 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Modal Item 1 -->
+<div @click="showAllNews = false; selectedNews = { tag: t('news1Tag'), title: t('news1Title'), desc: t('news1Full'), img: 'https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?q=80&w=800&auto=format&fit=crop' }" class="rounded-2xl bg-white/70 border border-black/5 overflow-hidden flex flex-col cursor-pointer hover:shadow-xl hover:scale-[1.02] transition-all">
+<div class="h-36 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?q=80&w=800&auto=format&fit=crop')"></div>
+<div class="p-4 flex flex-col gap-2 flex-grow">
+<span class="text-xs font-bold uppercase text-secondary" x-text="t('news1Tag')">Weather Advisory</span>
+<h4 class="font-title-md font-bold text-on-surface text-base" x-text="t('news1Title')">Light Rain Expected</h4>
+<p class="text-xs text-on-surface-variant line-clamp-2" x-text="t('news1Desc')">Optimal time for sowing wheat is approaching. Ensure fields are well prepared.</p>
+</div>
+</div>
+<!-- Modal Item 2 -->
+<div @click="showAllNews = false; selectedNews = { tag: t('news2Tag'), title: t('news2Title'), desc: t('news2Full'), img: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=800&auto=format&fit=crop' }" class="rounded-2xl bg-white/70 border border-black/5 overflow-hidden flex flex-col cursor-pointer hover:shadow-xl hover:scale-[1.02] transition-all">
+<div class="h-36 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=800&auto=format&fit=crop')"></div>
+<div class="p-4 flex flex-col gap-2 flex-grow">
+<span class="text-xs font-bold uppercase text-secondary" x-text="t('news2Tag')">Government Subsidy</span>
+<h4 class="font-title-md font-bold text-on-surface text-base" x-text="t('news2Title')">Govt Subsidy Scheme</h4>
+<p class="text-xs text-on-surface-variant line-clamp-2" x-text="t('news2Desc')">Govt announces new subsidy scheme for drip irrigation systems.</p>
+</div>
+</div>
+<!-- Modal Item 3 -->
+<div @click="showAllNews = false; selectedNews = { tag: t('news3Tag'), title: t('news3Title'), desc: t('news3Full'), img: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?q=80&w=800&auto=format&fit=crop' }" class="rounded-2xl bg-white/70 border border-black/5 overflow-hidden flex flex-col cursor-pointer hover:shadow-xl hover:scale-[1.02] transition-all">
+<div class="h-36 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1586771107445-d3ca888129ff?q=80&w=800&auto=format&fit=crop')"></div>
+<div class="p-4 flex flex-col gap-2 flex-grow">
+<span class="text-xs font-bold uppercase text-secondary" x-text="t('news3Tag')">Market Trends</span>
+<h4 class="font-title-md font-bold text-on-surface text-base" x-text="t('news3Title')">Wheat MSP Increase</h4>
+<p class="text-xs text-on-surface-variant line-clamp-2" x-text="t('news3Desc')">Wheat MSP rises by 7% for the upcoming procurement season.</p>
+</div>
+</div>
+<!-- Modal Item 4 (New) -->
+<div @click="showAllNews = false; selectedNews = { tag: t('news4Tag'), title: t('news4Title'), desc: t('news4Full'), img: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=800&auto=format&fit=crop' }" class="rounded-2xl bg-white/70 border border-black/5 overflow-hidden flex flex-col cursor-pointer hover:shadow-xl hover:scale-[1.02] transition-all">
+<div class="h-36 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=800&auto=format&fit=crop')"></div>
+<div class="p-4 flex flex-col gap-2 flex-grow">
+<span class="text-xs font-bold uppercase text-secondary" x-text="t('news4Tag')">Crop Acreage</span>
+<h4 class="font-title-md font-bold text-on-surface text-base" x-text="t('news4Title')">Kharif Sowing Progress</h4>
+<p class="text-xs text-on-surface-variant line-clamp-2" x-text="t('news4Desc')">India crosses 1,000 lakh hectares in Kharif sowing with increased acreage in pulses.</p>
+</div>
+</div>
+<!-- Modal Item 5 (New) -->
+<div @click="showAllNews = false; selectedNews = { tag: t('news5Tag'), title: t('news5Title'), desc: t('news5Full'), img: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=800&auto=format&fit=crop' }" class="rounded-2xl bg-white/70 border border-black/5 overflow-hidden flex flex-col cursor-pointer hover:shadow-xl hover:scale-[1.02] transition-all">
+<div class="h-36 w-full bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=800&auto=format&fit=crop')"></div>
+<div class="p-4 flex flex-col gap-2 flex-grow">
+<span class="text-xs font-bold uppercase text-secondary" x-text="t('news5Tag')">Digital Initiative</span>
+<h4 class="font-title-md font-bold text-on-surface text-base" x-text="t('news5Title')">PM Dhan-Dhaanya Review</h4>
+<p class="text-xs text-on-surface-variant line-clamp-2" x-text="t('news5Desc')">Union Agriculture Ministry reviews progress across 100 focus districts.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Detailed Individual News Modal -->
+<div x-show="selectedNews" x-transition.opacity class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 md:p-8" style="display: none;">
+<div @click.outside="selectedNews = null" class="frosted-pearl w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[2.5rem] p-6 md:p-8 flex flex-col gap-5 shadow-2xl relative">
+<div class="flex justify-between items-center border-b border-black/10 pb-3">
+<span class="text-xs font-bold uppercase px-3 py-1 bg-secondary/10 text-secondary rounded-full" x-text="selectedNews ? selectedNews.tag : ''"></span>
+<button @click="selectedNews = null" class="w-9 h-9 rounded-full bg-black/10 flex items-center justify-center hover:bg-black/20 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<div class="w-full h-52 rounded-2xl overflow-hidden shadow-sm">
+<img class="w-full h-full object-cover" :src="selectedNews ? selectedNews.img : ''" alt="News Image">
+</div>
+<h3 class="font-headline-lg text-2xl font-bold text-on-surface" x-text="selectedNews ? selectedNews.title : ''"></h3>
+<p class="text-sm md:text-base text-on-surface-variant leading-relaxed" x-text="selectedNews ? selectedNews.desc : ''"></p>
+<button @click="selectedNews = null" class="w-full py-3 bg-primary-container text-white font-bold rounded-xl mt-2 hover:opacity-95 transition-opacity cursor-pointer" x-text="t('closeModal')">
+Close
+</button>
+</div>
+</div>
+
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 md:hidden bg-white/85 backdrop-blur-xl rounded-t-lg border-t border-white/40 shadow-2xl">
+<a aria-label="Home" class="flex flex-col items-center justify-center bg-black text-white rounded-full px-6 py-2 -mt-4 shadow-md" href="#home-top">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-[10px] font-medium mt-0.5" x-text="t('navHome')">Home</span>
+</a>
+<a aria-label="Mandi" class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="mandi.html">
+<span class="material-symbols-outlined">storefront</span>
+<span class="font-label-sm text-label-sm mt-1" x-text="t('navMandi')">Mandi</span>
+</a>
+<a aria-label="Queue" class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="queue.html">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span class="font-label-sm text-label-sm mt-1" x-text="t('navBookSlot')">Queue</span>
+</a>
+<a aria-label="Profile" class="flex flex-col items-center justify-center text-on-surface-variant py-2 px-4 hover:bg-surface-container-high/50 transition-colors rounded-xl" href="profile.html">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm mt-1" x-text="t('navProfile')">Profile</span>
+</a>
+</nav>
+
+<script>
+    function openAccordion(sectionId) {
+        setTimeout(() => {
+            const el = document.getElementById(sectionId);
+            if (el && window.Alpine) {
+                ['about-section', 'faq-section', 'contact-section'].forEach(id => {
+                    const targetEl = document.getElementById(id);
+                    if (targetEl && Alpine.$data(targetEl)) {
+                        Alpine.$data(targetEl).open = (id === sectionId);
+                    }
+                });
+            }
+        }, 100);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const sections = [
+            { id: 'home-top', name: 'home' },
+            { id: 'recommended-section', name: 'news' },
+            { id: 'contact-section', name: 'contact' },
+            { id: 'faq-section', name: 'faq' },
+            { id: 'about-section', name: 'about' }
+        ];
+
+        const rootEl = document.querySelector('[x-data]');
+
+        function checkScrollPosition() {
+            if (!rootEl) return;
+            const alpineData = Alpine.$data(rootEl);
+            if (!alpineData) return;
+
+            let current = 'home';
+            const scrollY = window.scrollY;
+
+            sections.forEach(sec => {
+                const el = document.getElementById(sec.id);
+                if (el) {
+                    const offsetTop = el.getBoundingClientRect().top + scrollY;
+                    if (scrollY >= offsetTop - 180) {
+                        current = sec.name;
+                    }
+                }
+            });
+
+            if ((window.innerHeight + scrollY) >= document.body.offsetHeight - 40) {
+                current = 'about';
+            }
+
+            if (alpineData.activeSection !== current) {
+                alpineData.activeSection = current;
+            }
+        }
+
+        window.addEventListener('scroll', checkScrollPosition, { passive: true });
+        setTimeout(checkScrollPosition, 200);
+
+        if (window.location.hash && window.location.hash !== '#home-top') {
+            openAccordion(window.location.hash.substring(1));
+        }
+    });
+
+    window.addEventListener('hashchange', () => {
+        if (window.location.hash && window.location.hash !== '#home-top') {
+            openAccordion(window.location.hash.substring(1));
+        }
+    });
+</script>
+
+</body>
+</html>
