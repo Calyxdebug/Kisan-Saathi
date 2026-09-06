@@ -10,7 +10,6 @@
             transactions: 'Transaction History',
             settings: 'Settings',
             support: 'Support',
-            logout: 'Logout',
             navHome: 'Home',
             navMandi: 'Mandi',
             navQueue: 'Queue',
@@ -24,7 +23,6 @@
             transactions: 'ਲੈਣ-ਦੇਣ ਦਾ ਇਤਿਹਾਸ',
             settings: 'ਸੈਟਿੰਗਾਂ',
             support: 'ਸਹਾਇਤਾ',
-            logout: 'ਲੌਗ ਆਉਟ',
             navHome: 'ਘਰ',
             navMandi: 'ਮੰਡੀ',
             navQueue: 'ਕਤਾਰ',
@@ -38,7 +36,6 @@
             transactions: 'लेन-देन का इतिहास',
             settings: 'सेटिंग्स',
             support: 'सहायता',
-            logout: 'लॉग आउट',
             navHome: 'होम',
             navMandi: 'मंडी',
             navQueue: 'कतार',
@@ -52,7 +49,6 @@
             transactions: 'లావాదేవీల చరిత్ర',
             settings: 'సెట్టింగ్‌లు',
             support: 'సహాయం',
-            logout: 'లాగ్‌అవుట్',
             navHome: 'హోమ్',
             navMandi: 'మండి',
             navQueue: 'క్యూ',
@@ -66,7 +62,6 @@
             transactions: 'பரிவர்த்தனை வரலாறு',
             settings: 'அமைப்புகள்',
             support: 'ஆதரவு',
-            logout: 'வெளியேறு',
             navHome: 'முகப்பு',
             navMandi: 'சந்தை',
             navQueue: 'வரிசை',
@@ -80,7 +75,6 @@
             transactions: 'ഇടപാട് ചരിത്രം',
             settings: 'ക്രമീകരണങ്ങൾ',
             support: 'പിന്തുണ',
-            logout: 'പുറത്തുപോവുക',
             navHome: 'ഹോം',
             navMandi: 'ചന്ത',
             navQueue: 'ക്യൂ',
@@ -94,11 +88,10 @@
             transactions: 'ವಹಿವಾಟು ಇತಿಹಾಸ',
             settings: 'ಸೆಂಟ್ಟಿಂಗ್ಸ್',
             support: 'ಬೆಂಬಲ',
-            logout: 'ಲಾಗ್ ಔಟ್',
             navHome: 'ಮುಖಪುಟ',
             navMandi: 'ಮಂಡಿ',
             navQueue: 'ಕ್ಯೂ',
-            navProfile: 'ಮುಖಪುಟ'
+            navProfile: 'ಪ್ರೊಫೈಲ್'
         },
         ur: {
             appTitle: 'کیسان ساتھی',
@@ -108,7 +101,6 @@
             transactions: 'لین دین کی تاریخ',
             settings: 'ترتیبات',
             support: 'معاونت',
-            logout: 'لاگ آؤٹ',
             navHome: 'ہوم',
             navMandi: 'منڈی',
             navQueue: 'قطار',
@@ -140,19 +132,6 @@
             }
         }
         checkAuth();
-
-        window.forceLogout = async function(event) {
-            if (event) event.preventDefault();
-            try {
-                localStorage.clear();
-                sessionStorage.clear();
-                await supabase.auth.signOut();
-            } catch (err) {
-                console.error('Logout error:', err);
-            } finally {
-                window.location.href = 'index.html';
-            }
-        };
     </script>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
@@ -282,7 +261,7 @@
             </div>
         </section>
 
-        <section class="flex flex-col gap-3 mx-2 md:mx-0">
+        <section class="flex flex-col gap-3 mx-2 md:mx-0 pb-16">
             
             <a href="My Bookings.html" class="bento-card rounded-xl p-4 items-center justify-between group text-left cursor-pointer no-underline text-inherit">
                 <div class="flex items-center gap-4">
@@ -324,15 +303,6 @@
                 <span class="material-symbols-outlined text-slate-400 group-hover:text-slate-800 transition-transform group-hover:translate-x-1">chevron_right</span>
             </a>
 
-        </section>
-
-        <section class="mt-2 mx-2 md:mx-0 pb-16">
-            <button type="button" onclick="forceLogout(event)" class="bento-card bg-red-50/50 rounded-xl p-4 w-full flex items-center gap-4 group cursor-pointer hover:bg-red-100 border border-red-100 transition-all">
-                <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:text-white transition-colors shadow-sm">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">logout</span>
-                </div>
-                <span class="text-[16px] font-body-md text-red-600 font-bold" x-text="t('logout')"></span>
-            </button>
         </section>
     </main>
 
