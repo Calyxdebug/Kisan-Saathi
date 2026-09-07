@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-    <title>Transaction History - KIsan Saathi</title>
+    <title>Transaction History - Kisan Saathi</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
@@ -138,12 +138,12 @@
 </head>
 <body class="bg-background text-on-background font-body-md text-[16px] antialiased min-h-screen pb-[100px]" x-data="transactionApp()">
 
-<div class="bg-agricultural-overlay" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDx6FsZMtBmh1HSue0IF2MqBQ8WMgHzLeHNUPgrSnGvQne1ziz3nFsMak4i4uKlr_VuNaXURlFRjYBAS_KZpMjbTxsiAxgZ8UQYdZmx8Q3pn7jOHa9sg8u7zfNsmgSnAsaXOhmNGq7ZKW-Wi1Vh3DzCzVUL4F1ALqURnPgAAzNeo1Q6a5O6sgfU-sPpxmC4i7hGXvwuc2DmccHYFCWeeL3mctHoon3LnEOJnxLbu9sN5FZiUI3I6DCY')"></div>
+<div class="bg-agricultural-overlay" style="background-image: url('https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=2000&q=80')"></div>
 
 <header class="bg-primary-container text-white shadow-md flex items-center justify-between px-4 w-full h-16 fixed top-0 z-50">
-    <button class="flex items-center justify-center p-2 rounded-full hover:bg-white/10 active:scale-90 transition-transform text-white cursor-pointer" onclick="history.back()">
+    <a href="profile.html" class="flex items-center justify-center p-2 rounded-full hover:bg-white/10 active:scale-90 transition-transform text-white cursor-pointer no-underline">
         <span class="material-symbols-outlined">arrow_back</span>
-    </button>
+    </a>
     <h1 class="text-[18px] font-semibold text-white absolute left-1/2 -translate-x-1/2 uppercase tracking-tight font-['Poppins']">
         <span x-show="lang === 'en'">Transaction History</span>
         <span x-show="lang === 'pa'">ਲੈਣ-ਦੇਣ ਦਾ ਇਤਿਹਾਸ</span>
@@ -259,7 +259,7 @@
                     </div>
                     <div>
                         <h4 class="text-[16px] font-semibold text-on-background mb-1">Wheat Sale - 150 Quintals</h4>
-                        <p class="text-[13px] text-on-surface-variant mb-2">Mandi #42 - Oct 02, 2023</p>
+                        <p class="text-[13px] text-on-surface-variant mb-2">Mandi #42 - Oct 02, 2026</p>
                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-ledger-green/10 text-ledger-green text-[10px] font-bold border border-ledger-green/20">
                             <span class="material-symbols-outlined text-[14px]">check_circle</span>
                             <span>Settled</span>
@@ -268,7 +268,7 @@
                 </div>
                 <div class="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center border-t border-border-subtle md:border-t-0 pt-3 md:pt-0">
                     <p class="text-[18px] font-bold text-ledger-green mb-1 font-['Inter']">+ ₹ 3,15,000</p>
-                    <button @click="openReceipt('Wheat Sale - 150 Quintals', '₹ 3,15,000', 'Mandi #42 - Oct 02, 2023', '#TXN-94821', 'Settled')" class="text-xs font-bold text-transaction-blue flex items-center gap-1 hover:underline cursor-pointer bg-transparent border-0 p-0">
+                    <button @click="openReceipt('Wheat Sale - 150 Quintals', '₹ 3,15,000', 'Mandi #42 - Oct 02, 2026', '#TXN-94821', 'Settled')" class="text-xs font-bold text-transaction-blue flex items-center gap-1 hover:underline cursor-pointer bg-transparent border-0 p-0">
                         <span>View Receipt</span>
                         <span class="material-symbols-outlined text-[14px]">receipt_long</span>
                     </button>
@@ -282,7 +282,7 @@
                     </div>
                     <div>
                         <h4 class="text-[16px] font-semibold text-on-background mb-1">MSP Payout - Paddy</h4>
-                        <p class="text-[13px] text-on-surface-variant mb-2">Govt. Direct Transfer - Sep 28, 2023</p>
+                        <p class="text-[13px] text-on-surface-variant mb-2">Govt. Direct Transfer - Sep 28, 2026</p>
                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-kcc-amber/10 text-kcc-amber text-[10px] font-bold border border-kcc-amber/20">
                             <span class="material-symbols-outlined text-[14px]">hourglass_empty</span>
                             <span>Processing</span>
@@ -291,7 +291,7 @@
                 </div>
                 <div class="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center border-t border-border-subtle md:border-t-0 pt-3 md:pt-0">
                     <p class="text-[18px] font-bold text-kcc-amber mb-1 font-['Inter']">+ ₹ 2,45,000</p>
-                    <button @click="openReceipt('MSP Payout - Paddy', '₹ 2,45,000', 'Govt. Direct Transfer - Sep 28, 2023', '#TXN-88392', 'Processing')" class="text-xs font-bold text-transaction-blue flex items-center gap-1 hover:underline cursor-pointer bg-transparent border-0 p-0">
+                    <button @click="openReceipt('MSP Payout - Paddy', '₹ 2,45,000', 'Govt. Direct Transfer - Sep 28, 2026', '#TXN-88392', 'Processing')" class="text-xs font-bold text-transaction-blue flex items-center gap-1 hover:underline cursor-pointer bg-transparent border-0 p-0">
                         <span>View Receipt</span>
                         <span class="material-symbols-outlined text-[14px]">receipt_long</span>
                     </button>
@@ -305,7 +305,7 @@
                     </div>
                     <div>
                         <h4 class="text-[16px] font-semibold text-on-background mb-1">Fertilizer Purchase - Urea</h4>
-                        <p class="text-[13px] text-on-surface-variant mb-2">AgriStore Direct - Sep 15, 2023</p>
+                        <p class="text-[13px] text-on-surface-variant mb-2">AgriStore Direct - Sep 15, 2026</p>
                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant text-[10px] font-bold border border-outline-variant">
                             <span class="material-symbols-outlined text-[14px]">done_all</span>
                             <span>Paid</span>
@@ -314,7 +314,7 @@
                 </div>
                 <div class="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center border-t border-border-subtle md:border-t-0 pt-3 md:pt-0">
                     <p class="text-[18px] font-bold text-on-background mb-1 font-['Inter']">- ₹ 45,000</p>
-                    <button @click="openReceipt('Fertilizer Purchase - Urea', '- ₹ 45,000', 'AgriStore Direct - Sep 15, 2023', '#TXN-77312', 'Paid')" class="text-xs font-bold text-transaction-blue flex items-center gap-1 hover:underline cursor-pointer bg-transparent border-0 p-0">
+                    <button @click="openReceipt('Fertilizer Purchase - Urea', '- ₹ 45,000', 'AgriStore Direct - Sep 15, 2026', '#TXN-77312', 'Paid')" class="text-xs font-bold text-transaction-blue flex items-center gap-1 hover:underline cursor-pointer bg-transparent border-0 p-0">
                         <span>View Receipt</span>
                         <span class="material-symbols-outlined text-[14px]">receipt_long</span>
                     </button>
@@ -328,7 +328,7 @@
                     </div>
                     <div>
                         <h4 class="text-[16px] font-semibold text-on-background mb-1">Soybean Sale - 50 Quintals</h4>
-                        <p class="text-[13px] text-on-surface-variant mb-2">Mandi #12 - Sep 10, 2023</p>
+                        <p class="text-[13px] text-on-surface-variant mb-2">Mandi #12 - Sep 10, 2026</p>
                         <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-ledger-green/10 text-ledger-green text-[10px] font-bold border border-ledger-green/20">
                             <span class="material-symbols-outlined text-[14px]">check_circle</span>
                             <span>Settled</span>
@@ -337,7 +337,7 @@
                 </div>
                 <div class="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center border-t border-border-subtle md:border-t-0 pt-3 md:pt-0">
                     <p class="text-[18px] font-bold text-ledger-green mb-1 font-['Inter']">+ ₹ 1,20,000</p>
-                    <button @click="openReceipt('Soybean Sale - 50 Quintals', '+ ₹ 1,20,000', 'Mandi #12 - Sep 10, 2023', '#TXN-66120', 'Settled')" class="text-xs font-bold text-transaction-blue flex items-center gap-1 hover:underline cursor-pointer bg-transparent border-0 p-0">
+                    <button @click="openReceipt('Soybean Sale - 50 Quintals', '+ ₹ 1,20,000', 'Mandi #12 - Sep 10, 2026', '#TXN-66120', 'Settled')" class="text-xs font-bold text-transaction-blue flex items-center gap-1 hover:underline cursor-pointer bg-transparent border-0 p-0">
                         <span>View Receipt</span>
                         <span class="material-symbols-outlined text-[14px]">receipt_long</span>
                     </button>
@@ -374,19 +374,19 @@
 </div>
 
 <nav class="bg-white/95 backdrop-blur-md border-t border-slate-200 fixed bottom-0 left-0 w-full z-[9999] flex justify-around items-center px-4 py-2 shadow-lg rounded-t-xl pointer-events-auto md:hidden">
-    <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors cursor-pointer" href="home.html">
+    <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors cursor-pointer no-underline" href="home.html">
         <span class="material-symbols-outlined text-[24px] mb-1">home</span>
         <span class="text-[10px] font-bold">Home</span>
     </a>
-    <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors cursor-pointer" href="mandi.html">
+    <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors cursor-pointer no-underline" href="mandi.html">
         <span class="material-symbols-outlined text-[24px] mb-1">storefront</span>
         <span class="text-[10px] font-bold">Mandi</span>
     </a>
-    <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors cursor-pointer" href="queue.html">
+    <a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 hover:text-primary transition-colors cursor-pointer no-underline" href="queue.html">
         <span class="material-symbols-outlined text-[24px] mb-1">confirmation_number</span>
         <span class="text-[10px] font-bold">Queue</span>
     </a>
-    <a class="flex flex-col items-center justify-center bg-primary-container text-white rounded-full px-6 py-2 scale-95 shadow-md cursor-pointer" href="profile.html">
+    <a class="flex flex-col items-center justify-center bg-primary-container text-white rounded-full px-6 py-2 scale-95 shadow-md cursor-pointer no-underline" href="profile.html">
         <span class="material-symbols-outlined text-[24px] mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
         <span class="text-[10px] font-bold">Profile</span>
     </a>
