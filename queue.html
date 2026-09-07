@@ -18,7 +18,7 @@
             if (!session) {
                 const hasLocalSession = Object.keys(localStorage).some(key => key.includes('-auth-token'));
                 if (!hasLocalSession) {
-                    window.location.href = 'login.html';
+                    window.location.href = 'index.html';
                 }
             }
         }
@@ -114,6 +114,7 @@
         .shadow-level-1 { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); }
         .shadow-level-2 { box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08); }
         .leaflet-top, .leaflet-bottom { z-index: 20 !important; }
+        ::-webkit-scrollbar { display: none; }
     </style>
     
     <script>
@@ -290,29 +291,29 @@
                     { name: 'Dahmi Kalan Sub-Center', distance: '1.2 km away', wait: '2 mins wait', queueCount: 2, statusClass: 'bg-ledger-green', color: '#10b981', lat: 26.8420, lng: 75.5650 },
                     { name: 'Ajmer Road Grain Yard', distance: '14.5 km away', wait: '35 mins wait', queueCount: 19, statusClass: 'bg-kcc-amber', color: '#f59e0b', lat: 26.8850, lng: 75.6120 }
                 ],
-                crops: [
-                    'Wheat Procurement',
-                    'Paddy Storage',
-                    'Mustard Sale',
-                    'Soybean Sale',
-                    'Barley (Jau)',
-                    'Chickpea (Chana)',
-                    'Pearl Millet (Bajra)',
-                    'Cotton (Kapas)',
-                    'Maize (Makka)'
+                
+                // ALL MANDI COMMODITIES CATEGORIZED
+                cropsList: [
+                    { category: 'Grains & Cereals', items: ['Wheat (Kanak)', 'Paddy (Dhan)', 'Maize (Makka)', 'Pearl Millet (Bajra)', 'Barley (Jau)', 'Sorghum (Jowar)'] },
+                    { category: 'Pulses (Dal)', items: ['Chickpea (Chana)', 'Toor Dal (Arhar)', 'Urad Dal (Black Gram)', 'Moong Dal', 'Lentil (Masoor)'] },
+                    { category: 'Oilseeds', items: ['Mustard (Sarson)', 'Soybean', 'Groundnut (Moongphali)', 'Sesame (Til)', 'Sunflower Seed'] },
+                    { category: 'Cash & Commercial Crops', items: ['Cotton (Kapas)', 'Sugarcane', 'Guar Seed'] },
+                    { category: 'Spices & Agri-Produce', items: ['Cumin (Jeera)', 'Coriander (Dhania)', 'Turmeric (Haldi)', 'Red Chilli'] }
                 ],
+                
+                selectedCrops: ['Wheat (Kanak)'],
+                
                 activeToken: {
                     number: 'Token #04',
                     center: 'Bagru Mandi',
-                    category: 'Wheat Procurement',
+                    category: 'Wheat (Kanak)',
                     queuePosition: 2,
                     wait: '5 mins',
-                    time: '25 Oct, 10:30 AM'
+                    time: '15 Oct, 10:30 AM'
                 },
                 showBookingModal: false,
                 bookingStep: 1,
                 bookingCenter: 'Bagru Mandi',
-                bookingCategory: 'Wheat Procurement',
                 bookingDate: '',
                 bookingTimeSlot: '09:00 AM - 11:00 AM',
                 bookingQty: '100',
@@ -396,6 +397,17 @@
                         });
                     });
                 },
+                toggleCropSelection(cropName) {
+                    if (this.selectedCrops.includes(cropName)) {
+                        if (this.selectedCrops.length > 1) {
+                            this.selectedCrops = this.selectedCrops.filter(c => c !== cropName);
+                        } else {
+                            alert('Please select at least one crop.');
+                        }
+                    } else {
+                        this.selectedCrops.push(cropName);
+                    }
+                },
                 getQueueCountForSelectedCenter() {
                     const found = this.mandis.find(m => m.name === this.bookingCenter);
                     return found ? found.queueCount : 3;
@@ -410,18 +422,22 @@
                         alert('Please select a date.');
                         return;
                     }
+                    if (this.selectedCrops.length === 0) {
+                        alert('Please select at least one crop.');
+                        return;
+                    }
                     const randomTokenNum = Math.floor(Math.random() * 50) + 10;
                     this.activeToken = {
                         number: `Token #${randomTokenNum}`,
                         center: this.bookingCenter,
-                        category: this.bookingCategory,
+                        category: this.selectedCrops.join(', '),
                         queuePosition: this.getQueueCountForSelectedCenter() + 1,
                         wait: '10 mins',
                         time: `${this.bookingDate}, ${this.bookingTimeSlot.split(' - ')[0]}`
                     };
 
                     this.showBookingModal = false;
-                    this.successAlert = `Successfully booked slot at ${this.bookingCenter}! Token #${randomTokenNum} generated.`;
+                    this.successAlert = `Successfully booked slot at ${this.bookingCenter} for ${this.selectedCrops.length} crop(s)! Token #${randomTokenNum} generated.`;
                     setTimeout(() => { this.successAlert = ''; }, 6000);
                 }
             }));
@@ -495,7 +511,11 @@
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/60 p-4 rounded-2xl border border-amber-200/60">
                     <div>
                         <h2 class="font-headline text-[32px] md:text-[38px] font-bold text-[#081240] leading-none" x-text="activeToken.number"></h2>
-                        <p class="text-xs font-bold text-[#653e00] mt-1" x-text="activeToken.category"></p>
+                        <div class="flex flex-wrap gap-1 mt-2">
+                            <template x-for="c in activeToken.category.split(', ')">
+                                <span class="bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-md text-[11px] font-bold" x-text="c"></span>
+                            </template>
+                        </div>
                     </div>
                     <div class="bg-white rounded-xl px-4 py-2.5 border border-amber-300 flex items-center gap-3 shadow-sm self-start sm:self-auto">
                         <span class="material-symbols-outlined text-amber-600 text-[26px]">groups</span>
@@ -581,13 +601,13 @@
         </div>
     </div>
 
-    <!-- BOOK SLOT MODAL -->
+    <!-- BOOK SLOT MODAL WITH MULTI-CROP SELECTION -->
     <div x-show="showBookingModal" x-transition.opacity class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4" style="display: none;">
         <div @click.outside="showBookingModal = false" class="bg-white w-full max-w-lg rounded-[28px] p-6 md:p-8 flex flex-col gap-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                 <div>
                     <span class="text-xs font-bold text-primary-container uppercase tracking-wider">Mandi Procurement</span>
-                    <h3 class="font-headline text-xl font-bold text-on-background">Book Slot & Live Queue Check</h3>
+                    <h3 class="font-headline text-xl font-bold text-on-background">Book Slot & Multi-Crop Selection</h3>
                 </div>
                 <button @click="showBookingModal = false" class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 cursor-pointer">
                     <span class="material-symbols-outlined text-sm">close</span>
@@ -611,25 +631,40 @@
                             <span class="material-symbols-outlined text-transaction-blue text-[24px]">info</span>
                             <div class="text-xs text-on-surface">
                                 <p class="font-bold text-transaction-blue">Current Queue at <span x-text="bookingCenter"></span>:</p>
-                                <p class="text-slate-600 mt-0.5"><span class="font-bold text-on-background" x-text="getQueueCountForSelectedCenter()"></span> farmers currently waiting. Estimated wait time is minimal.</p>
+                                <p class="text-slate-600 mt-0.5"><span class="font-bold text-on-background" x-text="getQueueCountForSelectedCenter()"></span> farmers currently waiting. Multi-crop unloading available.</p>
+                            </div>
+                        </div>
+
+                        <!-- MULTI-CROP SELECTION LIST -->
+                        <div class="flex flex-col gap-2">
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs font-bold text-on-surface-variant">Select Crops to Sell / Procure (Multiple Allowed):</label>
+                                <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200" x-text="selectedCrops.length + ' Selected'"></span>
+                            </div>
+
+                            <div class="border border-border-subtle rounded-xl p-3 bg-slate-50 flex flex-col gap-3 max-h-[220px] overflow-y-auto">
+                                <template x-for="group in cropsList">
+                                    <div class="flex flex-col gap-1.5">
+                                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 border-b border-slate-200 pb-1" x-text="group.category"></p>
+                                        <div class="grid grid-cols-2 gap-1.5 pt-1">
+                                            <template x-for="crop in group.items">
+                                                <button type="button" @click="toggleCropSelection(crop)" :class="selectedCrops.includes(crop) ? 'bg-primary-container text-white font-bold border-primary-container' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'" class="p-2 rounded-lg text-xs border text-left flex items-center justify-between transition-all cursor-pointer">
+                                                    <span class="truncate pr-1" x-text="crop"></span>
+                                                    <span class="material-symbols-outlined text-sm" x-text="selectedCrops.includes(crop) ? 'check_circle' : 'add_circle_outline'"></span>
+                                                </button>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
                             </div>
                         </div>
 
                         <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-on-surface-variant">Select Crop Category:</label>
-                            <select x-model="bookingCategory" class="p-3 rounded-xl border border-border-subtle bg-surface-container-low text-xs font-semibold focus:outline-none cursor-pointer">
-                                <template x-for="crop in crops">
-                                    <option :value="crop" x-text="crop"></option>
-                                </template>
-                            </select>
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-on-surface-variant">Expected Quantity (Quintals):</label>
+                            <label class="text-xs font-bold text-on-surface-variant">Total Quantity Across All Crops (Quintals):</label>
                             <input type="number" x-model="bookingQty" class="p-3 rounded-xl border border-border-subtle bg-surface-container-low text-xs font-semibold focus:outline-none" min="10" max="1000"/>
                         </div>
 
-                        <button @click="bookingStep = 2" class="w-full bg-primary-container text-white py-3.5 rounded-xl font-bold text-sm shadow-md mt-2 cursor-pointer">
+                        <button @click="bookingStep = 2" class="w-full bg-primary-container text-white py-3.5 rounded-xl font-bold text-sm shadow-md mt-2 cursor-pointer hover:opacity-90">
                             Next: Choose Date & Time →
                         </button>
                     </div>
@@ -652,10 +687,14 @@
                             </select>
                         </div>
 
-                        <div class="bg-surface-container-low p-3.5 rounded-xl flex flex-col gap-1.5 text-xs text-on-surface border border-border-subtle">
+                        <div class="bg-surface-container-low p-3.5 rounded-xl flex flex-col gap-2 text-xs text-on-surface border border-border-subtle">
                             <div class="flex justify-between"><span class="text-outline">Farmer:</span> <span class="font-bold">Harjinder Singh (PB-9842)</span></div>
                             <div class="flex justify-between"><span class="text-outline">Center:</span> <span class="font-bold text-primary-container" x-text="bookingCenter"></span></div>
-                            <div class="flex justify-between"><span class="text-outline">Crop & Qty:</span> <span class="font-bold" x-text="bookingCategory + ' (' + bookingQty + ' Qtl)'"></span></div>
+                            <div class="flex justify-between items-start">
+                                <span class="text-outline">Crops Selected:</span> 
+                                <span class="font-bold text-right max-w-[200px]" x-text="selectedCrops.join(', ')"></span>
+                            </div>
+                            <div class="flex justify-between"><span class="text-outline">Total Quantity:</span> <span class="font-bold" x-text="bookingQty + ' Quintals'"></span></div>
                             <div class="flex justify-between"><span class="text-outline">Time Slot:</span> <span class="font-bold" x-text="bookingTimeSlot"></span></div>
                         </div>
 
