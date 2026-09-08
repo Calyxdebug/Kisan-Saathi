@@ -591,7 +591,7 @@
             </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
-            <button @click="window.open(`https://maps.google.com/?q=${selectedMandi.lat},${selectedMandi.lng}`, '_blank')" class="bg-primary-container text-on-primary w-full py-3 rounded-xl font-label text-sm font-bold flex justify-center items-center gap-2 active:scale-95 transition-transform shadow-md cursor-pointer">
+            <button @click="activeTab = 'map'; mapInstance.setView([selectedMandi.lat, selectedMandi.lng], 15);" class="bg-primary-container text-on-primary w-full py-3 rounded-xl font-label text-sm font-bold flex justify-center items-center gap-2 active:scale-95 transition-transform shadow-md cursor-pointer">
                 <span class="material-symbols-outlined text-[18px]">navigation</span> 
                 <span x-text="t('navigate')"></span>
             </button>
