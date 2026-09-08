@@ -25,10 +25,11 @@
         checkAuth();
     </script>
 
+    <!-- Leaflet CSS & JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Leaflet Routing Machine CSS & JS for turn-by-turn routing -->
+    <!-- Leaflet Routing Machine CSS & JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
     <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
 
@@ -118,8 +119,20 @@
         .shadow-level-1 { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); }
         .shadow-level-2 { box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08); }
         .leaflet-top, .leaflet-bottom { z-index: 20 !important; }
-        /* Style to neatly dock routing instruction box inside map or minimize layout obstruction */
-        .leaflet-routing-container { background-color: rgba(255, 255, 255, 0.95) !important; padding: 10px !important; border-radius: 12px !important; box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important; font-family: 'Inter', sans-serif !important; max-height: 200px; overflow-y: auto; }
+        
+        /* Clean compact routing directions box inside map */
+        .leaflet-routing-container {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            padding: 12px !important;
+            border-radius: 16px !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+            font-family: 'Inter', sans-serif !important;
+            margin-top: 10px !important;
+            margin-right: 10px !important;
+            max-width: 300px;
+            max-height: 220px;
+            overflow-y: auto;
+        }
         ::-webkit-scrollbar { display: none; }
     </style>
     
@@ -274,7 +287,7 @@
                         activeTokenTitle: 'فعال ٹوکن اور لائیو قطار',
                         queueStatus: 'قطار کی حیثیت',
                         farmersAhead: 'کسان آپ سے آگے ہیں',
-                        waitingAt: 'پر انتظار کر रहे ہیں',
+                        waitingAt: 'پر انتظار کر رہے ہیں',
                         estWait: 'تخمینہ انتظار:',
                         allCenters: 'تمام خریداری کے مراکز اور لائیو قطاریں',
                         bookNewSlot: '+ نیا سلاٹ بک کریں',
@@ -284,7 +297,7 @@
                         home: 'ہوم',
                         mandi: 'منڈی',
                         queue: 'سلاٹ بک کریں',
-                        profile: 'پروفाइल'
+                        profile: 'پروفائل'
                     }
                 },
                 t(key) {
@@ -350,7 +363,18 @@
 
                     this.$watch('activeTab', (value) => {
                         if (value === 'map' && this.mapInstance) {
-                            setTimeout(() => { this.mapInstance.invalidateSize(); }, 100);
+                            setTimeout(() => { 
+                                this.mapInstance.invalidateSize(); 
+                                if (this.routingControl) {
+                                    this.routingControl.getContainer().style.display = 'block';
+                                }
+                            }, 100);
+                        } else if (value === 'dashboard' && this.routingControl) {
+                            // Hide routing directions card when switching away from map tab
+                            try {
+                                const container = this.routingControl.getContainer();
+                                if (container) container.style.display = 'none';
+                            } catch(e) {}
                         }
                     });
                 },
@@ -409,12 +433,13 @@
                         if (!this.mapInstance) return;
                         this.mapInstance.invalidateSize();
 
-                        // Remove previous routing layer if exists
+                        // Remove previous routing control if exists
                         if (this.routingControl) {
                             this.mapInstance.removeControl(this.routingControl);
+                            this.routingControl = null;
                         }
 
-                        // Initialize Leaflet Routing Machine for turn-by-turn road navigation
+                        // Create new Leaflet Routing Machine instance
                         this.routingControl = L.Routing.control({
                             waypoints: [
                                 L.latLng(this.userLat, this.userLng),
@@ -422,33 +447,35 @@
                             ],
                             routeWhileDragging: false,
                             addWaypoints: false,
-                            createMarker: function(i, wp, nWaypoints) {
-                                // Custom styling for start/end markers in routing
+                            draggableWaypoints: false,
+                            fitSelectedRoutes: true,
+                            lineOptions: {
+                                styles: [{ color: '#3b82f6', opacity: 0.85, weight: 6 }]
+                            },
+                            createMarker: function(i, wp) {
                                 if (i === 0) {
                                     return L.marker(wp.latLng, {
                                         icon: L.divIcon({
                                             className: 'start-pin',
-                                            html: `<div class="bg-transaction-blue text-white p-1.5 rounded-full shadow-md text-xs font-bold flex items-center justify-center w-6 h-6">📍</div>`,
-                                            iconSize: [24, 24]
+                                            html: `<div class="bg-transaction-blue text-white px-2 py-0.5 rounded-full shadow-md font-bold text-[10px] whitespace-nowrap border border-white">Start</div>`,
+                                            iconSize: [50, 20],
+                                            iconAnchor: [25, 10]
                                         })
                                     });
                                 } else {
                                     return L.marker(wp.latLng, {
                                         icon: L.divIcon({
                                             className: 'end-pin',
-                                            html: `<div class="bg-ledger-green text-white p-1.5 rounded-full shadow-md text-xs font-bold flex items-center justify-center w-6 h-6">🏁</div>`,
-                                            iconSize: [24, 24]
+                                            html: `<div class="bg-ledger-green text-white px-2 py-0.5 rounded-full shadow-md font-bold text-[10px] whitespace-nowrap border border-white">Destination</div>`,
+                                            iconSize: [75, 20],
+                                            iconAnchor: [37, 10]
                                         })
                                     });
                                 }
-                            },
-                            lineOptions: {
-                                styles: [{ color: '#3b82f6', opacity: 0.8, weight: 6 }]
-                            },
-                            show: true,
-                            fitSelectedRoutes: true
+                            }
                         }).addTo(this.mapInstance);
-                    }, 200);
+
+                    }, 250);
                 },
                 toggleCropSelection(cropName) {
                     if (this.selectedCrops.includes(cropName)) {
@@ -821,7 +848,7 @@
                 <span x-show="lang === 'te'">ప్రొఫైల్</span>
                 <span x-show="lang === 'ta'">சுயவிவரம்</span>
                 <span x-show="lang === 'ml'">പ്രൊഫൈൽ</span>
-                <span x-show="lang === 'kn'">ಪ್ರೊಫೈಲ್</span>
+                <span x-show="lang === 'kn'">প্রೊಫೈಲ್</span>
                 <span x-show="lang === 'ur'">پروفائل</span>
             </span>
         </a>
