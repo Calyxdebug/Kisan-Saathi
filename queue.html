@@ -28,6 +28,10 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+    <!-- Leaflet Routing Machine CSS & JS for turn-by-turn routing -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
@@ -114,6 +118,8 @@
         .shadow-level-1 { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); }
         .shadow-level-2 { box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08); }
         .leaflet-top, .leaflet-bottom { z-index: 20 !important; }
+        /* Style to neatly dock routing instruction box inside map or minimize layout obstruction */
+        .leaflet-routing-container { background-color: rgba(255, 255, 255, 0.95) !important; padding: 10px !important; border-radius: 12px !important; box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important; font-family: 'Inter', sans-serif !important; max-height: 200px; overflow-y: auto; }
         ::-webkit-scrollbar { display: none; }
     </style>
     
@@ -122,6 +128,7 @@
             Alpine.data('queueApp', () => ({
                 activeTab: 'dashboard',
                 mapInstance: null,
+                routingControl: null,
                 userLat: 26.8420,
                 userLng: 75.5650,
                 userLocationText: 'Dahmi Kalan (GPS Synced)',
@@ -140,7 +147,7 @@
                         bookNewSlot: '+ Book New Slot',
                         viewMap: 'View Map',
                         bookSlot: 'Book Slot',
-                        navigate: 'Navigate',
+                        navigate: 'Start Route',
                         home: 'Home',
                         mandi: 'Mandi',
                         queue: 'Book Slot',
@@ -159,7 +166,7 @@
                         bookNewSlot: '+ ਨਵਾਂ ਸਲਾਟ ਬੁੱਕ ਕਰੋ',
                         viewMap: 'ਨਕਸ਼ਾ ਦੇਖੋ',
                         bookSlot: 'ਸਲਾਟ ਬੁੱਕ ਕਰੋ',
-                        navigate: 'ਨੇਵੀਗੇਟ ਕਰੋ',
+                        navigate: 'ਰੂਟ ਸ਼ੁਰੂ ਕਰੋ',
                         home: 'ਘਰ',
                         mandi: 'ਮੰਡੀ',
                         queue: 'ਸਲਾਟ ਬੁੱਕ ਕਰੋ',
@@ -178,7 +185,7 @@
                         bookNewSlot: '+ नया स्लॉट बुक करें',
                         viewMap: 'मैप देखें',
                         bookSlot: 'स्लॉट बुक करें',
-                        navigate: 'नेविगेट करें',
+                        navigate: 'रूट शुरू करें',
                         home: 'होम',
                         mandi: 'मंडी',
                         queue: 'स्लॉट बुक करें',
@@ -197,7 +204,7 @@
                         bookNewSlot: '+ కొత్త స్లాట్ బుక్ చేయండి',
                         viewMap: 'మ్యాప్ చూడండి',
                         bookSlot: 'స్లాట్ బుక్ చేయండి',
-                        navigate: 'నావిగేట్ చేయండి',
+                        navigate: 'റൂട്ട് ప్రారంభించండి',
                         home: 'హోమ్',
                         mandi: 'మండి',
                         queue: 'స్లాట్ బుక్ చేయండి',
@@ -216,7 +223,7 @@
                         bookNewSlot: '+ புதிய ஸ்லாட்டை முன்பதிவு செய்',
                         viewMap: 'வரைபடம் காண்க',
                         bookSlot: 'ஸ்லாட் பதிவு செய்',
-                        navigate: 'செல்ல வழி',
+                        navigate: 'வழியைத் தொடங்கு',
                         home: 'முகப்பு',
                         mandi: 'மண்டி',
                         queue: 'ஸ்லாட் பதிவு',
@@ -235,7 +242,7 @@
                         bookNewSlot: '+ പുതിയ സ്ലോട്ട് ബുക്ക് ചെയ്യുക',
                         viewMap: 'മാപ്പ് കാണുക',
                         bookSlot: 'സ്ലോട്ട് ബുക്ക് ചെയ്യുക',
-                        navigate: 'വഴി കണ്ടെത്തുക',
+                        navigate: 'വഴി തുടങ്ങുക',
                         home: 'ഹോം',
                         mandi: 'മണ്ടി',
                         queue: 'സ്ലോട്ട് ബുക്ക് ചെയ്യുക',
@@ -254,7 +261,7 @@
                         bookNewSlot: '+ ಹೊಸ ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ',
                         viewMap: 'ನಕ್ಷೆ ನೋಡಿ',
                         bookSlot: 'ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ',
-                        navigate: 'ನ್ಯಾವಿಗೇಟ್ ಮಾಡಿ',
+                        navigate: 'ಮಾರ್ಗ ಪ್ರಾರಂಭಿಸಿ',
                         home: 'ಮುಖಪುಟ',
                         mandi: 'ಮಂಡಿ',
                         queue: 'ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ',
@@ -267,17 +274,17 @@
                         activeTokenTitle: 'فعال ٹوکن اور لائیو قطار',
                         queueStatus: 'قطار کی حیثیت',
                         farmersAhead: 'کسان آپ سے آگے ہیں',
-                        waitingAt: 'پر انتظار کر رہے ہیں',
+                        waitingAt: 'پر انتظار کر रहे ہیں',
                         estWait: 'تخمینہ انتظار:',
                         allCenters: 'تمام خریداری کے مراکز اور لائیو قطاریں',
                         bookNewSlot: '+ نیا سلاٹ بک کریں',
                         viewMap: 'نقشہ دیکھیں',
                         bookSlot: 'سلاٹ بک کریں',
-                        navigate: 'تشریف لے جائیں',
+                        navigate: 'روٹ شروع کریں',
                         home: 'ہوم',
                         mandi: 'منڈی',
                         queue: 'سلاٹ بک کریں',
-                        profile: 'پروفائل'
+                        profile: 'پروفाइल'
                     }
                 },
                 t(key) {
@@ -292,7 +299,6 @@
                     { name: 'Ajmer Road Grain Yard', distance: '14.5 km away', wait: '35 mins wait', queueCount: 19, statusClass: 'bg-kcc-amber', color: '#f59e0b', lat: 26.8850, lng: 75.6120 }
                 ],
                 
-                // ALL MANDI COMMODITIES CATEGORIZED
                 cropsList: [
                     { category: 'Grains & Cereals', items: ['Wheat (Kanak)', 'Paddy (Dhan)', 'Maize (Makka)', 'Pearl Millet (Bajra)', 'Barley (Jau)', 'Sorghum (Jowar)'] },
                     { category: 'Pulses (Dal)', items: ['Chickpea (Chana)', 'Toor Dal (Arhar)', 'Urad Dal (Black Gram)', 'Moong Dal', 'Lentil (Masoor)'] },
@@ -393,9 +399,56 @@
                         const marker = L.marker([mandi.lat, mandi.lng], { icon: mandiIcon }).addTo(this.mapInstance);
                         marker.on('click', () => {
                             this.selectedMandi = mandi;
-                            this.mapInstance.setView([mandi.lat, mandi.lng], 13);
                         });
                     });
+                },
+                startRouteToSelectedMandi() {
+                    this.activeTab = 'map';
+                    
+                    setTimeout(() => {
+                        if (!this.mapInstance) return;
+                        this.mapInstance.invalidateSize();
+
+                        // Remove previous routing layer if exists
+                        if (this.routingControl) {
+                            this.mapInstance.removeControl(this.routingControl);
+                        }
+
+                        // Initialize Leaflet Routing Machine for turn-by-turn road navigation
+                        this.routingControl = L.Routing.control({
+                            waypoints: [
+                                L.latLng(this.userLat, this.userLng),
+                                L.latLng(this.selectedMandi.lat, this.selectedMandi.lng)
+                            ],
+                            routeWhileDragging: false,
+                            addWaypoints: false,
+                            createMarker: function(i, wp, nWaypoints) {
+                                // Custom styling for start/end markers in routing
+                                if (i === 0) {
+                                    return L.marker(wp.latLng, {
+                                        icon: L.divIcon({
+                                            className: 'start-pin',
+                                            html: `<div class="bg-transaction-blue text-white p-1.5 rounded-full shadow-md text-xs font-bold flex items-center justify-center w-6 h-6">📍</div>`,
+                                            iconSize: [24, 24]
+                                        })
+                                    });
+                                } else {
+                                    return L.marker(wp.latLng, {
+                                        icon: L.divIcon({
+                                            className: 'end-pin',
+                                            html: `<div class="bg-ledger-green text-white p-1.5 rounded-full shadow-md text-xs font-bold flex items-center justify-center w-6 h-6">🏁</div>`,
+                                            iconSize: [24, 24]
+                                        })
+                                    });
+                                }
+                            },
+                            lineOptions: {
+                                styles: [{ color: '#3b82f6', opacity: 0.8, weight: 6 }]
+                            },
+                            show: true,
+                            fitSelectedRoutes: true
+                        }).addTo(this.mapInstance);
+                    }, 200);
                 },
                 toggleCropSelection(cropName) {
                     if (this.selectedCrops.includes(cropName)) {
@@ -566,7 +619,10 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-2 self-end md:self-auto">
-                            <button @click="selectedMandi = mandi; activeTab = 'map'; mapInstance.setView([mandi.lat, mandi.lng], 13);" class="px-3 py-2 bg-white border border-border-subtle text-on-surface rounded-lg text-xs font-bold hover:bg-slate-50 cursor-pointer" x-text="t('viewMap')"></button>
+                            <button @click="selectedMandi = mandi; startRouteToSelectedMandi()" class="px-3 py-2 bg-white border border-border-subtle text-on-surface rounded-lg text-xs font-bold hover:bg-slate-50 cursor-pointer flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm text-transaction-blue">navigation</span>
+                                <span x-text="t('navigate')"></span>
+                            </button>
                             <button @click="openBookingFor(mandi.name)" class="px-4 py-2 bg-primary-container text-white rounded-lg text-xs font-bold shadow-sm hover:opacity-90 cursor-pointer" x-text="t('bookSlot')"></button>
                         </div>
                     </div>
@@ -591,7 +647,7 @@
             </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
-            <button @click="activeTab = 'map'; mapInstance.setView([selectedMandi.lat, selectedMandi.lng], 15);" class="bg-primary-container text-on-primary w-full py-3 rounded-xl font-label text-sm font-bold flex justify-center items-center gap-2 active:scale-95 transition-transform shadow-md cursor-pointer">
+            <button @click="startRouteToSelectedMandi()" class="bg-primary-container text-on-primary w-full py-3 rounded-xl font-label text-sm font-bold flex justify-center items-center gap-2 active:scale-95 transition-transform shadow-md cursor-pointer">
                 <span class="material-symbols-outlined text-[18px]">navigation</span> 
                 <span x-text="t('navigate')"></span>
             </button>
